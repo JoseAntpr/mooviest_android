@@ -1,23 +1,23 @@
-package com.mooviest;
+package com.mooviest.ui.activities;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mooviest.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TwoFragment.OnFragmentInteractionListener} interface
+ * {@link ThreeFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TwoFragment#newInstance} factory method to
+ * Use the {@link ThreeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TwoFragment extends Fragment {
+public class ThreeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,7 +29,7 @@ public class TwoFragment extends Fragment {
 
     //private OnFragmentInteractionListener mListener;
 
-    public TwoFragment() {
+    public ThreeFragment() {
         // Required empty public constructor
     }
 
@@ -39,11 +39,11 @@ public class TwoFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TwoFragment.
+     * @return A new instance of fragment ThreeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TwoFragment newInstance(String param1, String param2) {
-        TwoFragment fragment = new TwoFragment();
+    public static ThreeFragment newInstance(String param1, String param2) {
+        ThreeFragment fragment = new ThreeFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,10 +64,11 @@ public class TwoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_two, container, false);
+        return inflater.inflate(R.layout.fragment_three, container, false);
     }
 
     /*
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -91,7 +92,6 @@ public class TwoFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
     */
 
     /**

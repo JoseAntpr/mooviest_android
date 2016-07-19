@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import com.mooviest.R;
+import com.mooviest.ui.SingletonSwipe;
 
 /**
  * Created by aaron on 4/12/2015.
@@ -396,6 +397,9 @@ public class SwipeDeck extends FrameLayout {
             swipeListener.setRightView(rightView);
 
             child.setOnTouchListener(swipeListener);
+
+            // ENABLE VIEWPAGER SWIPE
+            SingletonSwipe.getInstance().enabled=true;
         }
     }
 
