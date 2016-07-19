@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.animation.OvershootInterpolator;
 
+import com.mooviest.ui.SingletonSwipe;
+
 /**
  * Created by aaron on 4/12/2015.
  */
@@ -61,6 +63,9 @@ public class SwipeListener implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        //DISABLE VIEWPAGER SWIPE
+        SingletonSwipe.getInstance().enabled=false;
+
         if (deactivated) return false;
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
 
