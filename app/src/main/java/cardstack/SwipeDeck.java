@@ -397,10 +397,9 @@ public class SwipeDeck extends FrameLayout {
             swipeListener.setRightView(rightView);
 
             child.setOnTouchListener(swipeListener);
-
-            // ENABLE VIEWPAGER SWIPE
-            SingletonSwipe.getInstance().enabled=true;
         }
+        // ENABLE VIEWPAGER SWIPE
+        SingletonSwipe.getInstance().enabled=true;
     }
 
     public void setEventCallback(SwipeEventCallback eventCallback) {

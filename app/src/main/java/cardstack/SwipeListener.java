@@ -233,6 +233,9 @@ public class SwipeListener implements View.OnTouchListener {
     private ViewPropertyAnimator resetCardPosition() {
         if(rightView!=null)rightView.setAlpha(0);
         if(leftView!=null)leftView.setAlpha(0);
+        Log.i("SwipeListener","Reset card position");
+        // ENABLE VIEWPAGER SWIPE
+        SingletonSwipe.getInstance().enabled=true;
         return card.animate()
                 .setDuration(200)
                 .setInterpolator(new OvershootInterpolator(1.5f))
