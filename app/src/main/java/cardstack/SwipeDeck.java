@@ -250,7 +250,8 @@ public class SwipeDeck extends FrameLayout {
         }
 
         //ensure new card is under the deck at the beginning
-        child.setY(paddingTop);
+        //Muestra el efecto de añadir la nueva card debajo
+        //child.setY(paddingTop);
 
         //every time we add and measure a child refresh the children on screen and order them
         ArrayList<View> children = new ArrayList<>();

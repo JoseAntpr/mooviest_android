@@ -261,6 +261,7 @@ public class SwipeListener implements View.OnTouchListener {
                 .rotation(30);
     }
 
+
     public void setRightView(View image) {
         this.rightView = image;
     }

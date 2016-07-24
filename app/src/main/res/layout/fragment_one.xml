@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".ui.activities.OneFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activities.OneFragment">
 
     <cardstack.SwipeFrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,27 +13,43 @@ tools:context=".ui.activities.OneFragment">
         android:orientation="vertical">
 
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
+
+
+        <!-- Custom paddingBottom FilmCard -->
         <cardstack.SwipeDeck
             android:id="@+id/swipe_deck"
             android:layout_width="match_parent"
-            android:layout_height="480dp"
-            android:padding="40dp"
+            android:layout_height="match_parent"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="30dp"
+            android:paddingBottom="@dimen/paddingBottom_filmCard"
             swipedeck:card_spacing="0dp"
             swipedeck:max_visible="2"
             swipedeck:render_above="true"
             swipedeck:rotation_degrees="15"
             swipedeck:opacity_end="0.2"/>
+
+        <!-- Custom height Linear Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="@dimen/height_linearButtons"
             android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:gravity="center"
             android:paddingBottom="5dp">
 
             <ImageButton
                 android:id="@+id/button"
-                android:layout_width="64dp"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_close_eye"
@@ -42,16 +58,17 @@ tools:context=".ui.activities.OneFragment">
                 android:background="?android:selectableItemBackground"/>
             <ImageButton
                 android:id="@+id/button4"
-                android:layout_width="64dp"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="bottom|center"
                 android:src="@drawable/ic_clock"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:background="?android:selectableItemBackground" />
             <ImageButton
                 android:id="@+id/button3"
-                android:layout_width="64dp"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_open_eye"
@@ -60,16 +77,16 @@ tools:context=".ui.activities.OneFragment">
                 android:background="?android:selectableItemBackground" />
             <ImageButton
                 android:id="@+id/button2"
-                android:layout_width="64dp"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="bottom|right"
                 android:src="@drawable/ic_heart"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:background="?android:selectableItemBackground" />
         </LinearLayout>
 
-
+    </RelativeLayout>
 
 
 
