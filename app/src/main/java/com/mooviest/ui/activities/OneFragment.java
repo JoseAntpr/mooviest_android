@@ -115,6 +115,11 @@ public class OneFragment extends Fragment {
             }
 
             @Override
+            public void cardSwipedDown(int position) {
+                Log.i("MainActivity", "card was swiped down, position in adapter: " + position);
+            }
+
+            @Override
             public void cardsDepleted() {
                 Log.i("MainActivity", "no more cards");
             }
@@ -161,16 +166,11 @@ public class OneFragment extends Fragment {
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /* ADD CARD
                 testData.add("hangover");
-//                ArrayList<String> newData = new ArrayList<>();
-//                newData.add("some new data");
-//                newData.add("some new data");
-//                newData.add("some new data");
-//                newData.add("some new data");
-//
-//                SwipeDeckAdapter adapter = new SwipeDeckAdapter(newData, context);
-//                cardStack.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+                */
+                cardStack.swipeTopCardDown(180);
             }
         });
 

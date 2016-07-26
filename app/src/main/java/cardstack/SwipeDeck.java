@@ -379,6 +379,14 @@ public class SwipeDeck extends FrameLayout {
                 }
 
                 @Override
+                public void cardSwipedDown() {
+                    int positionInAdapter = nextAdapterCard - getChildCount();
+                    removeTopCard();
+                    if (eventCallback != null) eventCallback.cardSwipedDown(positionInAdapter);
+                    addNextCard();
+                }
+
+                @Override
                 public void cardOffScreen() {
                 }
 
@@ -456,6 +464,18 @@ public class SwipeDeck extends FrameLayout {
         }
     }
 
+    public void swipeTopCardDown(int duration) {
+        int childCount = getChildCount();
+        if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
+            swipeListener.animateOffScreenDown(duration);
+
+            int positionInAdapter = nextAdapterCard - getChildCount();
+            removeTopCard();
+            if (eventCallback != null) eventCallback.cardSwipedDown(positionInAdapter);
+            addNextCard();
+        }
+    }
+
     public void setPositionCallback(CardPositionCallback callback) {
         cardPosCallback = callback;
     }
@@ -475,6 +495,8 @@ public class SwipeDeck extends FrameLayout {
         void cardSwipedRight(int position);
 
         void cardSwipedUp(int position);
+
+        void cardSwipedDown(int position);
 
         void cardsDepleted();
 

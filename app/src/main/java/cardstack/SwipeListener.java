@@ -247,6 +247,32 @@ public class SwipeListener implements View.OnTouchListener {
                     });
             callback.cardSwipedUp();
             this.deactivated = true;
+        }else if (cardBeyondDownBorder()) {
+            animateOffScreenDown(160)
+                    .setListener(new Animator.AnimatorListener() {
+
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            callback.cardOffScreen();
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+            callback.cardSwipedDown();
+            this.deactivated = true;
         } else {
             resetCardPosition();
         }
@@ -265,6 +291,17 @@ public class SwipeListener implements View.OnTouchListener {
     private boolean cardBeyondUpBorder() {
         //check if card middle is beyond the top quarter of the screen
         return (card.getY() + (card.getHeight() / 2) < ((parentHeight / 4.f )));
+    }
+
+    private boolean cardBeyondDownBorder() {
+        //check if card middle is beyond the top quarter of the screen
+
+        Log.i("Position Y","Y:"+card.getY());
+
+        Log.i("getHeight","H:"+(card.getHeight() / 2));
+
+        Log.i("ParentHeight","up:"+((parentHeight)));
+        return (card.getY() + (card.getHeight() / 2) > ((parentHeight /1.5f)));
     }
 
     private ViewPropertyAnimator resetCardPosition() {
@@ -324,6 +361,20 @@ public class SwipeListener implements View.OnTouchListener {
                 .rotation(0);
     }
 
+    public ViewPropertyAnimator animateOffScreenDown(int duration) {
+        Log.i("AnimateUP","up:"+((parentHeight)));
+
+
+        Log.i("Positionx","X:"+card.getX());
+
+        Log.i("Positionx","Y:"+card.getY());
+        return card.animate()
+                .setDuration(duration)
+                .x(initialX)
+                .y((parentHeight))
+                .rotation(0);
+    }
+
 
     public void setRightView(View image) {
         this.rightView = image;
@@ -337,6 +388,7 @@ public class SwipeListener implements View.OnTouchListener {
         void cardSwipedLeft();
         void cardSwipedRight();
         void cardSwipedUp();
+        void cardSwipedDown();
         void cardOffScreen();
         void cardActionDown();
         void cardActionUp();
