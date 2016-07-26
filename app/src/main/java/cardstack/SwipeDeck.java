@@ -206,8 +206,9 @@ public class SwipeDeck extends FrameLayout {
     }
 
     private void addNextCard() {
-        if (nextAdapterCard < mAdapter.getCount()) {
 
+        if (nextAdapterCard < mAdapter.getCount()) {
+            Log.i("nextAdaptmadapterget","nextAdapterCard < mAdapter.getCount()");
             // TODO: Make view recycling work
             // TODO: Instead of removing the view from here and adding it again when it's swiped
             // ... don't remove and add to this instance: don't call removeView & addView in sequence.
@@ -223,6 +224,7 @@ public class SwipeDeck extends FrameLayout {
             addAndMeasureChild(newBottomChild);
             nextAdapterCard++;
         }
+        Log.i("nextAdaptmadapterget","nextAdapterCard > mAdapter.getCount()");
         setupTopCard();
     }
 
@@ -250,7 +252,8 @@ public class SwipeDeck extends FrameLayout {
         }
 
         //ensure new card is under the deck at the beginning
-        child.setY(paddingTop);
+        //Muestra el efecto de añadir la nueva card debajo
+        //child.setY(paddingTop);
 
         //every time we add and measure a child refresh the children on screen and order them
         ArrayList<View> children = new ArrayList<>();
@@ -368,6 +371,22 @@ public class SwipeDeck extends FrameLayout {
                 }
 
                 @Override
+                public void cardSwipedUp() {
+                    int positionInAdapter = nextAdapterCard - getChildCount();
+                    removeTopCard();
+                    if (eventCallback != null) eventCallback.cardSwipedUp(positionInAdapter);
+                    addNextCard();
+                }
+
+                @Override
+                public void cardSwipedDown() {
+                    int positionInAdapter = nextAdapterCard - getChildCount();
+                    removeTopCard();
+                    if (eventCallback != null) eventCallback.cardSwipedDown(positionInAdapter);
+                    addNextCard();
+                }
+
+                @Override
                 public void cardOffScreen() {
                 }
 
@@ -381,7 +400,7 @@ public class SwipeDeck extends FrameLayout {
                 public void cardActionUp() {
 
                     if(eventCallback!=null) eventCallback.cardActionUp();
-                    cardInteraction = false;
+                    cardInteraction = true;
                 }
 
             }, initialX, initialY, ROTATION_DEGREES, OPACITY_END);
@@ -433,6 +452,30 @@ public class SwipeDeck extends FrameLayout {
         }
     }
 
+    public void swipeTopCardUp(int duration) {
+        int childCount = getChildCount();
+        if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
+            swipeListener.animateOffScreenUp(duration);
+
+            int positionInAdapter = nextAdapterCard - getChildCount();
+            removeTopCard();
+            if (eventCallback != null) eventCallback.cardSwipedUp(positionInAdapter);
+            addNextCard();
+        }
+    }
+
+    public void swipeTopCardDown(int duration) {
+        int childCount = getChildCount();
+        if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
+            swipeListener.animateOffScreenDown(duration);
+
+            int positionInAdapter = nextAdapterCard - getChildCount();
+            removeTopCard();
+            if (eventCallback != null) eventCallback.cardSwipedDown(positionInAdapter);
+            addNextCard();
+        }
+    }
+
     public void setPositionCallback(CardPositionCallback callback) {
         cardPosCallback = callback;
     }
@@ -450,6 +493,10 @@ public class SwipeDeck extends FrameLayout {
         void cardSwipedLeft(int position);
 
         void cardSwipedRight(int position);
+
+        void cardSwipedUp(int position);
+
+        void cardSwipedDown(int position);
 
         void cardsDepleted();
 
@@ -476,7 +523,6 @@ public class SwipeDeck extends FrameLayout {
         protected void onPostExecute(View view) {
             super.onPostExecute(view);
             removeView(view);
-
             //if there are no more children left after top card removal let the callback know
             if (getChildCount() <= 0 && eventCallback != null) {
                 eventCallback.cardsDepleted();
