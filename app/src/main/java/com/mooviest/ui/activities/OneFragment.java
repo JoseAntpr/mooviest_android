@@ -93,19 +93,7 @@ public class OneFragment extends Fragment {
         cardStack = (SwipeDeck) v.findViewById(R.id.swipe_deck);
         cardStack.setHardwareAccelerationEnabled(true);
         testData = new ArrayList<>();
-        testData.add("the_hobbit_2");
-        testData.add("mothers_day");
-        testData.add("the_revenant");
-        testData.add("shrek");
-        testData.add("the_conjuring");
-        testData.add("titanic");
-        testData.add("avengers_2");
-        testData.add("as_good_as_it_gets");
-        testData.add("hangover");
-        testData.add("no_strings_attached");
-        testData.add("alvin_and_the_chipmunks");
-        testData.add("perdiendo_el_norte");
-        testData.add("the_purge_election_year");
+        getData();
 
         adapter = new SwipeDeckAdapter(testData, getContext());
         cardStack.setAdapter(adapter);
@@ -119,6 +107,11 @@ public class OneFragment extends Fragment {
             @Override
             public void cardSwipedRight(int position) {
                 Log.i("MainActivity", "card was swiped right, position in adapter: " + position);
+            }
+
+            @Override
+            public void cardSwipedUp(int position) {
+                Log.i("MainActivity", "card was swiped Up, position in adapter: " + position);
             }
 
             @Override
@@ -153,7 +146,14 @@ public class OneFragment extends Fragment {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cardStack.swipeTopCardRight(180);
+                cardStack.swipeTopCardRight(260);
+            }
+        });
+        ImageButton btn4 = (ImageButton) v.findViewById(R.id.button4);
+        btn4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cardStack.swipeTopCardUp(150);
             }
         });
 
@@ -179,6 +179,24 @@ public class OneFragment extends Fragment {
 
 
     }
+
+    private void getData(){
+        testData.add("the_hobbit_2");
+        testData.add("mothers_day");
+        testData.add("the_revenant");
+        testData.add("shrek");
+        testData.add("the_conjuring");
+        testData.add("titanic");
+        testData.add("avengers_2");
+        testData.add("as_good_as_it_gets");
+        testData.add("hangover");
+        testData.add("no_strings_attached");
+        testData.add("alvin_and_the_chipmunks");
+        testData.add("perdiendo_el_norte");
+        testData.add("the_purge_election_year");
+    }
+
+
 
     public class SwipeDeckAdapter extends BaseAdapter {
 
