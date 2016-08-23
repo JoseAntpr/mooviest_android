@@ -1,5 +1,6 @@
 package com.mooviest.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -49,22 +50,14 @@ public class MainActivity extends AppCompatActivity
         SingletonSwipe.getInstance().enabled=true;
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+        //GUARDA EL ESTADO DE TODOS LOS FRAGMENTS DEL VIEW PAGER
+        viewPager.setOffscreenPageLimit(2);
+        //SETUP VIEW PAGER (ADD 3 FRAGMENTS)
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
-
-        /*FLOATING BUTTON
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
 
         //SIDE MENU
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -75,6 +68,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //INTENT LoginActivity
+        //Intent intent = new Intent(this, LoginActivity.class);
+        //startActivity(intent);
     }
 
     @Override

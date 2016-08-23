@@ -124,9 +124,9 @@ public class SwipeListener implements View.OnTouchListener {
                 card.setX(posX);
                 card.setY(posY);
 
-                Log.i("Positionx","X:"+posX);
+                //Log.i("Positionx","X:"+posX);
 
-                Log.i("Positionx","Y:"+posY);
+                //Log.i("Positionx","Y:"+posY);
 
                 //card.setRotation
                 float distobjectX = posX - initialX;
@@ -296,11 +296,11 @@ public class SwipeListener implements View.OnTouchListener {
     private boolean cardBeyondDownBorder() {
         //check if card middle is beyond the top quarter of the screen
 
-        Log.i("Position Y","Y:"+card.getY());
+        //Log.i("Position Y","Y:"+card.getY());
 
-        Log.i("getHeight","H:"+(card.getHeight() / 2));
+        //Log.i("getHeight","H:"+(card.getHeight() / 2));
 
-        Log.i("ParentHeight","up:"+((parentHeight)));
+        //Log.i("ParentHeight","up:"+((parentHeight)));
         return (card.getY() + (card.getHeight() / 2) > ((parentHeight /1.5f)));
     }
 
@@ -319,12 +319,12 @@ public class SwipeListener implements View.OnTouchListener {
     }
 
     public ViewPropertyAnimator animateOffScreenLeft(int duration) {
-        Log.i("AnimateUP","up:"+(-parentWidth));
+        //Log.i("AnimateUP","up:"+(-parentWidth));
 
 
-        Log.i("Positionx","X:"+card.getX());
+        //Log.i("Positionx","X:"+card.getX());
 
-        Log.i("Positionx","Y:"+card.getY());
+        //Log.i("Positionx","Y:"+card.getY());
         return card.animate()
                 .setDuration(duration)
                 .x(-(parentWidth))
@@ -334,12 +334,12 @@ public class SwipeListener implements View.OnTouchListener {
 
 
     public ViewPropertyAnimator animateOffScreenRight(int duration) {
-        Log.i("AnimateUP","up:"+(parentWidth * 2));
+        //Log.i("AnimateUP","up:"+(parentWidth * 2));
 
 
-        Log.i("Positionx","X:"+card.getX());
+        //Log.i("Positionx","X:"+card.getX());
 
-        Log.i("Positionx","Y:"+card.getY());
+        //Log.i("Positionx","Y:"+card.getY());
         return card.animate()
                 .setDuration(duration)
                 .x(parentWidth * 2)
@@ -348,12 +348,12 @@ public class SwipeListener implements View.OnTouchListener {
     }
 
     public ViewPropertyAnimator animateOffScreenUp(int duration) {
-        Log.i("AnimateUP","up:"+(-(parentHeight)));
+        //Log.i("AnimateUP","up:"+(-(parentHeight)));
 
 
-        Log.i("Positionx","X:"+card.getX());
+        //Log.i("Positionx","X:"+card.getX());
 
-        Log.i("Positionx","Y:"+card.getY());
+        //Log.i("Positionx","Y:"+card.getY());
         return card.animate()
                 .setDuration(duration)
                 .x(initialX)
@@ -362,12 +362,12 @@ public class SwipeListener implements View.OnTouchListener {
     }
 
     public ViewPropertyAnimator animateOffScreenDown(int duration) {
-        Log.i("AnimateUP","up:"+((parentHeight)));
+        //Log.i("AnimateUP","up:"+((parentHeight)));
 
 
-        Log.i("Positionx","X:"+card.getX());
+        //Log.i("Positionx","X:"+card.getX());
 
-        Log.i("Positionx","Y:"+card.getY());
+        //Log.i("Positionx","Y:"+card.getY());
         return card.animate()
                 .setDuration(duration)
                 .x(initialX)

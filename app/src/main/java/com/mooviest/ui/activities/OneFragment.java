@@ -41,7 +41,8 @@ public class OneFragment extends Fragment {
 
     private SwipeDeck cardStack;
     private SwipeDeckAdapter adapter;
-    private ArrayList<String> testData;
+    private ArrayList<String> movies_buffer;
+    private ArrayList<String> movies_swipe;
 
     Bundle savedInstanceState;
     private Resources resources;
@@ -78,13 +79,30 @@ public class OneFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        if (savedInstanceState != null) {
+            Log.i("OneFragment", "restoreInstanceState");
+            // Restore value of members from saved state
+            movies_buffer = savedInstanceState.getStringArrayList("MOVIES_BUFFER");
+            movies_swipe = savedInstanceState.getStringArrayList("MOVIES_SWIPE");
+        }else {
+            Log.i("OneFragment", "onCreate");
+            //INIT movies_swipe
+            movies_swipe = new ArrayList<>();
+
+            //INIT movies_buffer
+            movies_buffer = new ArrayList<>();
+            getData(movies_buffer);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //this.savedInstanceState=savedInstanceState;
+        Log.i("OneFragment", "onCreateView");
 
-        this.savedInstanceState=savedInstanceState;
         this.resources=getContext().getResources();
         // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_one, container, false);
@@ -92,30 +110,53 @@ public class OneFragment extends Fragment {
         //**** CARDSTACK ******
         cardStack = (SwipeDeck) v.findViewById(R.id.swipe_deck);
         cardStack.setHardwareAccelerationEnabled(true);
-        testData = new ArrayList<>();
-        getData();
 
-        adapter = new SwipeDeckAdapter(testData, getContext());
+        Log.i("OneFragment", "Movies_size: "+ movies_swipe.size());
+
+
+        adapter = new SwipeDeckAdapter(movies_swipe, getContext());
         cardStack.setAdapter(adapter);
+
+        if(movies_swipe.isEmpty() && movies_buffer.size()>=2){
+            Log.i("OneFragment", "movies_swipe empty, add two movies");
+            addMoviesToSwipe(2);
+        }
 
         cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
             @Override
             public void cardSwipedLeft(int position) {
+                adapter.data.remove(0);
+                if(movies_buffer.size() >= 1) {
+                    addMoviesToSwipe(1);
+                }
                 Log.i("MainActivity", "card was swiped left, position in adapter: " + position);
             }
 
             @Override
             public void cardSwipedRight(int position) {
+                adapter.data.remove(0);
+                if(movies_buffer.size() >= 1) {
+                    addMoviesToSwipe(1);
+                }
+
                 Log.i("MainActivity", "card was swiped right, position in adapter: " + position);
             }
 
             @Override
             public void cardSwipedUp(int position) {
+                adapter.data.remove(0);
+                if(movies_buffer.size() >= 1) {
+                    addMoviesToSwipe(1);
+                }
                 Log.i("MainActivity", "card was swiped Up, position in adapter: " + position);
             }
 
             @Override
             public void cardSwipedDown(int position) {
+                adapter.data.remove(0);
+                if(movies_buffer.size() >= 1) {
+                    addMoviesToSwipe(1);
+                }
                 Log.i("MainActivity", "card was swiped down, position in adapter: " + position);
             }
 
@@ -143,7 +184,9 @@ public class OneFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cardStack.swipeTopCardLeft(180);
+                if(adapter.data.size()>1) {
+                    cardStack.swipeTopCardLeft(180);
+                }
 
             }
         });
@@ -151,14 +194,18 @@ public class OneFragment extends Fragment {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cardStack.swipeTopCardRight(260);
+                if(adapter.data.size()>1) {
+                    cardStack.swipeTopCardRight(260);
+                }
             }
         });
         ImageButton btn4 = (ImageButton) v.findViewById(R.id.button4);
         btn4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cardStack.swipeTopCardUp(150);
+                if(adapter.data.size()>1) {
+                    cardStack.swipeTopCardUp(150);
+                }
             }
         });
 
@@ -167,10 +214,12 @@ public class OneFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 /* ADD CARD
-                testData.add("hangover");
+                movies_swipe.add("hangover");
                 adapter.notifyDataSetChanged();
                 */
-                cardStack.swipeTopCardDown(180);
+                if(adapter.data.size()>1) {
+                    cardStack.swipeTopCardDown(180);
+                }
             }
         });
 
@@ -180,23 +229,40 @@ public class OneFragment extends Fragment {
 
     }
 
-    private void getData(){
-        testData.add("the_hobbit_2");
-        testData.add("mothers_day");
-        testData.add("the_revenant");
-        testData.add("shrek");
-        testData.add("the_conjuring");
-        testData.add("titanic");
-        testData.add("avengers_2");
-        testData.add("as_good_as_it_gets");
-        testData.add("hangover");
-        testData.add("no_strings_attached");
-        testData.add("alvin_and_the_chipmunks");
-        testData.add("perdiendo_el_norte");
-        testData.add("the_purge_election_year");
+    private void getData(ArrayList<String> list){
+        list.add("the_hobbit_2");
+        list.add("mothers_day");
+        list.add("the_revenant");
+        list.add("shrek");
+        list.add("the_conjuring");
+        list.add("titanic");
+        list.add("avengers_2");
+        list.add("as_good_as_it_gets");
+        list.add("hangover");
+        list.add("no_strings_attached");
+        list.add("alvin_and_the_chipmunks");
+        list.add("perdiendo_el_norte");
+        list.add("the_purge_election_year");
     }
 
+    private void addMoviesToSwipe(int num){
+        for(int i=0; i < num; i++){
+            adapter.data.add(movies_buffer.get(0));
+            movies_buffer.remove(0);
+        }
+    }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        Log.i("OneFragment", "onSaveInstanceState");
+        // Save the user's current game state
+        Log.i("OneFragment", "Movies_size: "+ movies_swipe.size());
+        savedInstanceState.putStringArrayList("MOVIES_BUFFER", movies_buffer);
+        savedInstanceState.putStringArrayList("MOVIES_SWIPE", movies_swipe);
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
 
     public class SwipeDeckAdapter extends BaseAdapter {
 
@@ -234,7 +300,7 @@ public class OneFragment extends Fragment {
             }
             //((TextView) v.findViewById(R.id.textView2)).setText(data.get(position));
             ImageView imageView = (ImageView) v.findViewById(R.id.offer_image);
-
+            Log.i("OneFragment", "load new Image");
             //GET IMAGE
             String item = (String)getItem(position);
             Picasso.with(context).load(resources.getIdentifier(item,"drawable",context.getPackageName())).fit().centerCrop().into(imageView);
@@ -301,5 +367,7 @@ public class OneFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
      */
+
+
 
 }
