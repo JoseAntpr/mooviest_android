@@ -183,6 +183,7 @@ public class SwipeDeck extends FrameLayout {
     }
 
     private void removeTopCard() {
+        Log.i("SwipeDeck","RemoveTopCard");
         //top card is now the last in view children
         int childOffset = getChildCount() - NUMBER_OF_CARDS + 1;
         final View child = getChildAt(getChildCount() - childOffset);
@@ -192,6 +193,9 @@ public class SwipeDeck extends FrameLayout {
             //this will also check to see if cards are depleted
             removeViewWaitForAnimation(child);
         }
+        nextAdapterCard--;
+        // ENABLE VIEWPAGER SWIPE
+        SingletonSwipe.getInstance().enabled=true;
     }
 
     private void removeViewWaitForAnimation(View child) {
@@ -206,14 +210,15 @@ public class SwipeDeck extends FrameLayout {
     }
 
     private void addNextCard() {
-
+        Log.i("SwipeDeck","AddNextCard");
+        Log.i("nextAdapterCard",nextAdapterCard+"");
+        Log.i("mAdapter",mAdapter.getCount()+"");
         if (nextAdapterCard < mAdapter.getCount()) {
             Log.i("nextAdaptmadapterget","nextAdapterCard < mAdapter.getCount()");
             // TODO: Make view recycling work
             // TODO: Instead of removing the view from here and adding it again when it's swiped
             // ... don't remove and add to this instance: don't call removeView & addView in sequence.
             View newBottomChild = mAdapter.getView(nextAdapterCard, null/*lastRemovedView*/, this);
-
             if (hardwareAccelerationEnabled) {
                 //set backed by an off-screen buffer
                 newBottomChild.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -223,6 +228,8 @@ public class SwipeDeck extends FrameLayout {
             //newBottomChild.setY(paddingTop);
             addAndMeasureChild(newBottomChild);
             nextAdapterCard++;
+            Log.i("nextAdapterCard",nextAdapterCard+"");
+            Log.i("mAdapter",mAdapter.getCount()+"");
         }
         Log.i("nextAdaptmadapterget","nextAdapterCard > mAdapter.getCount()");
         setupTopCard();
@@ -356,34 +363,34 @@ public class SwipeDeck extends FrameLayout {
             swipeListener = new SwipeListener(child, new SwipeListener.SwipeCallback() {
                 @Override
                 public void cardSwipedLeft() {
+                    addNextCard();
                     int positionInAdapter = nextAdapterCard - getChildCount();
                     removeTopCard();
                     if (eventCallback != null) eventCallback.cardSwipedLeft(positionInAdapter);
-                    addNextCard();
                 }
 
                 @Override
                 public void cardSwipedRight() {
+                    addNextCard();
                     int positionInAdapter = nextAdapterCard - getChildCount();
                     removeTopCard();
                     if (eventCallback != null) eventCallback.cardSwipedRight(positionInAdapter);
-                    addNextCard();
                 }
 
                 @Override
                 public void cardSwipedUp() {
+                    addNextCard();
                     int positionInAdapter = nextAdapterCard - getChildCount();
                     removeTopCard();
                     if (eventCallback != null) eventCallback.cardSwipedUp(positionInAdapter);
-                    addNextCard();
                 }
 
                 @Override
                 public void cardSwipedDown() {
+                    addNextCard();
                     int positionInAdapter = nextAdapterCard - getChildCount();
                     removeTopCard();
                     if (eventCallback != null) eventCallback.cardSwipedDown(positionInAdapter);
-                    addNextCard();
                 }
 
                 @Override
@@ -417,8 +424,7 @@ public class SwipeDeck extends FrameLayout {
 
             child.setOnTouchListener(swipeListener);
         }
-        // ENABLE VIEWPAGER SWIPE
-        SingletonSwipe.getInstance().enabled=true;
+
     }
 
     public void setEventCallback(SwipeEventCallback eventCallback) {
@@ -427,52 +433,57 @@ public class SwipeDeck extends FrameLayout {
 
 
     public void swipeTopCardLeft(int duration) {
-
         int childCount = getChildCount();
+        Log.i("SwipeDeck","CHILD COUNT"+childCount+" NUMBER OF CARDS"+ NUMBER_OF_CARDS);
         if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
             swipeListener.animateOffScreenLeft(duration);
 
+            addNextCard();
             int positionInAdapter = nextAdapterCard - getChildCount();
             removeTopCard();
             if (eventCallback != null) eventCallback.cardSwipedLeft(positionInAdapter);
-            addNextCard();
         }
 
     }
 
     public void swipeTopCardRight(int duration) {
         int childCount = getChildCount();
+        Log.i("SwipeDeck","CHILD COUNT"+childCount+" NUMBER OF CARDS"+ NUMBER_OF_CARDS);
         if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
             swipeListener.animateOffScreenRight(duration);
 
+            addNextCard();
             int positionInAdapter = nextAdapterCard - getChildCount();
             removeTopCard();
             if (eventCallback != null) eventCallback.cardSwipedRight(positionInAdapter);
-            addNextCard();
         }
     }
 
     public void swipeTopCardUp(int duration) {
         int childCount = getChildCount();
+        Log.i("SwipeDeck","CHILD COUNT"+childCount+" NUMBER OF CARDS"+ NUMBER_OF_CARDS);
         if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
             swipeListener.animateOffScreenUp(duration);
 
+            addNextCard();
             int positionInAdapter = nextAdapterCard - getChildCount();
             removeTopCard();
             if (eventCallback != null) eventCallback.cardSwipedUp(positionInAdapter);
-            addNextCard();
+
         }
     }
 
     public void swipeTopCardDown(int duration) {
         int childCount = getChildCount();
+        Log.i("SwipeDeck","CHILD COUNT"+childCount +" NUMBER OF CARDS"+ NUMBER_OF_CARDS);
         if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
             swipeListener.animateOffScreenDown(duration);
 
+            addNextCard();
             int positionInAdapter = nextAdapterCard - getChildCount();
             removeTopCard();
             if (eventCallback != null) eventCallback.cardSwipedDown(positionInAdapter);
-            addNextCard();
+
         }
     }
 
