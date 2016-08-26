@@ -435,55 +435,62 @@ public class SwipeDeck extends FrameLayout {
     public void swipeTopCardLeft(int duration) {
         int childCount = getChildCount();
         Log.i("SwipeDeck","CHILD COUNT"+childCount+" NUMBER OF CARDS"+ NUMBER_OF_CARDS);
-        if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
-            swipeListener.animateOffScreenLeft(duration);
+        if(swipeListener != null) {
+            if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
+                swipeListener.animateOffScreenLeft(duration);
 
-            addNextCard();
-            int positionInAdapter = nextAdapterCard - getChildCount();
-            removeTopCard();
-            if (eventCallback != null) eventCallback.cardSwipedLeft(positionInAdapter);
+                addNextCard();
+                int positionInAdapter = nextAdapterCard - getChildCount();
+                removeTopCard();
+                if (eventCallback != null) eventCallback.cardSwipedLeft(positionInAdapter);
+            }
         }
-
     }
 
     public void swipeTopCardRight(int duration) {
         int childCount = getChildCount();
         Log.i("SwipeDeck","CHILD COUNT"+childCount+" NUMBER OF CARDS"+ NUMBER_OF_CARDS);
-        if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
-            swipeListener.animateOffScreenRight(duration);
+        if(swipeListener != null) {
+            if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
+                swipeListener.animateOffScreenRight(duration);
 
-            addNextCard();
-            int positionInAdapter = nextAdapterCard - getChildCount();
-            removeTopCard();
-            if (eventCallback != null) eventCallback.cardSwipedRight(positionInAdapter);
+                addNextCard();
+                int positionInAdapter = nextAdapterCard - getChildCount();
+                removeTopCard();
+                if (eventCallback != null) eventCallback.cardSwipedRight(positionInAdapter);
+            }
         }
     }
 
     public void swipeTopCardUp(int duration) {
         int childCount = getChildCount();
         Log.i("SwipeDeck","CHILD COUNT"+childCount+" NUMBER OF CARDS"+ NUMBER_OF_CARDS);
-        if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
-            swipeListener.animateOffScreenUp(duration);
+        if(swipeListener != null) {
+            if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
+                swipeListener.animateOffScreenUp(duration);
 
-            addNextCard();
-            int positionInAdapter = nextAdapterCard - getChildCount();
-            removeTopCard();
-            if (eventCallback != null) eventCallback.cardSwipedUp(positionInAdapter);
+                addNextCard();
+                int positionInAdapter = nextAdapterCard - getChildCount();
+                removeTopCard();
+                if (eventCallback != null) eventCallback.cardSwipedUp(positionInAdapter);
 
+            }
         }
     }
 
     public void swipeTopCardDown(int duration) {
         int childCount = getChildCount();
         Log.i("SwipeDeck","CHILD COUNT"+childCount +" NUMBER OF CARDS"+ NUMBER_OF_CARDS);
-        if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
-            swipeListener.animateOffScreenDown(duration);
+        if(swipeListener != null) {
+            if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
+                swipeListener.animateOffScreenDown(duration);
 
-            addNextCard();
-            int positionInAdapter = nextAdapterCard - getChildCount();
-            removeTopCard();
-            if (eventCallback != null) eventCallback.cardSwipedDown(positionInAdapter);
+                addNextCard();
+                int positionInAdapter = nextAdapterCard - getChildCount();
+                removeTopCard();
+                if (eventCallback != null) eventCallback.cardSwipedDown(positionInAdapter);
 
+            }
         }
     }
 
