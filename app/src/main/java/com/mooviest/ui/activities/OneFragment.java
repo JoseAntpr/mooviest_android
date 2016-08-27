@@ -13,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.mooviest.R;
+import com.mooviest.ui.models.MooviestApiResult;
+import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.MooviestApiInterface;
 import com.mooviest.ui.rest.SingletonRestClient;
 import com.squareup.picasso.Picasso;
@@ -202,17 +204,17 @@ public class OneFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 MooviestApiInterface apiInterface=SingletonRestClient.getInstance().mooviestApiInterface;
-                Call<ResponseBody> call = apiInterface.movie_app_bylang(2,20);
-                call.enqueue(new Callback<ResponseBody>() {
+                Call<MooviestApiResult> call = apiInterface.movie_app_bylang(2,10);
+                call.enqueue(new Callback<MooviestApiResult>() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    public void onResponse(Call<MooviestApiResult> call, Response<MooviestApiResult> response) {
                         if (response.isSuccessful()) {
                             Log.i("RESTCLIENT", "RESPONSE SUCCESSFUL");
-                            try {
-                                Log.d("RESPONSE", "" + response.body().string());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            MooviestApiResult result =response.body();
+                            Movie m=result.getMovies().get(1);
+                            Log.i("Title", m.getLangs().get(0).getTitle()+"");
+                            Log.i("Title", m.getLangs().get(0).getSynopsis()+"");
+
                         } else {
                             int statusCode = response.code();
                             Log.i("RESTCLIENT", "STATUS CODE "+ statusCode);
@@ -223,7 +225,7 @@ public class OneFragment extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    public void onFailure(Call<MooviestApiResult> call, Throwable t) {
                         Log.i("RESTCLIENT", "FAILURE");
                         Log.d("RESTCLIENT", "onFailure()", t);
                     }

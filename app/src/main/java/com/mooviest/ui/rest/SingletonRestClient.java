@@ -15,9 +15,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class SingletonRestClient {
 
-    //10.0.2.2 solo funciona con el emulador Android para probar
-    //con el móvil no se todavía como funciona. Con la ip del Mac no va tampoco.
-    private static String baseUrl = "http://10.0.2.2:8000/api/";
+    /* Para servidor local introducir la ip del pc donde se esté ejecutando el
+     * servidor. Para que el servidor escuche llamadas realizadas desde fuera,
+     * como es el caso del móvil, se debe ejecutar de la siguiente forma:
+     *
+     *      python3 manage.py runserver 0.0.0.0:8000
+     */
+    private static String baseUrl = "http://192.168.0.154:8000/api/";
     public static MooviestApiInterface mooviestApiInterface;
     private static Retrofit retrofit;
 

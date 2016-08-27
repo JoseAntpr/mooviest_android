@@ -1,5 +1,7 @@
 package com.mooviest.ui.rest;
 
+import com.mooviest.ui.models.MooviestApiResult;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -11,9 +13,9 @@ import retrofit2.http.Query;
 public interface MooviestApiInterface {
 
     @GET("movie/")
-    Call<ResponseBody> movie(@Query("search") String name);
+    Call<MooviestApiResult> movie(@Query("search") String name);
 
     @GET("movie_app_bylang")
-    Call<ResponseBody> movie_app_bylang(@Query("lang_id") int lang_id, @Query("limit") int limit);
+    Call<MooviestApiResult> movie_app_bylang(@Query("lang_id") int lang_id, @Query("limit") int limit);
 
 }
