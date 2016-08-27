@@ -15,6 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class SingletonRestClient {
 
+    //10.0.2.2 solo funciona con el emulador Android para probar
+    //con el móvil no se todavía como funciona. Con la ip del Mac no va tampoco.
     private static String baseUrl = "http://10.0.2.2:8000/api/";
     public static MooviestApiInterface mooviestApiInterface;
     private static Retrofit retrofit;
@@ -37,13 +39,13 @@ public class SingletonRestClient {
         builder.interceptors().add(interceptor);
         OkHttpClient okClient = builder.build();
 
-        retrofit = new Retrofit.Builder()
+        this.retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okClient)
                 .build();
 
-        mooviestApiInterface=retrofit.create(MooviestApiInterface.class);
+        this.mooviestApiInterface=this.retrofit.create(MooviestApiInterface.class);
 
     }
 

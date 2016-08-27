@@ -13,4 +13,7 @@ public interface MooviestApiInterface {
     @GET("movie/")
     Call<ResponseBody> movie(@Query("search") String name);
 
+    @GET("movie_app_bylang")
+    Call<ResponseBody> movie_app_bylang(@Query("lang_id") int lang_id, @Query("limit") int limit);
+
 }
