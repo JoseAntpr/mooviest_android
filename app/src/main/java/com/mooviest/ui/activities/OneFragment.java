@@ -50,8 +50,8 @@ public class OneFragment extends Fragment {
 
     private SwipeDeck cardStack;
     private SwipeDeckAdapter adapter;
-    private ArrayList<String> movies_buffer;
-    private ArrayList<String> movies_swipe;
+    private ArrayList<Movie> movies_buffer;
+    private ArrayList<Movie> movies_swipe;
 
     Bundle savedInstanceState;
     private Resources resources;
@@ -92,8 +92,8 @@ public class OneFragment extends Fragment {
         if (savedInstanceState != null) {
             Log.i("OneFragment", "restoreInstanceState");
             // Restore value of members from saved state
-            movies_buffer = savedInstanceState.getStringArrayList("MOVIES_BUFFER");
-            movies_swipe = savedInstanceState.getStringArrayList("MOVIES_SWIPE");
+            movies_buffer = savedInstanceState.getParcelableArrayList("MOVIES_BUFFER");
+            movies_swipe = savedInstanceState.getParcelableArrayList("MOVIES_SWIPE");
         }else {
             Log.i("OneFragment", "onCreate");
             //INIT movies_swipe
@@ -101,7 +101,9 @@ public class OneFragment extends Fragment {
 
             //INIT movies_buffer
             movies_buffer = new ArrayList<>();
-            getData(movies_buffer);
+
+            // GET API DATA TO MOVIES_BUFFER, lang, num_movies
+            getData(1, 10);
         }
     }
 
@@ -203,33 +205,6 @@ public class OneFragment extends Fragment {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MooviestApiInterface apiInterface=SingletonRestClient.getInstance().mooviestApiInterface;
-                Call<MooviestApiResult> call = apiInterface.movie_app_bylang(2,10);
-                call.enqueue(new Callback<MooviestApiResult>() {
-                    @Override
-                    public void onResponse(Call<MooviestApiResult> call, Response<MooviestApiResult> response) {
-                        if (response.isSuccessful()) {
-                            Log.i("RESTCLIENT", "RESPONSE SUCCESSFUL");
-                            MooviestApiResult result =response.body();
-                            Movie m=result.getMovies().get(1);
-                            Log.i("Title", m.getLangs().get(0).getTitle()+"");
-                            Log.i("Title", m.getLangs().get(0).getSynopsis()+"");
-
-                        } else {
-                            int statusCode = response.code();
-                            Log.i("RESTCLIENT", "STATUS CODE "+ statusCode);
-                            // handle request errors yourself
-                            ResponseBody errorBody = response.errorBody();
-                            Log.i("RESTCLIENT", "ERROR BODY "+errorBody);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<MooviestApiResult> call, Throwable t) {
-                        Log.i("RESTCLIENT", "FAILURE");
-                        Log.d("RESTCLIENT", "onFailure()", t);
-                    }
-                });
                 if(adapter.data.size()>1) {
                     cardStack.swipeTopCardRight(260);
                 }
@@ -249,10 +224,6 @@ public class OneFragment extends Fragment {
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /* ADD CARD
-                movies_swipe.add("hangover");
-                adapter.notifyDataSetChanged();
-                */
                 if(adapter.data.size()>1) {
                     cardStack.swipeTopCardDown(180);
                 }
@@ -265,20 +236,32 @@ public class OneFragment extends Fragment {
 
     }
 
-    private void getData(ArrayList<String> list){
-        list.add("the_hobbit_2");
-        list.add("mothers_day");
-        list.add("the_revenant");
-        list.add("shrek");
-        list.add("the_conjuring");
-        list.add("titanic");
-        list.add("avengers_2");
-        list.add("as_good_as_it_gets");
-        list.add("hangover");
-        list.add("no_strings_attached");
-        list.add("alvin_and_the_chipmunks");
-        list.add("perdiendo_el_norte");
-        list.add("the_purge_election_year");
+    private void getData(int lang, final int num_movies){
+        MooviestApiInterface apiInterface=SingletonRestClient.getInstance().mooviestApiInterface;
+        Call<MooviestApiResult> call = apiInterface.movie_app_bylang(lang, num_movies);
+        call.enqueue(new Callback<MooviestApiResult>() {
+            @Override
+            public void onResponse(Call<MooviestApiResult> call, Response<MooviestApiResult> response) {
+                if (response.isSuccessful()) {
+                    Log.i("RESTCLIENT", "RESPONSE SUCCESSFUL");
+                    MooviestApiResult result =response.body();
+                    movies_buffer = result.getMovies();
+
+                } else {
+                    int statusCode = response.code();
+                    Log.i("RESTCLIENT", "STATUS CODE "+ statusCode);
+                    // handle request errors yourself
+                    ResponseBody errorBody = response.errorBody();
+                    Log.i("RESTCLIENT", "ERROR BODY "+errorBody);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MooviestApiResult> call, Throwable t) {
+                Log.i("RESTCLIENT", "FAILURE");
+                Log.d("RESTCLIENT", "onFailure()", t);
+            }
+        });
     }
 
     private void addMoviesToSwipe(int num){
@@ -293,8 +276,8 @@ public class OneFragment extends Fragment {
         Log.i("OneFragment", "onSaveInstanceState");
         // Save the user's current game state
         Log.i("OneFragment", "Movies_size: "+ movies_swipe.size());
-        savedInstanceState.putStringArrayList("MOVIES_BUFFER", movies_buffer);
-        savedInstanceState.putStringArrayList("MOVIES_SWIPE", movies_swipe);
+        savedInstanceState.putParcelableArrayList("MOVIES_BUFFER", movies_buffer);
+        savedInstanceState.putParcelableArrayList("MOVIES_SWIPE", movies_swipe);
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
@@ -302,10 +285,10 @@ public class OneFragment extends Fragment {
 
     public class SwipeDeckAdapter extends BaseAdapter {
 
-        private List<String> data;
+        private List<Movie> data;
         private Context context;
 
-        public SwipeDeckAdapter(List<String> data, Context context) {
+        public SwipeDeckAdapter(List<Movie> data, Context context) {
             this.data = data;
             this.context = context;
         }
@@ -338,8 +321,8 @@ public class OneFragment extends Fragment {
             ImageView imageView = (ImageView) v.findViewById(R.id.offer_image);
             Log.i("OneFragment", "load new Image");
             //GET IMAGE
-            String item = (String)getItem(position);
-            Picasso.with(context).load(resources.getIdentifier(item,"drawable",context.getPackageName())).fit().centerCrop().into(imageView);
+            Movie item = (Movie)getItem(position);
+            Picasso.with(context).load(resources.getIdentifier(item.getLangs().get(0).getImage(),"drawable",context.getPackageName())).fit().centerCrop().into(imageView);
             Picasso.with(context).setIndicatorsEnabled(false);
             //TextView textView = (TextView) v.findViewById(R.id.sample_text);
 

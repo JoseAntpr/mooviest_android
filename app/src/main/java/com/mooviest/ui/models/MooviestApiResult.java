@@ -9,7 +9,7 @@ public class MooviestApiResult {
     private int count;
     private String next;
     private String previous;
-    private List<Movie> results = new ArrayList<Movie>();
+    private ArrayList<Movie> results = new ArrayList<Movie>();
 
     /**
      * 
@@ -70,7 +70,7 @@ public class MooviestApiResult {
      * @return
      *     The results
      */
-    public List<Movie> getMovies() {
+    public ArrayList<Movie> getMovies() {
         return results;
     }
 
@@ -79,7 +79,7 @@ public class MooviestApiResult {
      * @param results
      *     The results
      */
-    public void setMovies(List<Movie> results) {
+    public void setMovies(ArrayList<Movie> results) {
         this.results = results;
     }
 
