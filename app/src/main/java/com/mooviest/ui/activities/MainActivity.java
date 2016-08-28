@@ -21,6 +21,7 @@ import com.mooviest.R;
 import com.mooviest.ui.CustomViewPager;
 import com.mooviest.ui.SingletonSwipe;
 import com.mooviest.ui.adapters.ViewPagerAdapter;
+import com.mooviest.ui.rest.SingletonRestClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,9 @@ public class MainActivity extends AppCompatActivity
 
         //ENABLE VIEWPAGER SWIPE
         SingletonSwipe.getInstance().enabled=true;
+
+        //INITIALIZE SINGLETON REST CLIENT
+        SingletonRestClient.getInstance();
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         //GUARDA EL ESTADO DE TODOS LOS FRAGMENTS DEL VIEW PAGER

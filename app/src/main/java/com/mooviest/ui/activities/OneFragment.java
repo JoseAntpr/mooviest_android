@@ -13,12 +13,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.mooviest.R;
+import com.mooviest.ui.models.MooviestApiResult;
+import com.mooviest.ui.models.Movie;
+import com.mooviest.ui.rest.MooviestApiInterface;
+import com.mooviest.ui.rest.SingletonRestClient;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cardstack.SwipeDeck;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -194,6 +203,33 @@ public class OneFragment extends Fragment {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MooviestApiInterface apiInterface=SingletonRestClient.getInstance().mooviestApiInterface;
+                Call<MooviestApiResult> call = apiInterface.movie_app_bylang(2,10);
+                call.enqueue(new Callback<MooviestApiResult>() {
+                    @Override
+                    public void onResponse(Call<MooviestApiResult> call, Response<MooviestApiResult> response) {
+                        if (response.isSuccessful()) {
+                            Log.i("RESTCLIENT", "RESPONSE SUCCESSFUL");
+                            MooviestApiResult result =response.body();
+                            Movie m=result.getMovies().get(1);
+                            Log.i("Title", m.getLangs().get(0).getTitle()+"");
+                            Log.i("Title", m.getLangs().get(0).getSynopsis()+"");
+
+                        } else {
+                            int statusCode = response.code();
+                            Log.i("RESTCLIENT", "STATUS CODE "+ statusCode);
+                            // handle request errors yourself
+                            ResponseBody errorBody = response.errorBody();
+                            Log.i("RESTCLIENT", "ERROR BODY "+errorBody);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<MooviestApiResult> call, Throwable t) {
+                        Log.i("RESTCLIENT", "FAILURE");
+                        Log.d("RESTCLIENT", "onFailure()", t);
+                    }
+                });
                 if(adapter.data.size()>1) {
                     cardStack.swipeTopCardRight(260);
                 }

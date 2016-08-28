@@ -6,12 +6,12 @@ package com.mooviest.ui;
 
 public class SingletonSwipe {
     public boolean enabled;
-    private static SingletonSwipe ourInstance = new SingletonSwipe();
-
-    public static SingletonSwipe getInstance() {
-        return ourInstance;
-    }
+    private static SingletonSwipe instance = new SingletonSwipe();
 
     private SingletonSwipe() {
+    }
+
+    public static SingletonSwipe getInstance() {
+        return instance;
     }
 }
