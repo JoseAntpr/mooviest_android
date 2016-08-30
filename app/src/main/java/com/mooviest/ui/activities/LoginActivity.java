@@ -13,7 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mooviest.R;
+import com.mooviest.ui.models.Movie;
+import com.mooviest.ui.rest.SingletonRestClient;
+import com.mooviest.ui.tasks.DataCallback;
 
+import java.util.ArrayList;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -65,7 +69,16 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+        // GET API DATA TO MOVIES_BUFFER, lang, num_movies
+        DataCallback callbackservice = new DataCallback(LoginActivity.this) {
+            @Override
+            public void receiveData(Object object) {
+                SingletonRestClient.getInstance().movies_buffer = (ArrayList<Movie>) object;
+            }
+        };
+        callbackservice.execute(1, 10);
+
+        /*final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
@@ -84,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                         // onLoginFailed();
                         progressDialog.dismiss();
                     }
-                }, 3000);
+                }, 3000);*/
     }
 
 
@@ -139,5 +152,6 @@ public class LoginActivity extends AppCompatActivity {
 
         return valid;
     }
+
 }
 

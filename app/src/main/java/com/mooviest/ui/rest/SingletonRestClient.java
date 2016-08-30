@@ -1,6 +1,9 @@
 package com.mooviest.ui.rest;
 
+import com.mooviest.ui.models.Movie;
+
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
@@ -21,9 +24,10 @@ public class SingletonRestClient {
      *
      *      python3 manage.py runserver 0.0.0.0:8000
      */
-    private static String baseUrl = "http://192.168.0.154:8000/api/";
+    private static String baseUrl = "http://192.168.1.78:8000/api/";
     public static MooviestApiInterface mooviestApiInterface;
     private static Retrofit retrofit;
+    public ArrayList<Movie> movies_buffer;
 
     private static SingletonRestClient instance = new SingletonRestClient();
 
