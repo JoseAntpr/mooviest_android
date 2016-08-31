@@ -1,6 +1,7 @@
 package com.mooviest.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -284,7 +285,7 @@ public class OneFragment extends Fragment {
             ImageView imageView = (ImageView) v.findViewById(R.id.offer_image);
             Log.i("OneFragment", "load new Image");
             //GET IMAGE
-            Movie item = (Movie)getItem(position);
+            final Movie item = (Movie)getItem(position);
             Log.i("OneFragment", item.getLangs().get(0).getImage());
             //resources.getIdentifier(item.getLangs().get(0).getImage(),"drawable",context.getPackageName())
             Picasso.with(context).load(item.getLangs().get(0).getImage()).fit().centerCrop().into(imageView);
@@ -293,17 +294,17 @@ public class OneFragment extends Fragment {
 
             //textView.setText(item);
 
-            /* Hacer click en una tarjeta
+            //Click in movie
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    SingletonRestClient.getInstance().movie_selected= item;
                     Log.i("Layer type: ", Integer.toString(v.getLayerType()));
                     Log.i("Hwardware Accel type:", Integer.toString(View.LAYER_TYPE_HARDWARE));
-                    Intent i = new Intent(v.getContext(), BlankActivity.class);
+                    Intent i = new Intent(v.getContext(), MovieDetailActivity.class);
                     v.getContext().startActivity(i);
                 }
             });
-            */
             return v;
         }
     }

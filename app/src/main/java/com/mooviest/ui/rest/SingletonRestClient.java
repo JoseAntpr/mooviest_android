@@ -24,10 +24,11 @@ public class SingletonRestClient {
      *
      *      python3 manage.py runserver 0.0.0.0:8000
      */
-    private static String baseUrl = "http://192.168.1.220:8000/api/";
+    private static String baseUrl = "http://192.168.0.160:8000/api/";
     public static MooviestApiInterface mooviestApiInterface;
     private static Retrofit retrofit;
     public ArrayList<Movie> movies_buffer;
+    public Movie movie_selected;
 
     private static SingletonRestClient instance = new SingletonRestClient();
 
