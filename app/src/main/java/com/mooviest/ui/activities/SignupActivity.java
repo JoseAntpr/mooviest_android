@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText nameText;
     private EditText emailText;
     private EditText passwordText;
+    private EditText confirmPasswordText;
     private Button signupButton;
     private TextView loginLink;
 
@@ -30,6 +32,7 @@ public class SignupActivity extends AppCompatActivity {
         nameText = (EditText) findViewById(R.id.input_name);
         emailText = (EditText) findViewById(R.id.input_email);
         passwordText = (EditText) findViewById(R.id.input_password);
+        confirmPasswordText = (EditText) findViewById(R.id.confirm_password);
         signupButton = (Button) findViewById(R.id.btn_signup);
         loginLink = (TextView) findViewById(R.id.link_login);
 
@@ -43,10 +46,12 @@ public class SignupActivity extends AppCompatActivity {
         loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Finish the registration screen and return to the Login activity
+                // Finish the registration screen and return to the LoginActivity
                 finish();
             }
         });
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     public void signup() {
@@ -54,33 +59,34 @@ public class SignupActivity extends AppCompatActivity {
 
         if (!validate()) {
             onSignupFailed();
-            return;
+        }else {
+
+            signupButton.setEnabled(false);
+
+            String name = nameText.getText().toString();
+            String email = emailText.getText().toString();
+            String password = passwordText.getText().toString();
+
+            //PROGRESS DIALOG EN ASYNCTASK
+            final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
+                    R.style.AppTheme_Dark_Dialog);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Creating Account...");
+            progressDialog.show();
+
+            //CON ASYNCTASK y en onPostExecute llamar al intent HomeActivity
+            //REGISTRAR Y LOGEAR en doInBackground
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            // On complete call either onSignupSuccess or onSignupFailed
+                            // depending on success
+                            onSignupSuccess();
+                            // onSignupFailed();
+                            progressDialog.dismiss();
+                        }
+                    }, 3000);
         }
-
-        signupButton.setEnabled(false);
-
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
-        progressDialog.show();
-
-        String name = nameText.getText().toString();
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
-
-        // TODO: Implement your own signup logic here.
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
     }
 
 
@@ -102,6 +108,7 @@ public class SignupActivity extends AppCompatActivity {
         String name = nameText.getText().toString();
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
+        String confirmPassword = confirmPasswordText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
             nameText.setError("at least 3 characters");
@@ -122,6 +129,12 @@ public class SignupActivity extends AppCompatActivity {
             valid = false;
         } else {
             passwordText.setError(null);
+            if(password.equals(confirmPassword)){
+                confirmPasswordText.setError(null);
+            }else {
+                valid = false;
+                confirmPasswordText.setError("Passwords do not match");
+            }
         }
 
         return valid;

@@ -131,7 +131,7 @@ public class OneFragment extends Fragment {
                 if(movies_buffer.size() >= 1) {
                     addMoviesToSwipe(1);
                 }
-                Log.i("MainActivity", "card was swiped left, position in adapter: " + position);
+                Log.i("HomeActivity", "card was swiped left, position in adapter: " + position);
             }
 
             @Override
@@ -141,7 +141,7 @@ public class OneFragment extends Fragment {
                     addMoviesToSwipe(1);
                 }
 
-                Log.i("MainActivity", "card was swiped right, position in adapter: " + position);
+                Log.i("HomeActivity", "card was swiped right, position in adapter: " + position);
             }
 
             @Override
@@ -150,7 +150,7 @@ public class OneFragment extends Fragment {
                 if(movies_buffer.size() >= 1) {
                     addMoviesToSwipe(1);
                 }
-                Log.i("MainActivity", "card was swiped Up, position in adapter: " + position);
+                Log.i("HomeActivity", "card was swiped Up, position in adapter: " + position);
             }
 
             @Override
@@ -159,22 +159,22 @@ public class OneFragment extends Fragment {
                 if(movies_buffer.size() >= 1) {
                     addMoviesToSwipe(1);
                 }
-                Log.i("MainActivity", "card was swiped down, position in adapter: " + position);
+                Log.i("HomeActivity", "card was swiped down, position in adapter: " + position);
             }
 
             @Override
             public void cardsDepleted() {
-                Log.i("MainActivity", "no more cards");
+                Log.i("HomeActivity", "no more cards");
             }
 
             @Override
             public void cardActionDown() {
-                Log.i("MainActivity", "cardActionDown");
+                Log.i("HomeActivity", "cardActionDown");
             }
 
             @Override
             public void cardActionUp() {
-                Log.i("MainActivity", "cardActionUp");
+                Log.i("HomeActivity", "cardActionUp");
             }
 
         });
@@ -285,7 +285,9 @@ public class OneFragment extends Fragment {
             Log.i("OneFragment", "load new Image");
             //GET IMAGE
             Movie item = (Movie)getItem(position);
-            Picasso.with(context).load(resources.getIdentifier(item.getLangs().get(0).getImage(),"drawable",context.getPackageName())).fit().centerCrop().into(imageView);
+            Log.i("OneFragment", item.getLangs().get(0).getImage());
+            //resources.getIdentifier(item.getLangs().get(0).getImage(),"drawable",context.getPackageName())
+            Picasso.with(context).load(item.getLangs().get(0).getImage()).fit().centerCrop().into(imageView);
             Picasso.with(context).setIndicatorsEnabled(false);
             //TextView textView = (TextView) v.findViewById(R.id.sample_text);
 
