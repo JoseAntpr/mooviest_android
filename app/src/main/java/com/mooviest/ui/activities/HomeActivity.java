@@ -26,7 +26,7 @@ import com.mooviest.ui.rest.SingletonRestClient;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
+public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar toolbar;
@@ -72,10 +72,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        //INTENT LoginActivity
-        //Intent intent = new Intent(this, LoginActivity.class);
-        //startActivity(intent);
     }
 
     @Override
