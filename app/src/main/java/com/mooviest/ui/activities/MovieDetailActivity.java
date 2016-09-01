@@ -37,6 +37,9 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         detail_tabs = (TabLayout) findViewById(R.id.detail_tabs);
         detail_tabs.setupWithViewPager(detail_pager);
+        detail_tabs.getTabAt(0).setText(getString(R.string.information));
+        detail_tabs.getTabAt(1).setText(getString(R.string.cast));
+        detail_tabs.getTabAt(2).setText(getString(R.string.watch));
 
 
     }

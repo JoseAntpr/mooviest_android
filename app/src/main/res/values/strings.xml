@@ -27,4 +27,9 @@
 
     <!-- Search Menu -->
     <string name="search_query_hint">Search film in Mooviest</string>
+
+    <!-- Mooviest Detail -->
+    <string name="information">Information</string>
+    <string name="cast">Cast</string>
+    <string name="watch">Watch</string>
 </resources>
