@@ -1,13 +1,38 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.mooviest.ui.activities.MovieInformationFragment">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical"
+        tools:context="com.mooviest.ui.activities.MovieInformationFragment">
 
-</FrameLayout>
+        <TextView
+            android:paddingRight="30dp"
+            android:paddingLeft="30dp"
+            android:paddingTop="30dp"
+            android:paddingBottom="20dp"
+            android:textSize="22sp"
+            android:background="@color/grey_light"
+            android:id="@+id/title_synopsis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Synopsis" />
+
+        <TextView
+            android:paddingRight="35dp"
+            android:paddingLeft="35dp"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp"
+            android:lineSpacingExtra="5sp"
+            android:textSize="16sp"
+            android:id="@+id/movie_synopsis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hello_blank_fragment" />
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

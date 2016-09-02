@@ -7,8 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.mooviest.R;
+import com.mooviest.ui.rest.SingletonRestClient;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +25,7 @@ public class MovieInformationFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private TextView movie_synopsis;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -59,13 +62,18 @@ public class MovieInformationFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_movie_information, container, false);
+        movie_synopsis= (TextView) view.findViewById(R.id.movie_synopsis);
+        movie_synopsis.setText(SingletonRestClient.getInstance().movie_selected.getLangs().get(0).getSynopsis());
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_movie_information, container, false);
+        return view;
     }
 
     /*
