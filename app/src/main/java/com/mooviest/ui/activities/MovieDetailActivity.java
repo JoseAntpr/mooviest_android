@@ -5,7 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.ImageView;
 
@@ -40,7 +40,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         detail_tabs.getTabAt(0).setText(getString(R.string.information));
         detail_tabs.getTabAt(1).setText(getString(R.string.cast));
         detail_tabs.getTabAt(2).setText(getString(R.string.watch));
-
 
     }
 
