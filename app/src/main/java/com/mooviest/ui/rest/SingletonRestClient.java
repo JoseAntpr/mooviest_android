@@ -18,16 +18,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class SingletonRestClient {
 
-    /* Para servidor local introducir la ip del pc donde se esté ejecutando el
-     * servidor. Para que el servidor escuche llamadas realizadas desde fuera,
+    /* En baseUrl introducir la ip del pc donde se esté ejecutando el
+     * servidor. Si se ejecuta la aplicación en el emulador android
+     * introducir la ip equivalente a localhost que en android es
+     * la siguiente: 10.0.2.2
+     *
+     * Para que el servidor django escuche llamadas realizadas desde fuera,
      * como es el caso del móvil, se debe ejecutar de la siguiente forma:
      *
      *      python3 manage.py runserver 0.0.0.0:8000
+     *
      */
-    private static String baseUrl = "http://192.168.1.220:8000/api/";
+    private static String baseUrl = "http://192.168.0.160:8000/api/";
     public static MooviestApiInterface mooviestApiInterface;
     private static Retrofit retrofit;
     public ArrayList<Movie> movies_buffer;
+    public Movie movie_selected;
 
     private static SingletonRestClient instance = new SingletonRestClient();
 

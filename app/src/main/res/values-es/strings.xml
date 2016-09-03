@@ -26,10 +26,10 @@
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
 
     <!-- Search Menu -->
-    <string name="search_query_hint">Search film in Mooviest</string>
+    <string name="search_query_hint">Buscar película en Mooviest</string>
 
     <!-- Mooviest Detail -->
-    <string name="information">Information</string>
-    <string name="cast">Cast</string>
-    <string name="watch">Watch</string>
+    <string name="information">Información</string>
+    <string name="cast">Reparto</string>
+    <string name="watch">Ver</string>
 </resources>
