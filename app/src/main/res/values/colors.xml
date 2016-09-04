@@ -7,4 +7,6 @@
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
     <color name="grey_light">#e4e4e4</color>
+    <color name="celebrity_linear_transparent">#410a0a0a</color>
+    <color name="transparent">#00ffffff</color>
 </resources>

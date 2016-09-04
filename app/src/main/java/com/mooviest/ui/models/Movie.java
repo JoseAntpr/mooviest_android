@@ -22,6 +22,28 @@ public class Movie implements Parcelable {
     private int sagaOrder;
     private String average;
 
+    protected Movie(Parcel in) {
+        id = in.readInt();
+        originalTitle = in.readString();
+        runtime = in.readInt();
+        released = in.readInt();
+        movieProducer = in.readString();
+        sagaOrder = in.readInt();
+        average = in.readString();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
     /**
      * 
      * @return
@@ -246,6 +268,12 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-
+        parcel.writeInt(id);
+        parcel.writeString(originalTitle);
+        parcel.writeInt(runtime);
+        parcel.writeInt(released);
+        parcel.writeString(movieProducer);
+        parcel.writeInt(sagaOrder);
+        parcel.writeString(average);
     }
 }

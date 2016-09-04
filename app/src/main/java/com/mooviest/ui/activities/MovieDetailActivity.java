@@ -8,15 +8,23 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.mooviest.R;
+import com.mooviest.ui.RoundedTransformation;
 import com.mooviest.ui.adapters.ViewPagerAdapter;
+import com.mooviest.ui.models.Lang_;
+import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.SingletonRestClient;
 import com.squareup.picasso.Picasso;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
-    ImageView image_detail;
+    ImageView cover_detail;
+    ImageView background_detail;
+    TextView title_detail;
+    TextView average_detail;
+    TextView runtime_detail;
     ViewPager detail_pager;
     TabLayout detail_tabs;
 
@@ -25,10 +33,41 @@ public class MovieDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
 
-        // Load movie image
-        image_detail = (ImageView) findViewById(R.id.image_detail);
-        Picasso.with(this).load(SingletonRestClient.getInstance().movie_selected.getLangs().get(0).getImage()).into(image_detail);
+        Movie m = SingletonRestClient.getInstance().movie_selected;
+        Lang_ lang = m.getLangs().get(0);
+        String image = lang.getImage();
+        String background;
+        String cover;
+
+        if(image.startsWith("http")){
+            background = image;
+            cover = image;
+        }else{
+            background = "https://img.tviso.com/ES/backdrop/w600" + image;
+            cover = "https://img.tviso.com/ES/poster/w430" + image;
+        }
+
+        // Load cover image
+        cover_detail = (ImageView) findViewById(R.id.cover_detail);
+        Picasso.with(this).load(cover).transform(new RoundedTransformation(10, 0)).into(cover_detail);
         Picasso.with(this).setIndicatorsEnabled(false);
+
+        // Load background image
+        background_detail = (ImageView) findViewById(R.id.background_detail);
+        Picasso.with(this).load(background).fit().centerCrop().into(background_detail);
+        Picasso.with(this).setIndicatorsEnabled(false);
+
+        // Title
+        title_detail = (TextView) findViewById(R.id.title_detail);
+        title_detail.setText(lang.getTitle());
+
+        // Mooviest average
+        average_detail = (TextView) findViewById(R.id.average_detail);
+        average_detail.setText(m.getAverage());
+
+        // Runtime
+        runtime_detail = (TextView) findViewById(R.id.runtime_detail);
+        runtime_detail.setText(m.getRuntime() + " min");
 
         // Load fragments
         detail_pager = (ViewPager) findViewById(R.id.detail_pager);
