@@ -286,9 +286,17 @@ public class OneFragment extends Fragment {
             Log.i("OneFragment", "load new Image");
             //GET IMAGE
             final Movie item = (Movie)getItem(position);
-            Log.i("OneFragment", item.getLangs().get(0).getImage());
+            String image = item.getLangs().get(0).getImage();
+            String cover;
+
+            if(image.startsWith("http")){
+                cover = image;
+            }else{
+                cover = "https://img.tviso.com/ES/poster/w430" + image;
+            }
+
             //resources.getIdentifier(item.getLangs().get(0).getImage(),"drawable",context.getPackageName())
-            Picasso.with(context).load(item.getLangs().get(0).getImage()).fit().centerCrop().into(imageView);
+            Picasso.with(context).load(cover).fit().centerCrop().into(imageView);
             Picasso.with(context).setIndicatorsEnabled(false);
             //TextView textView = (TextView) v.findViewById(R.id.sample_text);
 

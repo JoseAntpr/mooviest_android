@@ -85,9 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //CON ASYNCTASK y en onPostExecute llamar al intent HomeActivity
         // GET API DATA TO MOVIES_BUFFER, lang, num_movies
-
-
-        new GetMoviesBuffer().execute(1,10);
+        new GetMoviesBuffer().execute(2,10);
 
         /*DataCallback callbackservice = new DataCallback(LoginActivity.this) {
             @Override

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mooviest.R;
+import com.mooviest.ui.RoundedTransformation;
 import com.mooviest.ui.models.Participation;
 import com.squareup.picasso.Picasso;
 
@@ -55,9 +56,9 @@ public class CelebritiesAdapter extends RecyclerView.Adapter<CelebritiesAdapter.
 
         String image = participation.getCelebrity().getImage();
         if(image.length() > 0){
-            p.load("https://img.tviso.com/XX/face/w175"+image).fit().centerCrop().into(viewHolder.celebrity_image);
+            p.load("https://img.tviso.com/XX/face/w175"+image).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.celebrity_image);
         }else{
-            p.load(R.drawable.face_175).fit().centerCrop().into(viewHolder.celebrity_image);
+            p.load(R.drawable.face_175).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.celebrity_image);
         }
 
         viewHolder.celebrity_name.setText(participation.getCelebrity().getName());
