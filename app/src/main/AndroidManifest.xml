@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:logo="@drawable/icon_login"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/MovieDetailTheme">
         <activity
             android:name=".ui.activities.SplashScreenActivity"
             android:label="@string/app_name"
@@ -38,6 +38,9 @@
         <activity
             android:name=".ui.activities.MovieDetailActivity"
             android:parentActivityName=".ui.activities.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.HomeActivity" />
         </activity>
     </application>
 
