@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
@@ -141,7 +140,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void applyPalette(Palette palette) {
-        int primaryDark = getResources().getColor(R.color.colorPrimaryDark);
         int primary = getResources().getColor(R.color.colorPrimary);
         collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
         collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
