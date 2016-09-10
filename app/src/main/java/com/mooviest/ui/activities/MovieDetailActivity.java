@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.view.Menu;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mooviest.R;
@@ -34,6 +35,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     TextView runtime_detail;
     ViewPager detail_pager;
     TabLayout detail_tabs;
+    LinearLayout linear_collapsing_detail;
     CollapsingToolbarLayout collapsingToolbarLayout;
 
     @Override
@@ -66,6 +68,18 @@ public class MovieDetailActivity extends AppCompatActivity {
         collapsingToolbarLayout.setTitle(lang.getTitle());
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transparent));
 
+        // Load fragments
+        detail_pager = (ViewPager) findViewById(R.id.detail_pager);
+        detail_pager.setOffscreenPageLimit(2);
+        setupViewPager(detail_pager);
+
+        // Tabs
+        detail_tabs = (TabLayout) findViewById(R.id.detail_tabs);
+        detail_tabs.setupWithViewPager(detail_pager);
+        detail_tabs.getTabAt(0).setText(getString(R.string.information));
+        detail_tabs.getTabAt(1).setText(getString(R.string.cast));
+        detail_tabs.getTabAt(2).setText(getString(R.string.watch));
+
         // Load background image
         final ImageView background_detail = (ImageView) findViewById(R.id.background_detail);
         Picasso.with(this).load(background).into(background_detail, new Callback() {
@@ -93,7 +107,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         Picasso.with(this).setIndicatorsEnabled(false);
 
 
-
         // Title
         title_detail = (TextView) findViewById(R.id.title_detail);
         title_detail.setText(lang.getTitle());
@@ -106,16 +119,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         runtime_detail = (TextView) findViewById(R.id.runtime_detail);
         runtime_detail.setText(m.getRuntime() + " min");
 
-        // Load fragments
-        detail_pager = (ViewPager) findViewById(R.id.detail_pager);
-        detail_pager.setOffscreenPageLimit(2);
-        setupViewPager(detail_pager);
 
-        detail_tabs = (TabLayout) findViewById(R.id.detail_tabs);
-        detail_tabs.setupWithViewPager(detail_pager);
-        detail_tabs.getTabAt(0).setText(getString(R.string.information));
-        detail_tabs.getTabAt(1).setText(getString(R.string.cast));
-        detail_tabs.getTabAt(2).setText(getString(R.string.watch));
 
     }
 
@@ -140,7 +144,13 @@ public class MovieDetailActivity extends AppCompatActivity {
         int primaryDark = getResources().getColor(R.color.colorPrimaryDark);
         int primary = getResources().getColor(R.color.colorPrimary);
         collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
-        collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkMutedColor(primaryDark));
+        collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
+
+        linear_collapsing_detail = (LinearLayout) findViewById(R.id.linear_collapsing_detail);
+        linear_collapsing_detail.setBackgroundColor(palette.getMutedColor(primary));
+
+        detail_tabs.setBackgroundColor(palette.getMutedColor(primary));
+
         supportStartPostponedEnterTransition();
     }
 
