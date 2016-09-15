@@ -295,7 +295,7 @@ public class OneFragment extends Fragment {
                 cover = "https://img.tviso.com/ES/poster/w430" + image;
             }
 
-            //resources.getIdentifier(item.getLangs().get(0).getImage(),"drawable",context.getPackageName())
+            //resources.getIdentifier(item.getGenreLangs().get(0).getImage(),"drawable",context.getPackageName())
             Picasso.with(context).load(cover).fit().centerCrop().into(imageView);
             Picasso.with(context).setIndicatorsEnabled(false);
             //TextView textView = (TextView) v.findViewById(R.id.sample_text);
