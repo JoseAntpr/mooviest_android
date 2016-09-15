@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import android.content.Intent;
+import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -17,9 +18,9 @@ import android.widget.Toast;
 import com.mooviest.R;
 import com.mooviest.ui.models.MooviestApiResult;
 import com.mooviest.ui.models.Movie;
+import com.mooviest.ui.rest.LoginResponse;
 import com.mooviest.ui.rest.MooviestApiInterface;
 import com.mooviest.ui.rest.SingletonRestClient;
-import com.mooviest.ui.tasks.DataCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,20 +33,23 @@ public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_SIGNUP = 0;
 
 
-    private EditText emailText;
+    private EditText emailUsernameText;
     private EditText passwordText;
     private Button loginButton;
     private TextView signupLink;
+    private ProgressDialog mProgressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        emailText = (EditText) findViewById(R.id.input_email);
-        passwordText = (EditText) findViewById(R.id.input_password);
+        emailUsernameText = (EditText) findViewById(R.id.input_email_username);
+        passwordText = (EditText) findViewById(R.id.input_login_password);
 
         loginButton = (Button) findViewById(R.id.btn_login);
         signupLink = (TextView) findViewById(R.id.link_signup);
+
+        mProgressDialog = null;
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,45 +79,18 @@ public class LoginActivity extends AppCompatActivity {
         }*/
         loginButton.setEnabled(false);
 
-        String email = emailText.getText().toString();
+        String emailUsername = emailUsernameText.getText().toString();
         String password = passwordText.getText().toString();
 
         // LOGIN API CALL CON ASYNCTASK en onPostExecute
         // hacer llamada para crear la lista de películas para swipe en la BD
         // Una vez terminada esta llamada hacer otra para traer las pelis para
         // movies buffer, terminada esta última llamar a HomeActivity
+        new APILogin().execute(emailUsername, password);
 
         //CON ASYNCTASK y en onPostExecute llamar al intent HomeActivity
         // GET API DATA TO MOVIES_BUFFER, lang, num_movies
-        new GetMoviesBuffer().execute(2,10);
-
-        /*DataCallback callbackservice = new DataCallback(LoginActivity.this) {
-            @Override
-            public void receiveData(Object object) {
-                SingletonRestClient.getInstance().movies_buffer = (ArrayList<Movie>) object;
-            }
-        };
-        callbackservice.execute(1, 10);*/
-
-
-
-        /*final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
-
-        // TODO: Implement your own authentication logic here.
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);*/
+        //new GetMoviesBuffer().execute(2,10);
 
     }
 
@@ -141,27 +118,41 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+    public void onLoginFailed(String message) {
+        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+        if(mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
 
         loginButton.setEnabled(true);
     }
 
-    public boolean validate() {
+    public boolean validate(String emailUsername, String password) {
+        return validEmail(emailUsername) && validPassword(password);
+    }
+
+    public boolean validEmail(String emailUsername){
         boolean valid = true;
-
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
-
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailText.setError("enter a valid email address");
-            valid = false;
-        } else {
-            emailText.setError(null);
+        if (!emailUsername.isEmpty()) {
+            if(emailUsername.contains("@") && !Patterns.EMAIL_ADDRESS.matcher(emailUsername).matches()) {
+                emailUsernameText.setError("Enter a valid email address");
+                valid = false;
+            }
+            if(emailUsername.length() < 3){
+                emailUsernameText.setError("Username must be at least 3 characters");
+                valid = false;
+            }
+        }else {
+            emailUsernameText.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            passwordText.setError("between 4 and 10 alphanumeric characters");
+        return valid;
+    }
+
+    public boolean validPassword(String password){
+        boolean valid = true;
+        if (password.isEmpty() || password.length() < 6) {
+            passwordText.setError("Password must be at least 6 characters");
             valid = false;
         } else {
             passwordText.setError(null);
@@ -170,16 +161,15 @@ public class LoginActivity extends AppCompatActivity {
         return valid;
     }
 
+    /************************  ASYNCTASKS  ************************/
+
+
     /*
-     * ASYNCTASK FOR GET MOVIES TO BUFFER
+     * AYNCTASK USER LOGIN
      */
-    public class GetMoviesBuffer extends AsyncTask<Integer, String, ArrayList<Movie>>{
+    public class APILogin extends AsyncTask<String, String, LoginResponse>{
 
-        private ProgressDialog mProgressDialog;
-        private ArrayList<Movie> movies;
-
-        public GetMoviesBuffer(){
-            movies = null;
+        public APILogin(){
             mProgressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme_Dark_Dialog);
             mProgressDialog.setMessage("Loading please wait...");
             mProgressDialog.setIndeterminate(true);
@@ -192,9 +182,63 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
+        protected LoginResponse doInBackground(String... params) {
+            MooviestApiInterface apiInterface= SingletonRestClient.getInstance().mooviestApiInterface;
+
+            Call<LoginResponse> call = apiInterface.login(params[0], params[1]);
+            LoginResponse result = null;
+            try {
+                result = call.execute().body();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(LoginResponse result) {
+            super.onPostExecute(result);
+
+            if(result!=null) {
+                int statusCode = result.getStatus();
+
+                //onLoginSuccess();
+                if(statusCode == 200) {
+                    new GetMoviesBuffer().execute(2,10);
+
+                }else if (statusCode == 404){
+                    onLoginFailed(result.getMessage());
+                }
+
+            }else{
+                onLoginFailed("Login failed. Check your internet connection.");
+            }
+        }
+    }
+
+
+    /*
+     * ASYNCTASK FOR GET MOVIES TO BUFFER
+     */
+    public class GetMoviesBuffer extends AsyncTask<Integer, String, ArrayList<Movie>>{
+
+
+        private ArrayList<Movie> movies;
+
+        public GetMoviesBuffer(){
+            movies = null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
         protected ArrayList<Movie> doInBackground(Integer... params) {
             MooviestApiInterface apiInterface= SingletonRestClient.getInstance().mooviestApiInterface;
-            Log.i("DOINGBACKGROUND", "INIT");
+
             //lang, num movies to get
             Call<MooviestApiResult> call = apiInterface.movie_app_bylang(params[0], params[1]);
 
@@ -205,14 +249,13 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            Log.i("DOINGBACKGROUND", "FINISH");
             return movies;
         }
 
         @Override
         protected void onPostExecute(ArrayList<Movie> result) {
             super.onPostExecute(result);
-            Log.i("ONPOSTEXECUTE", "INIT");
+
             if (mProgressDialog != null || mProgressDialog.isShowing()){
                 mProgressDialog.dismiss();
             }
@@ -227,11 +270,10 @@ public class LoginActivity extends AppCompatActivity {
 
                 // close this activity
                 finish();
-                Log.i("ONPOSTEXECUTE", "RECEIVEDATA");
+
             }else{
-                onLoginFailed();
+                onLoginFailed("Login failed");
             }
-            Log.i("ONPOSTEXECUTE", "FINISH");
         }
     }
 

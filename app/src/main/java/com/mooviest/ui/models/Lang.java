@@ -1,26 +1,28 @@
-
 package com.mooviest.ui.models;
 
+/**
+ * Created by jesus on 15/9/16.
+ */
 public class Lang {
 
-    private String name;
+    private String code;
 
     /**
-     * 
+     *
      * @return
-     *     The name
+     * The code
      */
-    public String getName() {
-        return name;
+    public String getCode() {
+        return code;
     }
 
     /**
-     * 
-     * @param name
-     *     The name
+     *
+     * @param code
+     * The code
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setCode(String code) {
+        this.code = code;
     }
 
 }
