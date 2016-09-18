@@ -1,5 +1,6 @@
 package com.mooviest.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,9 +19,25 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        SharedPreferences settings = getSharedPreferences("USER_PREFS", 0);
-        boolean tutorial = settings.getBoolean("tutorial", false);
-        boolean logged = settings.getBoolean("logged", false);
+        /* Si el nombre del atributo en el archivo de preferencias no existe, guarda
+         * en él el valor del segundo parámetro del método get()
+         *
+         * Para guardar un valor en el archivo de preferencias:
+         *
+         * SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+         *
+         * SharedPreferences.Editor editor = user_prefs.edit();
+         * editor.putBoolean("default_avatar", false);
+         */
+        SharedPreferences app_prefs = getSharedPreferences("APP_PREFS", Context.MODE_PRIVATE);
+        boolean tutorial = app_prefs.getBoolean("tutorial", false);
+        boolean logged = app_prefs.getBoolean("logged", false);
+
+        SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+        user_prefs.getBoolean("default_avatar", true);
+        //username
+        //email
+
 
         /*
          * Si no se ha visto el tutorial

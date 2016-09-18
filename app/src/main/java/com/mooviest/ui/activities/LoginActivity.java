@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         }*/
         loginButton.setEnabled(false);
 
-        String emailUsername = emailUsernameText.getText().toString();
+        String emailUsername = emailUsernameText.getText().toString().toLowerCase();
         String password = passwordText.getText().toString();
 
         // LOGIN API CALL CON ASYNCTASK en onPostExecute
