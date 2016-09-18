@@ -1,5 +1,7 @@
 package com.mooviest.ui.rest;
 
+import com.mooviest.ui.models.User;
+
 /**
  * Created by jesus on 11/9/16.
  */
@@ -8,6 +10,7 @@ public class LoginResponse {
     private String token;
     private String message;
     private int status;
+    private User user;
 
     /**
      *
@@ -25,6 +28,24 @@ public class LoginResponse {
      */
     public void setToken(String token) {
         this.token = token;
+    }
+
+    /**
+     *
+     * @return
+     * The user
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     *
+     * @param user
+     * The user
+     */
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**
