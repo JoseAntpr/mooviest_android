@@ -5,10 +5,29 @@ package com.mooviest.ui.models;
  */
 public class User {
 
+    private int id;
     private String username;
     private String email;
     private String password;
     private Profile profile;
+
+    /**
+     *
+     * @return
+     * The id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     *
+     * @param id
+     * The username
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
 
     /**
      *

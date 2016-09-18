@@ -1,6 +1,7 @@
 package com.mooviest.ui.rest;
 
 import com.mooviest.ui.models.Movie;
+import com.mooviest.ui.models.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class SingletonRestClient {
     private static Retrofit retrofit;
     public ArrayList<Movie> movies_buffer;
     public Movie movie_selected;
+    public User user;
 
     private static SingletonRestClient instance = new SingletonRestClient();
 

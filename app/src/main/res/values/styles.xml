@@ -57,4 +57,9 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="CollapsingToolbarLayoutExpandedTextStyle" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/transparent</item>
+        <item name="android:textSize">0sp</item>
+    </style>
+
 </resources>

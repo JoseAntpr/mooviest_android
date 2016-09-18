@@ -8,12 +8,16 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
  * Created by jesus on 26/8/16.
  */
 public interface MooviestApiInterface {
+
+    @GET("users/{id}")
+    Call<UserProfileResponse> getUserProfile(@Path("id") int id);
 
     @FormUrlEncoded
     @POST("users/")

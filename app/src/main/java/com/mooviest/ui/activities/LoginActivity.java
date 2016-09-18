@@ -1,6 +1,8 @@
 package com.mooviest.ui.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import com.mooviest.R;
 import com.mooviest.ui.models.MooviestApiResult;
 import com.mooviest.ui.models.Movie;
+import com.mooviest.ui.models.User;
 import com.mooviest.ui.rest.LoginResponse;
 import com.mooviest.ui.rest.MooviestApiInterface;
 import com.mooviest.ui.rest.SingletonRestClient;
@@ -113,9 +116,27 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess() {
-        loginButton.setEnabled(true);
-        finish();
+    public void onLoginSuccess(LoginResponse result) {
+        //loginButton.setEnabled(true);
+        //finish();
+
+        SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = user_prefs.edit();
+
+        User user = result.getUser();
+        String avatar = user.getProfile().getAvatar();
+
+        if(avatar.contains("http")){
+            editor.putBoolean("default_avatar", false);
+            editor.putString("avatar_image", avatar);
+        }
+
+        editor.putInt("id", user.getId());
+        editor.putString("username", user.getUsername());
+        editor.putString("email", user.getEmail());
+        editor.putString("token", result.getToken());
+
+        editor.commit();
     }
 
     public void onLoginFailed(String message) {
@@ -203,8 +224,10 @@ public class LoginActivity extends AppCompatActivity {
             if(result!=null) {
                 int statusCode = result.getStatus();
 
-                //onLoginSuccess();
+
                 if(statusCode == 200) {
+                    onLoginSuccess(result);
+
                     new GetMoviesBuffer().execute(2,10);
 
                 }else if (statusCode == 404){
@@ -263,7 +286,6 @@ public class LoginActivity extends AppCompatActivity {
             if(result!=null) {
 
                 SingletonRestClient.getInstance().movies_buffer = result;
-                //onLoginSuccess();
 
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                 startActivity(intent);
@@ -272,7 +294,7 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
 
             }else{
-                onLoginFailed("Login failed");
+                onLoginFailed("Load movies failed. Check your internet connection.");
             }
         }
     }

@@ -99,7 +99,7 @@ public abstract class DataCallback extends AsyncTask<Integer, String, ArrayList<
         {
             receiveData(jsonData);
 
-            activity.onLoginSuccess();
+            //activity.onLoginSuccess();
             Log.i("ONPOSTEXECUTE", "RECEIVEDATA");
         }
         Log.i("ONPOSTEXECUTE", "FINISH");

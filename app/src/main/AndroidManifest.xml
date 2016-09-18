@@ -33,10 +33,17 @@
             android:theme="@style/AppTheme.Sign" />
         <activity
             android:name=".ui.activities.HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleTop"></activity>
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activities.MovieDetailActivity"
+            android:parentActivityName=".ui.activities.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".ui.activities.ProfileActivity"
             android:parentActivityName=".ui.activities.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
