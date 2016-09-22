@@ -137,6 +137,9 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("token", result.getToken());
 
         editor.commit();
+
+        // Actualización del cliente para usar el nuevo token
+        SingletonRestClient.getInstance().setNewToken(result.getToken());
     }
 
     public void onLoginFailed(String message) {
@@ -204,8 +207,10 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected LoginResponse doInBackground(String... params) {
-            MooviestApiInterface apiInterface= SingletonRestClient.getInstance().mooviestApiInterface;
+            //Inicialización del Cliente Rest
+            SingletonRestClient.getInstance().init();
 
+            MooviestApiInterface apiInterface= SingletonRestClient.getInstance().mooviestApiInterface;
             Call<LoginResponse> call = apiInterface.login(params[0], params[1]);
             LoginResponse result = null;
             try {

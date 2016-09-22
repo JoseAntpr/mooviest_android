@@ -106,14 +106,9 @@ public class HomeActivity extends AppCompatActivity
         linear_nav_header.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(SingletonRestClient.getInstance().user == null){
-                    // ASYNCTASK GET USER AND PROFILE
-                    SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
-                    new GetUserProfile().execute(user_prefs.getInt("id", 0));
-                }else {
-                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                    startActivity(intent);
-                }
+                // ASYNCTASK GET USER AND PROFILE
+                SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+                new GetUserProfile().execute(user_prefs.getInt("id", 0));
             }
         });
 

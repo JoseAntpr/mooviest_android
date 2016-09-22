@@ -270,6 +270,9 @@ public class SignupActivity extends AppCompatActivity {
 
         @Override
         protected SignupResponse doInBackground(String... params) {
+            //Inicialización del Cliente Rest
+            SingletonRestClient.getInstance().init();
+
             MooviestApiInterface apiInterface = SingletonRestClient.getInstance().mooviestApiInterface;
 
             Call<SignupResponse> call = apiInterface.signup(params[0], params[1], params[2], params[3]);
@@ -292,6 +295,8 @@ public class SignupActivity extends AppCompatActivity {
                 int statusCode = result.getStatus();
 
                 if(statusCode == 201) {
+                    //onSignupSuccess(result)
+                    //en ese metodo guardar los sharedpreferences e inicializar el cliente rest con el nuevo token
                     new GetMoviesBuffer().execute(2,10);
 
                 }else if (statusCode == 404){

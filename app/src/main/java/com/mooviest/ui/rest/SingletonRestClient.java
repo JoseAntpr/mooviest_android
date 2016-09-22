@@ -1,5 +1,8 @@
 package com.mooviest.ui.rest;
 
+import android.app.Application;
+import android.content.Context;
+
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.models.User;
 
@@ -17,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by jesus on 26/8/16.
  */
-public class SingletonRestClient {
+public class SingletonRestClient extends Application {
 
     /* En baseUrl introducir la ip del pc donde se esté ejecutando el
      * servidor. Si se ejecuta la aplicación en el emulador android
@@ -39,13 +42,13 @@ public class SingletonRestClient {
 
     private static SingletonRestClient instance = new SingletonRestClient();
 
-    private SingletonRestClient(){
+    public void init(){
         Interceptor interceptor = new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request newRequest = chain.request().newBuilder()
                         .header("User-Agent", "Mozilla/5.0")
-                        .header("Authorization", Credentials.basic("jesus","root"))
+                        .header("Authorization", "")
                         .header("Content-type", "application/json")
                         .build();
                 return chain.proceed(newRequest);
@@ -62,10 +65,38 @@ public class SingletonRestClient {
                 .build();
 
         this.mooviestApiInterface=this.retrofit.create(MooviestApiInterface.class);
+    }
 
+    private SingletonRestClient(){
     }
 
     public static SingletonRestClient getInstance(){
         return instance;
+    }
+
+    public void setNewToken(String token){
+        final String newToken = token;
+        Interceptor interceptor = new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request newRequest = chain.request().newBuilder()
+                        .header("User-Agent", "Mozilla/5.0")
+                        .header("Authorization", "Token "+ newToken)
+                        .header("Content-type", "application/json")
+                        .build();
+                return chain.proceed(newRequest);
+            }
+        };
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.interceptors().add(interceptor);
+        OkHttpClient okClient = builder.build();
+
+        this.retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okClient)
+                .build();
+
+        this.mooviestApiInterface=this.retrofit.create(MooviestApiInterface.class);
     }
 }
