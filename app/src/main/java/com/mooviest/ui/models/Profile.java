@@ -6,6 +6,7 @@ package com.mooviest.ui.models;
 public class Profile {
     private Lang lang;
     private String avatar;
+    private String city;
 
     /**
      *
@@ -41,6 +42,24 @@ public class Profile {
      */
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    /**
+     *
+     * @return
+     * The city
+     */
+    public String getCity() {
+        return city;
+    }
+
+    /**
+     *
+     * @param city
+     * The city
+     */
+    public void setCity(String city) {
+        this.city = city;
     }
 
 }
