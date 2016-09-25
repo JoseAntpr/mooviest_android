@@ -34,6 +34,7 @@ public class SingletonRestClient extends Application {
      *
      */
     private static String baseUrl = "http://192.168.0.158:8000/api/";
+    public static String baseMediaUrl = "http://192.168.0.158:8000/media/";
     public static MooviestApiInterface mooviestApiInterface;
     private static Retrofit retrofit;
     public ArrayList<Movie> movies_buffer;

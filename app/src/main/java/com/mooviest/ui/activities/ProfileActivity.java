@@ -8,14 +8,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.mooviest.R;
 import com.mooviest.ui.adapters.ViewPagerAdapter;
 import com.mooviest.ui.models.Profile;
 import com.mooviest.ui.models.User;
 import com.mooviest.ui.rest.SingletonRestClient;
+import com.squareup.picasso.Picasso;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -63,6 +66,14 @@ public class ProfileActivity extends AppCompatActivity {
             city_profile.setText(p.getCity());
         }
 
+        String avatar =u.getProfile().getAvatar();
+        if(avatar.contains("no-image")){
+            avatar = SingletonRestClient.getInstance().baseMediaUrl + avatar;
+        }
+        CircularImageView circularImageView = (CircularImageView)findViewById(R.id.profile_avatar_image);
+        Picasso.with(this).load(avatar).fit().centerCrop().into(circularImageView);
+        Picasso.with(this).setIndicatorsEnabled(false);
+
         // **** CONF VIEW *****
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.profile_collapsing_toolbar);
         if(u.getFirstName() == null || u.getLastName() == null) {
@@ -88,6 +99,12 @@ public class ProfileActivity extends AppCompatActivity {
         profile_tabs.getTabAt(1).setText(getString(R.string.following));
         profile_tabs.getTabAt(2).setText(getString(R.string.celebrities));
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit_profile, menu);
+        return true;
     }
 
 

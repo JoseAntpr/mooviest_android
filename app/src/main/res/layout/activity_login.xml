@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    app:passwordToggleDrawable="@drawable/ic_password_visibility_selector">
+                    app:passwordToggleEnabled="false">
                     <EditText android:id="@+id/input_login_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
