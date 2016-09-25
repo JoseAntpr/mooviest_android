@@ -18,6 +18,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +34,7 @@ import com.mooviest.ui.RoundedTransformation;
 import com.mooviest.ui.SingletonSwipe;
 import com.mooviest.ui.adapters.ViewPagerAdapter;
 import com.mooviest.ui.models.Profile;
+import com.mooviest.ui.models.User;
 import com.mooviest.ui.rest.MooviestApiInterface;
 import com.mooviest.ui.rest.SingletonRestClient;
 import com.mooviest.ui.rest.UserProfileResponse;
@@ -55,6 +57,8 @@ public class HomeActivity extends AppCompatActivity
     TextView side_username;
     TextView side_email;
     private ProgressDialog mProgressDialog;
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
     private int[] tabIcons = {
             R.drawable.ic_swipe,
             R.drawable.ic_thumb_up,
@@ -87,28 +91,30 @@ public class HomeActivity extends AppCompatActivity
         setupTabIcons();
 
         //SIDE MENU
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerLayout = navigationView.getHeaderView(0);
 
         setupNavHeader(headerLayout);
     }
 
-    public void setupNavHeader(View headerLayout){
+    public void setupNavHeader(final View headerLayout){
+
+        User u = SingletonRestClient.getInstance().user;
 
         linear_nav_header = (LinearLayout) headerLayout.findViewById(R.id.linear_nav_header);
         linear_nav_header.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // ASYNCTASK GET USER AND PROFILE
-                SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
-                new GetUserProfile().execute(user_prefs.getInt("id", 0));
+                new GetUserProfile().execute(SingletonRestClient.getInstance().user.getId());
+                drawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
 
@@ -118,10 +124,8 @@ public class HomeActivity extends AppCompatActivity
         side_username = (TextView) headerLayout.findViewById(R.id.side_username);
         side_email = (TextView) headerLayout.findViewById(R.id.side_email);
 
-        Log.d("USERNAME SIDE", user_prefs.getString("username", ""));
-
-        side_username.setText("@" + user_prefs.getString("username", ""));
-        side_email.setText(user_prefs.getString("email", ""));
+        side_username.setText("@" + u.getUsername());
+        side_email.setText(u.getEmail());
 
         // if False
         if(!user_prefs.getBoolean("default_avatar", true)) {
@@ -228,7 +232,7 @@ public class HomeActivity extends AppCompatActivity
         protected UserProfileResponse doInBackground(Integer... params) {
             MooviestApiInterface apiInterface= SingletonRestClient.getInstance().mooviestApiInterface;
 
-            Call<UserProfileResponse> call = apiInterface.getUserProfile(params[0].intValue());
+            Call<UserProfileResponse> call = apiInterface.getUserProfile(params[0]);
             UserProfileResponse result = null;
             try {
                 result = call.execute().body();
@@ -242,6 +246,10 @@ public class HomeActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(UserProfileResponse result) {
             super.onPostExecute(result);
+
+            if (mProgressDialog != null || mProgressDialog.isShowing()){
+                mProgressDialog.dismiss();
+            }
 
             if(result!=null) {
                 Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);

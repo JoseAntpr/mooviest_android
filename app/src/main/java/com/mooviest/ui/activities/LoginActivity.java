@@ -123,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = user_prefs.edit();
 
+        SingletonRestClient.getInstance().user = result.getUser();
         User user = result.getUser();
         String avatar = user.getProfile().getAvatar();
 
