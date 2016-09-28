@@ -35,8 +35,7 @@
                     android:id="@+id/til_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    app:errorEnabled="true"
                     app:errorTextAppearance="@style/error_appearance">
                     <EditText android:id="@+id/input_username"
                         android:layout_width="match_parent"
@@ -54,8 +53,7 @@
                     android:id="@+id/til_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    app:errorEnabled="true"
                     app:errorTextAppearance="@style/error_appearance">
                     <EditText android:id="@+id/input_email"
                         android:layout_width="match_parent"
@@ -73,8 +71,7 @@
                     android:id="@+id/til_signup_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    app:errorEnabled="true"
                     app:passwordToggleTint="@color/grey_dark"
                     app:errorTextAppearance="@style/error_appearance"
                     app:passwordToggleDrawable="@drawable/ic_password_visibility_selector">
@@ -94,8 +91,6 @@
                     android:id="@+id/til_confirm_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
                     app:errorTextAppearance="@style/error_appearance"
                     app:passwordToggleTint="@color/grey_dark"
                     app:passwordToggleDrawable="@drawable/ic_password_visibility_selector">

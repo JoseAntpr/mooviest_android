@@ -49,6 +49,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.HomeActivity" />
         </activity>
+        <activity
+            android:name=".ui.activities.EditProfileActivity"
+            android:parentActivityName=".ui.activities.ProfileActivity"
+            android:theme="@style/FormsTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.ProfileActivity" />
+        </activity>
     </application>
 
 </manifest>
