@@ -25,7 +25,7 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
-        <com.mikhaellopez.circularimageview.CircularImageView
+        <!--<com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/edit_profile_avatar_image"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -37,8 +37,35 @@
             app:civ_border_color="#000000"
             app:civ_border_width="1dp"
             app:civ_shadow="false"
-            app:civ_shadow_radius="2"
-            app:civ_shadow_color="#63000000"/>
+            app:civ_shadow_radius="10"
+            app:civ_shadow_color="#63000000"/>-->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/edit_profile_avatar_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:fitsSystemWindows="true"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_change_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_camera_white"
+                android:layout_marginStart="68dp"
+                app:backgroundTint="@color/colorPrimary"
+                app:fabSize="mini"
+                android:layout_alignBottom="@+id/edit_profile_avatar_image"
+                android:layout_alignStart="@+id/edit_profile_avatar_image" />
+        </RelativeLayout>
+
 
         <!--  Username Label -->
         <android.support.design.widget.TextInputLayout

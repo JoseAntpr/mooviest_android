@@ -12,10 +12,12 @@ import android.transition.Slide;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.mooviest.R;
+import com.mooviest.ui.RoundedTransformation;
 import com.mooviest.ui.adapters.ViewPagerAdapter;
 import com.mooviest.ui.models.Profile;
 import com.mooviest.ui.models.User;
@@ -68,12 +70,15 @@ public class ProfileActivity extends AppCompatActivity {
             city_profile.setText(p.getCity());
         }
 
+        // Profile image
+        ImageView imageView = (ImageView)findViewById(R.id.profile_avatar_image);
         String avatar =u.getProfile().getAvatar();
         if(avatar.contains("no-image")){
-            avatar = SingletonRestClient.getInstance().baseMediaUrl + avatar;
+            //avatar = SingletonRestClient.getInstance().baseMediaUrl + avatar;
+            Picasso.with(this).load(R.drawable.no_image).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(imageView);
+        }else{
+            Picasso.with(this).load(avatar).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(imageView);
         }
-        CircularImageView circularImageView = (CircularImageView)findViewById(R.id.profile_avatar_image);
-        Picasso.with(this).load(avatar).fit().centerCrop().into(circularImageView);
         Picasso.with(this).setIndicatorsEnabled(false);
 
         // **** CONF VIEW *****

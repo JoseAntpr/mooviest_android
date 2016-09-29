@@ -27,7 +27,7 @@
 
             <ImageView
                 android:id="@+id/profile_background_image"
-                android:src="@drawable/background"
+                android:src="@drawable/background_red"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
                 android:fitsSystemWindows="true"
@@ -43,7 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="130dp"
+                    android:layout_marginTop="110dp"
                     android:paddingTop="90dp"
                     android:paddingBottom="40dp"
                     android:layout_weight="1"
@@ -82,7 +82,7 @@
                         android:layout_gravity="center"/>
                 </LinearLayout>
 
-                <com.mikhaellopez.circularimageview.CircularImageView
+                <!--<com.mikhaellopez.circularimageview.CircularImageView
                     android:id="@+id/profile_avatar_image"
                     android:layout_width="130dp"
                     android:layout_height="130dp"
@@ -95,7 +95,18 @@
                     app:civ_border_width="4dp"
                     app:civ_shadow="true"
                     app:civ_shadow_radius="10"
-                    app:civ_shadow_color="#63000000"/>
+                    app:civ_shadow_color="#63000000"/>-->
+
+                <ImageView
+                    android:id="@+id/profile_avatar_image"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:fitsSystemWindows="true"
+                    android:paddingBottom="40dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="70dp"/>
 
             </RelativeLayout>
 
