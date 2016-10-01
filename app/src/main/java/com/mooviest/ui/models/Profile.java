@@ -1,5 +1,7 @@
 package com.mooviest.ui.models;
 
+import java.util.Date;
+
 /**
  * Created by jesus on 15/9/16.
  */
@@ -7,7 +9,7 @@ public class Profile {
     private Lang lang;
     private String avatar;
     private String city;
-    private String born;
+    private Date born;
     private String gender;
     private String postalCode;
 
@@ -70,7 +72,7 @@ public class Profile {
      * @return
      * The born
      */
-    public String getBorn() {
+    public Date getBorn() {
         return born;
     }
 
@@ -79,7 +81,7 @@ public class Profile {
      * @param born
      * The born
      */
-    public void setBorn(String born) {
+    public void setBorn(Date born) {
         this.born = born;
     }
 

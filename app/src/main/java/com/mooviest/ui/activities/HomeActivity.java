@@ -252,6 +252,7 @@ public class HomeActivity extends AppCompatActivity
             }
 
             if(result!=null) {
+                SingletonRestClient.getInstance().user = result.getUser();
                 Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
                 startActivity(intent);
             }
