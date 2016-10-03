@@ -2,7 +2,6 @@ package com.mooviest.ui.activities;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -14,32 +13,36 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.mikhaellopez.circularimageview.CircularImageView;
 import com.mooviest.R;
 import com.mooviest.ui.RoundedTransformation;
 import com.mooviest.ui.models.Profile;
 import com.mooviest.ui.models.User;
+import com.mooviest.ui.rest.Errors;
 import com.mooviest.ui.rest.SingletonRestClient;
-import com.mooviest.ui.tasks.ProfileSaved;
+import com.mooviest.ui.rest.UpdateProfileResponse;
+import com.mooviest.ui.tasks.UpdateProfile;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class EditProfileActivity extends AppCompatActivity implements ProfileSaved{
+public class EditProfileActivity extends AppCompatActivity{
 
     private Toolbar toolbar;
     private FloatingActionButton fab_change_image;
     private TextInputLayout tilEditUsername;
-    private TextInputLayout tilFirstName;
-    private TextInputLayout tilLastName;
+    private TextInputLayout tilEditFirstName;
+    private TextInputLayout tilEditLastName;
     private TextInputLayout tilEditEmail;
     private TextInputLayout tilEditBorn;
     private TextInputLayout tilEditCity;
     private TextInputLayout tilEditPostalCode;
     private Calendar bornCalendar;
+    private User user;
+    private Profile userProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,38 +55,38 @@ public class EditProfileActivity extends AppCompatActivity implements ProfileSav
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Editar perfil");
 
-        User u = SingletonRestClient.getInstance().user;
-        Profile p = u.getProfile();
+        user = SingletonRestClient.getInstance().user;
+        userProfile = user.getProfile();
 
         tilEditUsername = (TextInputLayout) findViewById(R.id.til_edit_username);
-        tilEditUsername.getEditText().setText(u.getUsername());
+        tilEditUsername.getEditText().setText(user.getUsername());
         tilEditEmail = (TextInputLayout) findViewById(R.id.til_edit_email);
-        tilEditEmail.getEditText().setText(u.getEmail());
+        tilEditEmail.getEditText().setText(user.getEmail());
 
-        tilFirstName = (TextInputLayout) findViewById(R.id.til_edit_first_name);
-        if(u.getFirstName() != null) {
-            tilFirstName.getEditText().setText(u.getFirstName());
+        tilEditFirstName = (TextInputLayout) findViewById(R.id.til_edit_first_name);
+        if(user.getFirstName() != null) {
+            tilEditFirstName.getEditText().setText(user.getFirstName());
         }
-        tilLastName = (TextInputLayout) findViewById(R.id.til_edit_last_name);
-        if(u.getLastName() != null) {
-            tilLastName.getEditText().setText(u.getLastName());
+        tilEditLastName = (TextInputLayout) findViewById(R.id.til_edit_last_name);
+        if(user.getLastName() != null) {
+            tilEditLastName.getEditText().setText(user.getLastName());
         }
         tilEditCity = (TextInputLayout) findViewById(R.id.til_edit_city);
-        if(p.getCity() != null) {
-            tilEditCity.getEditText().setText(p.getCity());
+        if(userProfile.getCity() != null) {
+            tilEditCity.getEditText().setText(userProfile.getCity());
         }
         tilEditPostalCode = (TextInputLayout) findViewById(R.id.til_edit_postal_code);
-        if(p.getPostalCode() != null) {
-            tilEditPostalCode.getEditText().setText(p.getPostalCode());
+        if(userProfile.getPostalCode() != null) {
+            tilEditPostalCode.getEditText().setText(userProfile.getPostalCode());
         }
 
         // Avatar image and camera button
         ImageView imageView = (ImageView)findViewById(R.id.edit_profile_avatar_image);
-        String avatar = p.getAvatar();
+        String avatar = userProfile.getAvatar();
         if(avatar.contains("no-image")){
             Picasso.with(this).load(R.drawable.no_image).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(imageView);
         }else{
-            Picasso.with(this).load(avatar).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(imageView);
+            Picasso.with(this).load(SingletonRestClient.baseUrl + avatar).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(imageView);
         }
         Picasso.with(this).setIndicatorsEnabled(false);
 
@@ -93,6 +96,7 @@ public class EditProfileActivity extends AppCompatActivity implements ProfileSav
             public void onClick(View view) {
                 Snackbar.make(view, "Floating button pressed", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
             }
         });
 
@@ -114,11 +118,11 @@ public class EditProfileActivity extends AppCompatActivity implements ProfileSav
 
         };
 
-        if(p.getBorn() != null){
+        if(userProfile.getBorn() != null){
             String myFormat = "dd MMMM yyyy"; //In which you need put here
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
-            tilEditBorn.getEditText().setText(sdf.format(p.getBorn()));
-            bornCalendar.setTime(p.getBorn());
+            tilEditBorn.getEditText().setText(sdf.format(userProfile.getBorn()));
+            bornCalendar.setTime(userProfile.getBorn());
         }
         tilEditBorn.getEditText().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,24 +149,77 @@ public class EditProfileActivity extends AppCompatActivity implements ProfileSav
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.save_profile:
-
+                updateProfileTask();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    /*@Override
+    public void onBackPressed() {
+        startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
+        finish();
+    }*/
+
 
     private void setBornLabel() {
 
-        String myFormat = "dd MMMM yyyy"; //In which you need put here
+        String myFormat = "dd MMMM yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
 
         tilEditBorn.getEditText().setText(sdf.format(bornCalendar.getTime()));
     }
 
-    @Override
-    public void profileSaved() {
-        
+    private String getBornLabel(){
+        String bornFormat = null;
+
+        if(tilEditBorn.getEditText().getText().toString() != ""){
+            String myFormat = "yyyy-MM-dd";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+            bornFormat=sdf.format(bornCalendar.getTime());
+        }
+
+        return bornFormat;
+    }
+
+    private void updateProfileTask(){
+        UpdateProfile updateProfile = new UpdateProfile(){
+            @Override
+            protected void onPostExecute(UpdateProfileResponse result) {
+                super.onPostExecute(result);
+                if(result!=null) {
+                    if(result.getStatus() == 200) {
+                        SingletonRestClient.getInstance().user = result.getUser();
+
+                        startActivity(
+                                new Intent(EditProfileActivity.this, ProfileActivity.class)
+                                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                        finish();
+                    }else{
+                        Errors errors = result.getErrors();
+                        if(errors.getUsername().size() != 0){
+                            tilEditUsername.setError(errors.getUsername().get(0));
+                        }
+                        if(errors.getEmail().size() != 0){
+                            tilEditEmail.setError(errors.getEmail().get(0));
+                        }
+
+                        Toast.makeText(getBaseContext(), "Update profile failed, check fields errors", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        };
+
+        updateProfile.execute(
+                tilEditUsername.getEditText().getText().toString(),
+                tilEditFirstName.getEditText().getText().toString(),
+                tilEditLastName.getEditText().getText().toString(),
+                tilEditEmail.getEditText().getText().toString(),
+                getBornLabel(),
+                tilEditCity.getEditText().getText().toString(),
+                tilEditPostalCode.getEditText().getText().toString(),
+                Locale.getDefault().getLanguage()
+        );
     }
 }

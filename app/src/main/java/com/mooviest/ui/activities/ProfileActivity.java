@@ -77,7 +77,7 @@ public class ProfileActivity extends AppCompatActivity {
             //avatar = SingletonRestClient.getInstance().baseMediaUrl + avatar;
             Picasso.with(this).load(R.drawable.no_image).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(imageView);
         }else{
-            Picasso.with(this).load(avatar).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(imageView);
+            Picasso.with(this).load(SingletonRestClient.baseUrl + avatar).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(imageView);
         }
         Picasso.with(this).setIndicatorsEnabled(false);
 
@@ -121,6 +121,7 @@ public class ProfileActivity extends AppCompatActivity {
             case R.id.edit_profile:
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
                 startActivity(intent);
+                //finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

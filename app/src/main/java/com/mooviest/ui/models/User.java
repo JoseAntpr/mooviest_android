@@ -141,7 +141,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "Username: " + getUsername() + " Email: " + getEmail() + " Password: " + getPassword();
+        return "Username: " + getUsername() + " Email: " + getEmail();
     }
 
 }

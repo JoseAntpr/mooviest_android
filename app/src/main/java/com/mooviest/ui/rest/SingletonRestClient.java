@@ -1,7 +1,6 @@
 package com.mooviest.ui.rest;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.models.User;
@@ -9,7 +8,6 @@ import com.mooviest.ui.models.User;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class SingletonRestClient extends Application {
 
-    /* En baseUrl introducir la ip del pc donde se esté ejecutando el
+    /* En baseAPIUrl introducir la ip del pc donde se esté ejecutando el
      * servidor. Si se ejecuta la aplicación en el emulador android
      * introducir la ip equivalente a localhost que en android es
      * la siguiente: 10.0.2.2
@@ -33,8 +31,8 @@ public class SingletonRestClient extends Application {
      *      python3 manage.py runserver 0.0.0.0:8000
      *
      */
-    private static String baseUrl = "http://192.168.0.158:8000/api/";
-    public static String baseMediaUrl = "http://192.168.0.158:8000/media/";
+    private static String baseAPIUrl = "http://192.168.0.158:8000/api/";
+    public static String baseUrl = "http://192.168.0.158:8000";
     public static MooviestApiInterface mooviestApiInterface;
     private static Retrofit retrofit;
     public ArrayList<Movie> movies_buffer;
@@ -60,7 +58,7 @@ public class SingletonRestClient extends Application {
         OkHttpClient okClient = builder.build();
 
         this.retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(baseAPIUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okClient)
                 .build();
@@ -93,7 +91,7 @@ public class SingletonRestClient extends Application {
         OkHttpClient okClient = builder.build();
 
         this.retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(baseAPIUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okClient)
                 .build();

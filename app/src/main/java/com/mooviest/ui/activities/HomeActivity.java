@@ -114,6 +114,7 @@ public class HomeActivity extends AppCompatActivity
             public void onClick(View view) {
                 // ASYNCTASK GET USER AND PROFILE
                 new GetUserProfile().execute(SingletonRestClient.getInstance().user.getId());
+                // Close nav bar left
                 drawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
