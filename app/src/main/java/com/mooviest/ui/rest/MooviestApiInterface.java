@@ -2,6 +2,8 @@ package com.mooviest.ui.rest;
 
 import com.mooviest.ui.models.MooviestApiResult;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -21,18 +23,19 @@ public interface MooviestApiInterface {
     @GET("users/{id}/")
     Call<UserProfileResponse> getUserProfile(@Path("id") int id);
 
-    @FormUrlEncoded
+    @Multipart
     @PUT("users/{id}/")
     Call<UpdateProfileResponse> updateUserProfile(
             @Path("id") int id,
-            @Field("username") String username,
-            @Field("first_name") String first_name,
-            @Field("last_name") String last_name,
-            @Field("email") String email,
-            @Field("profile.born") String born,
-            @Field("profile.city") String city,
-            @Field("profile.postalCode") String postalCode,
-            @Field("profile.lang.code") String code
+            @Part("username") RequestBody username,
+            @Part("first_name") RequestBody first_name,
+            @Part("last_name") RequestBody last_name,
+            @Part("email") RequestBody email,
+            @Part("profile.born") RequestBody born,
+            @Part("profile.city") RequestBody city,
+            @Part("profile.postalCode") RequestBody postalCode,
+            @Part("profile.lang.code") RequestBody code,
+            @Part MultipartBody.Part imageFile
     );
 
     @FormUrlEncoded

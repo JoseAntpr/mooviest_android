@@ -8,6 +8,9 @@ import com.mooviest.ui.rest.UpdateProfileResponse;
 
 import java.io.IOException;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 
 /**
@@ -18,7 +21,11 @@ import retrofit2.Call;
 * AYNCTASK GET USER AND PROFILE
 */
 public class UpdateProfile extends AsyncTask<String, String, UpdateProfileResponse> {
-    public UpdateProfile(){
+    private MultipartBody.Part image;
+    MediaType TYPE_TEXT = MediaType.parse("text/plain");
+
+    public UpdateProfile(MultipartBody.Part i){
+        this.image = i;
     }
 
     @Override
@@ -32,8 +39,10 @@ public class UpdateProfile extends AsyncTask<String, String, UpdateProfileRespon
 
         Call<UpdateProfileResponse> call = apiInterface.updateUserProfile(
                 SingletonRestClient.getInstance().user.getId(),
-                params[0], params[1], params[2], params[3],
-                params[4], params[5], params[6], params[7]
+                RequestBody.create(TYPE_TEXT, params[0]), RequestBody.create(TYPE_TEXT, params[1]),
+                RequestBody.create(TYPE_TEXT, params[2]), RequestBody.create(TYPE_TEXT, params[3]),
+                RequestBody.create(TYPE_TEXT, params[4]), RequestBody.create(TYPE_TEXT, params[5]),
+                RequestBody.create(TYPE_TEXT, params[6]), RequestBody.create(TYPE_TEXT, params[7]), image
         );
         UpdateProfileResponse result = null;
         try {

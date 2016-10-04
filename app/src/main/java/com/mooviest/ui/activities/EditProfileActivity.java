@@ -2,12 +2,17 @@ package com.mooviest.ui.activities;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,9 +30,21 @@ import com.mooviest.ui.rest.UpdateProfileResponse;
 import com.mooviest.ui.tasks.UpdateProfile;
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class EditProfileActivity extends AppCompatActivity{
 
@@ -43,6 +60,10 @@ public class EditProfileActivity extends AppCompatActivity{
     private Calendar bornCalendar;
     private User user;
     private Profile userProfile;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private ImageView avatarImage;
+    private MultipartBody.Part imageProfileUploaded;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +102,12 @@ public class EditProfileActivity extends AppCompatActivity{
         }
 
         // Avatar image and camera button
-        ImageView imageView = (ImageView)findViewById(R.id.edit_profile_avatar_image);
+        avatarImage = (ImageView)findViewById(R.id.edit_profile_avatar_image);
         String avatar = userProfile.getAvatar();
         if(avatar.contains("no-image")){
-            Picasso.with(this).load(R.drawable.no_image).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(imageView);
+            Picasso.with(this).load(R.drawable.no_image).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(avatarImage);
         }else{
-            Picasso.with(this).load(SingletonRestClient.baseUrl + avatar).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(imageView);
+            Picasso.with(this).load(SingletonRestClient.baseUrl + avatar).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(avatarImage);
         }
         Picasso.with(this).setIndicatorsEnabled(false);
 
@@ -96,7 +117,11 @@ public class EditProfileActivity extends AppCompatActivity{
             public void onClick(View view) {
                 Snackbar.make(view, "Floating button pressed", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-
+                Intent takePictureIntent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
             }
         });
 
@@ -156,11 +181,56 @@ public class EditProfileActivity extends AppCompatActivity{
         }
     }
 
-    /*@Override
-    public void onBackPressed() {
-        startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
-        finish();
-    }*/
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            Uri photoUri = data.getData();
+            // Do something with the photo based on Uri
+            Bitmap selectedImage = null;
+            try {
+                selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Check image size. The image must be bigger than 180x180
+            if(selectedImage.getHeight() >= 180 && selectedImage.getWidth() >=180){
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+
+
+
+                Bitmap decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(stream.toByteArray()));
+                /*
+                File file = new File("path");
+                OutputStream os;
+                try {
+                    os = new BufferedOutputStream(new FileOutputStream(file));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                decoded.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                //avatarImage.setImageBitmap(decoded);
+                Picasso.with(this).load(file).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(avatarImage);
+                */
+                Picasso.with(this).load(photoUri).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(avatarImage);
+
+                imageProfileUploaded = MultipartBody.Part.createFormData("profile.avatar", "profile", RequestBody.create(MediaType.parse("image/*"), byteArray));
+
+            }else {
+                Toast.makeText(getBaseContext(), "Image must be bigger than 180x180", Toast.LENGTH_LONG).show();
+            }
+
+        }
+    }
 
 
     private void setBornLabel() {
@@ -184,7 +254,7 @@ public class EditProfileActivity extends AppCompatActivity{
     }
 
     private void updateProfileTask(){
-        UpdateProfile updateProfile = new UpdateProfile(){
+        UpdateProfile updateProfile = new UpdateProfile(imageProfileUploaded){
             @Override
             protected void onPostExecute(UpdateProfileResponse result) {
                 super.onPostExecute(result);
