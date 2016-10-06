@@ -1,9 +1,12 @@
 package com.mooviest.ui.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by jesus on 12/9/16.
  */
-public class User {
+public class User implements Parcelable{
 
     private int id;
     private String first_name;
@@ -12,6 +15,27 @@ public class User {
     private String email;
     private String password;
     private Profile profile;
+
+    protected User(Parcel in) {
+        id = in.readInt();
+        first_name = in.readString();
+        last_name = in.readString();
+        username = in.readString();
+        email = in.readString();
+        profile = in.readParcelable(getClass().getClassLoader());
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     /**
      *
@@ -144,4 +168,18 @@ public class User {
         return "Username: " + getUsername() + " Email: " + getEmail();
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(first_name);
+        parcel.writeString(last_name);
+        parcel.writeString(username);
+        parcel.writeString(email);
+        parcel.writeParcelable(profile, i);
+    }
 }

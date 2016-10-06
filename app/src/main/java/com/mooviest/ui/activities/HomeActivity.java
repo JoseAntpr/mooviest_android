@@ -8,16 +8,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,13 +23,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-import com.mikhaellopez.circularimageview.CircularImageView;
 import com.mooviest.R;
-import com.mooviest.ui.CustomViewPager;
 import com.mooviest.ui.RoundedTransformation;
 import com.mooviest.ui.SingletonSwipe;
 import com.mooviest.ui.adapters.ViewPagerAdapter;
-import com.mooviest.ui.models.Profile;
 import com.mooviest.ui.models.User;
 import com.mooviest.ui.rest.MooviestApiInterface;
 import com.mooviest.ui.rest.SingletonRestClient;
@@ -41,8 +34,6 @@ import com.mooviest.ui.rest.UserProfileResponse;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 
@@ -68,6 +59,10 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            // Restore value of user from saved state
+            SingletonRestClient.getInstance().user = savedInstanceState.getParcelable("USER");
+        }
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,9 +71,6 @@ public class HomeActivity extends AppCompatActivity
 
         //ENABLE VIEWPAGER SWIPE
         SingletonSwipe.getInstance().enabled=true;
-
-        //INITIALIZE SINGLETON REST CLIENT
-        SingletonRestClient.getInstance();
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         //GUARDA EL ESTADO DE TODOS LOS FRAGMENTS DEL VIEW PAGER
@@ -192,6 +184,13 @@ public class HomeActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putParcelable("USER", SingletonRestClient.getInstance().user);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());

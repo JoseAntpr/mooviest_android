@@ -1,17 +1,41 @@
 package com.mooviest.ui.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
  * Created by jesus on 15/9/16.
  */
-public class Profile {
+public class Profile implements Parcelable{
     private Lang lang;
     private String avatar;
     private String city;
     private Date born;
     private String gender;
     private String postalCode;
+
+    protected Profile(Parcel in) {
+        avatar = in.readString();
+        city = in.readString();
+        gender = in.readString();
+        postalCode = in.readString();
+        lang = in.readParcelable(getClass().getClassLoader());
+        born = new Date(in.readLong());
+    }
+
+    public static final Creator<Profile> CREATOR = new Creator<Profile>() {
+        @Override
+        public Profile createFromParcel(Parcel in) {
+            return new Profile(in);
+        }
+
+        @Override
+        public Profile[] newArray(int size) {
+            return new Profile[size];
+        }
+    };
 
     /**
      *
@@ -121,4 +145,18 @@ public class Profile {
         this.postalCode = postalCode;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(avatar);
+        parcel.writeString(city);
+        parcel.writeString(gender);
+        parcel.writeString(postalCode);
+        parcel.writeParcelable(lang, i);
+        parcel.writeLong(born.getTime());
+    }
 }

@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mikhaellopez.circularimageview.CircularImageView;
 import com.mooviest.R;
 import com.mooviest.ui.RoundedTransformation;
 import com.mooviest.ui.adapters.ViewPagerAdapter;
@@ -36,6 +35,10 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            // Restore value of user from saved state
+            SingletonRestClient.getInstance().user = savedInstanceState.getParcelable("USER");
+        }
         initActivityTransitions();
         setContentView(R.layout.activity_profile);
 
@@ -126,6 +129,12 @@ public class ProfileActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putParcelable("USER", SingletonRestClient.getInstance().user);
+        super.onSaveInstanceState(savedInstanceState);
     }
 
 
