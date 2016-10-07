@@ -35,8 +35,11 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
         user_prefs.getBoolean("default_avatar", true);
-        //username
-        //email
+        user_prefs.getString("avatar_image", "");
+        user_prefs.getInt("id", 0);
+        user_prefs.getString("username", "");
+        user_prefs.getString("email", "");
+        user_prefs.getString("token", "");
 
 
         /*
