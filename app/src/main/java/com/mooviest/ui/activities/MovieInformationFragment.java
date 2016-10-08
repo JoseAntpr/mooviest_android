@@ -90,7 +90,7 @@ public class MovieInformationFragment extends Fragment {
 
         //Synopsis
         movie_synopsis= (TextView) view.findViewById(R.id.movie_synopsis);
-        movie_synopsis.setText(SingletonRestClient.getInstance().movie_selected.getLangs().get(0).getSynopsis());
+        movie_synopsis.setText(SingletonRestClient.getInstance().movie_selected.getLangs().getSynopsis());
 
 
         return view;

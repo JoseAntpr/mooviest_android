@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.mooviest.R;
 import com.mooviest.ui.RoundedTransformation;
 import com.mooviest.ui.adapters.ViewPagerAdapter;
-import com.mooviest.ui.models.Lang_;
+import com.mooviest.ui.models.MovieLang;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.SingletonRestClient;
 import com.squareup.picasso.Callback;
@@ -46,7 +46,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 
 
         Movie m = SingletonRestClient.getInstance().movie_selected;
-        Lang_ lang = m.getLangs().get(0);
+        MovieLang lang = m.getLangs();
         String image = lang.getImage();
         final String background;
         String cover;
@@ -125,7 +125,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_search, menu);
-        setTitle(SingletonRestClient.getInstance().movie_selected.getLangs().get(0).getTitle());
+        setTitle(SingletonRestClient.getInstance().movie_selected.getLangs().getTitle());
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setQueryHint(getString(R.string.search_query_hint));
         return true;

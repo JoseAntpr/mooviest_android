@@ -157,6 +157,8 @@ public class Profile implements Parcelable{
         parcel.writeString(gender);
         parcel.writeString(postalCode);
         parcel.writeParcelable(lang, i);
-        parcel.writeLong(born.getTime());
+        if(born!=null) {
+            parcel.writeLong(born.getTime());
+        }
     }
 }

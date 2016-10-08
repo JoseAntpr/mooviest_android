@@ -286,7 +286,7 @@ public class OneFragment extends Fragment {
             Log.i("OneFragment", "load new Image");
             //GET IMAGE
             final Movie item = (Movie)getItem(position);
-            String image = item.getLangs().get(0).getImage();
+            String image = item.getLangs().getImage();
             String cover;
 
             if(image.startsWith("http")){

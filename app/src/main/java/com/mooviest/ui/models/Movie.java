@@ -12,7 +12,7 @@ public class Movie implements Parcelable {
     private int id;
     private List<Genre> genres = new ArrayList<Genre>();
     private List<Participation> participations = new ArrayList<Participation>();
-    private List<Lang_> langs = new ArrayList<Lang_>();
+    private MovieLang langs;
     private List<Object> emotions = new ArrayList<Object>();
     private List<Rating> ratings = new ArrayList<Rating>();
     private String originalTitle;
@@ -103,7 +103,7 @@ public class Movie implements Parcelable {
      * @return
      *     The langs
      */
-    public List<Lang_> getLangs() {
+    public MovieLang getLangs() {
         return langs;
     }
 
@@ -112,7 +112,7 @@ public class Movie implements Parcelable {
      * @param langs
      *     The langs
      */
-    public void setLangs(List<Lang_> langs) {
+    public void setLangs(MovieLang langs) {
         this.langs = langs;
     }
 

@@ -1,7 +1,5 @@
 package com.mooviest.ui.rest;
 
-import com.mooviest.ui.models.MooviestApiResult;
-
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -37,6 +35,9 @@ public interface MooviestApiInterface {
             @Part("profile.lang.code") RequestBody code,
             @Part MultipartBody.Part imageFile
     );
+
+    @GET("users/{id}/{list_name}/")
+    Call<MooviestApiResult> getUserList(@Path("id") int id, @Path("list_name") String list_name, @Query("page") int page);
 
     @FormUrlEncoded
     @POST("users/")

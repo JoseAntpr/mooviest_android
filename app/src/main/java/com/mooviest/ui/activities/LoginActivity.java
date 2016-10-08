@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mooviest.R;
-import com.mooviest.ui.models.MooviestApiResult;
+import com.mooviest.ui.rest.MooviestApiResult;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.models.User;
 import com.mooviest.ui.rest.LoginResponse;

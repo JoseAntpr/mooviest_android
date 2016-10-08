@@ -1,23 +1,32 @@
 package com.mooviest.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.mooviest.R;
+import com.mooviest.ui.rest.MooviestApiResult;
+import com.mooviest.ui.rest.SingletonRestClient;
+import com.mooviest.ui.tasks.GetUserList;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link //ThreeFragment.OnFragmentInteractionListener} interface
+ * {@link //UserListsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ThreeFragment#newInstance} factory method to
+ * Use the {@link UserListsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ThreeFragment extends Fragment {
+public class UserListsFragment extends Fragment {
+
+    private Button favourite_button;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,7 +38,7 @@ public class ThreeFragment extends Fragment {
 
     //private OnFragmentInteractionListener mListener;
 
-    public ThreeFragment() {
+    public UserListsFragment() {
         // Required empty public constructor
     }
 
@@ -39,11 +48,11 @@ public class ThreeFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ThreeFragment.
+     * @return A new instance of fragment UserListsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ThreeFragment newInstance(String param1, String param2) {
-        ThreeFragment fragment = new ThreeFragment();
+    public static UserListsFragment newInstance(String param1, String param2) {
+        UserListsFragment fragment = new UserListsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,7 +73,41 @@ public class ThreeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_three, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_lists, container, false);
+
+        favourite_button = (Button) view.findViewById(R.id.favourite_button);
+        favourite_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getUserListAPI("favourite_list", 1);
+            }
+        });
+
+        return view;
+
+    }
+
+    private void getUserListAPI(String list_name, int page){
+        GetUserList getUserList = new GetUserList(list_name){
+            @Override
+            protected void onPostExecute(MooviestApiResult result) {
+                super.onPostExecute(result);
+                if(result!=null) {
+                    if(result.getCount() >= 1) {
+                        SingletonRestClient.getInstance().movies_list = result.getMovies();
+
+                        Intent i = new Intent(getActivity(), MoviesListActivity.class);
+                        i.putExtra("TITLE", R.string.favourite_list);
+                        startActivity(i);
+                    }else{
+                        Toast.makeText(getActivity(), "No movies list", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        };
+
+        // Params: page API result
+        getUserList.execute(page);
     }
 
     /*

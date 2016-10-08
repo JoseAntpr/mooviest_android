@@ -36,6 +36,7 @@ public class SingletonRestClient extends Application {
     public static MooviestApiInterface mooviestApiInterface;
     private static Retrofit retrofit;
     public ArrayList<Movie> movies_buffer;
+    public ArrayList<Movie> movies_list;
     public Movie movie_selected;
     public User user;
 
