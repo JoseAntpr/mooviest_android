@@ -87,7 +87,7 @@ public class UserListsFragment extends Fragment {
 
     }
 
-    private void getUserListAPI(String list_name, int page){
+    private void getUserListAPI(final String list_name, int page){
         GetUserList getUserList = new GetUserList(list_name){
             @Override
             protected void onPostExecute(MooviestApiResult result) {
@@ -95,9 +95,16 @@ public class UserListsFragment extends Fragment {
                 if(result!=null) {
                     if(result.getCount() >= 1) {
                         SingletonRestClient.getInstance().movies_list = result.getMovies();
+                        Boolean next = false;
+                        if(result.getNext() != null) {
+                            next = true;
+                        }
 
                         Intent i = new Intent(getActivity(), MoviesListActivity.class);
                         i.putExtra("TITLE", R.string.favourite_list);
+                        i.putExtra("LIST_NAME", list_name);
+                        i.putExtra("NEXT", next);
+                        i.putExtra("COUNT",result.getCount());
                         startActivity(i);
                     }else{
                         Toast.makeText(getActivity(), "No movies list", Toast.LENGTH_LONG).show();

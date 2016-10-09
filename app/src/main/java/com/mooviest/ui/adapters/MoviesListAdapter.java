@@ -1,6 +1,7 @@
 package com.mooviest.ui.adapters;
 
 import android.media.Image;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,11 +26,12 @@ import java.util.List;
 
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.ViewHolder> {
 
-    private List<Movie> movies;
+    private ArrayList<Movie> movies;
 
-    public MoviesListAdapter(List<Movie> movies){
+    public MoviesListAdapter(ArrayList<Movie> movies){
         this.movies = movies;
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public ImageView poster;
@@ -73,6 +76,14 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
     @Override
     public int getItemCount() {
         return movies.size();
+    }
+
+    public void addItems(ArrayList<Movie> movies){
+        this.movies.addAll(movies);
+    }
+
+    public ArrayList<Movie> getItems(){
+        return movies;
     }
 
 
