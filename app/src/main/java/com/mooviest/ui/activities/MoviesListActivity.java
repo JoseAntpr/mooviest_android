@@ -40,12 +40,22 @@ public class MoviesListActivity extends AppCompatActivity {
         initActivityTransitions();
         setContentView(R.layout.activity_movies_list);
 
-        // GET TAG INTENT
-        Intent i =getIntent();
-        title = getString(i.getIntExtra("TITLE",R.string.app_name));
-        list_name = i.getStringExtra("LIST_NAME");
-        next = i.getBooleanExtra("NEXT", false);
-        count = i.getIntExtra("COUNT",0);
+
+        if(savedInstanceState != null){
+            title = savedInstanceState.getString("TITLE");
+            list_name = savedInstanceState.getString("LIST_NAME");
+            next = savedInstanceState.getBoolean("NEXT");
+            count = savedInstanceState.getInt("COUNT");
+            moviesAdapter = savedInstanceState.getParcelableArrayList("MOVIES_ADAPTER");
+        }else{
+            // GET TAG INTENT
+            Intent i =getIntent();
+            title = getString(i.getIntExtra("TITLE",R.string.app_name));
+            list_name = i.getStringExtra("LIST_NAME");
+            next = i.getBooleanExtra("NEXT",false);
+            count = i.getIntExtra("COUNT",0);
+            moviesAdapter = SingletonRestClient.getInstance().movies_list;
+        }
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_movies_list));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -56,12 +66,7 @@ public class MoviesListActivity extends AppCompatActivity {
         layoutManager = new GridLayoutManager(MoviesListActivity.this, 3);
         recyclerView.setLayoutManager(layoutManager);
 
-        if(savedInstanceState != null){
-            moviesAdapter = savedInstanceState.getParcelableArrayList("MOVIES_ADAPTER");
-            count = savedInstanceState.getInt("COUNT");
-        }else{
-            moviesAdapter = SingletonRestClient.getInstance().movies_list;
-        }
+
         moviesListAdapter = new MoviesListAdapter(moviesAdapter);
 
         recyclerView.setAdapter(moviesListAdapter);
@@ -120,8 +125,11 @@ public class MoviesListActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putParcelableArrayList("MOVIES_ADAPTER", moviesListAdapter.getItems());
+        savedInstanceState.putString("TITLE", title);
+        savedInstanceState.putString("LIST_NAME", list_name);
+        savedInstanceState.putBoolean("NEXT", next);
         savedInstanceState.putInt("COUNT", count);
+        savedInstanceState.putParcelableArrayList("MOVIES_ADAPTER", moviesListAdapter.getItems());
         super.onSaveInstanceState(savedInstanceState);
     }
 }
