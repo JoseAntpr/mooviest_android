@@ -86,7 +86,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // **** CONF VIEW *****
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.profile_collapsing_toolbar);
-        if(u.getFirstName() == null || u.getLastName() == null) {
+        if((u.getFirstName() == null || u.getFirstName() == "") || (u.getLastName() == null || u.getLastName() == "")) {
             collapsingToolbarLayout.setTitle(getString(R.string.my_profile));
         }else{
             collapsingToolbarLayout.setTitle(u.getFirstName() + " " + u.getLastName());

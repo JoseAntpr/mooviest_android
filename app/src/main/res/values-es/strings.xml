@@ -40,4 +40,9 @@
     <string name="cast">Reparto</string>
     <string name="watch">Ver</string>
 
+    <!-- Movies List -->
+    <string name="more">Más</string>
+    <string name="favourite_list">Favoritas</string>
+    <string name="seen_list">Vistas</string>
+    <string name="watchlist">Pendientes</string>
 </resources>

@@ -1,15 +1,13 @@
 package com.mooviest.ui.tasks;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
 import com.mooviest.R;
 import com.mooviest.ui.activities.LoginActivity;
-import com.mooviest.ui.models.MooviestApiResult;
+import com.mooviest.ui.rest.MooviestApiResult;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.MooviestApiInterface;
 import com.mooviest.ui.rest.SingletonRestClient;
@@ -17,10 +15,7 @@ import com.mooviest.ui.rest.SingletonRestClient;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by jesus on 29/8/16.

@@ -13,14 +13,15 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mooviest.R;
 import com.mooviest.ui.RoundedTransformation;
 import com.mooviest.ui.adapters.ViewPagerAdapter;
-import com.mooviest.ui.models.Lang_;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.SingletonRestClient;
 import com.squareup.picasso.Callback;
@@ -45,9 +46,9 @@ public class MovieDetailActivity extends AppCompatActivity {
 
 
 
-        Movie m = SingletonRestClient.getInstance().movie_selected;
-        Lang_ lang = m.getLangs().get(0);
-        String image = lang.getImage();
+        Movie movie = SingletonRestClient.getInstance().movie_selected;
+
+        String image = movie.getImage();
         final String background;
         String cover;
 
@@ -64,7 +65,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle(lang.getTitle());
+        collapsingToolbarLayout.setTitle(movie.getTitle());
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transparent));
 
         // Load fragments
@@ -108,15 +109,15 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         // Title
         title_detail = (TextView) findViewById(R.id.title_detail);
-        title_detail.setText(lang.getTitle());
+        title_detail.setText(movie.getTitle());
 
         // Mooviest average
         average_detail = (TextView) findViewById(R.id.average_detail);
-        average_detail.setText(m.getAverage());
+        average_detail.setText(movie.getAverage());
 
         // Runtime
         runtime_detail = (TextView) findViewById(R.id.runtime_detail);
-        runtime_detail.setText(m.getRuntime() + " min");
+        runtime_detail.setText(movie.getRuntime() + " min");
 
 
 
@@ -125,9 +126,21 @@ public class MovieDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_search, menu);
-        setTitle(SingletonRestClient.getInstance().movie_selected.getLangs().get(0).getTitle());
+        setTitle(SingletonRestClient.getInstance().movie_selected.getTitle());
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setQueryHint(getString(R.string.search_query_hint));
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
         return true;
     }
 

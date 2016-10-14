@@ -9,7 +9,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -40,11 +42,7 @@
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.activities.MovieDetailActivity"
-            android:parentActivityName=".ui.activities.HomeActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.HomeActivity" />
+            android:name=".ui.activities.MovieDetailActivity">
         </activity>
         <activity
             android:name=".ui.activities.ProfileActivity"
@@ -60,6 +58,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.ProfileActivity" />
+        </activity>
+        <activity
+            android:name=".ui.activities.MoviesListActivity"
+            android:parentActivityName=".ui.activities.HomeActivity"
+            android:theme="@style/FormsTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.HomeActivity" />
         </activity>
     </application>
 

@@ -1,5 +1,7 @@
 
-package com.mooviest.ui.models;
+package com.mooviest.ui.rest;
+
+import com.mooviest.ui.models.Movie;
 
 import java.util.ArrayList;
 import java.util.List;

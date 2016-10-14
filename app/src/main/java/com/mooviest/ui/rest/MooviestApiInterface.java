@@ -1,6 +1,6 @@
 package com.mooviest.ui.rest;
 
-import com.mooviest.ui.models.MooviestApiResult;
+import com.mooviest.ui.models.Movie;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -38,6 +38,9 @@ public interface MooviestApiInterface {
             @Part MultipartBody.Part imageFile
     );
 
+    @GET("users/{id}/{list_name}/")
+    Call<MooviestApiResult> getUserList(@Path("id") int id, @Path("list_name") String list_name, @Query("page") int page);
+
     @FormUrlEncoded
     @POST("users/")
     Call<SignupResponse> signup(
@@ -53,6 +56,9 @@ public interface MooviestApiInterface {
 
     @GET("movie/")
     Call<MooviestApiResult> movie(@Query("search") String name);
+
+    @GET("movie/{id}/")
+    Call<Movie> getMovieDetail(@Path("id") int id, @Query("movie_lang_id") int movie_lang_id, @Query("user_id") int user_id);
 
     @GET("movie_app_bylang")
     Call<MooviestApiResult> movie_app_bylang(@Query("lang_id") int lang_id, @Query("limit") int limit);

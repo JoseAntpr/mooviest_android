@@ -1,13 +1,32 @@
 
 package com.mooviest.ui.models;
 
-public class Lang_ {
+public class MovieLang {
 
+    private int id;
     private Country country;
     private String title;
     private String synopsis;
     private String image;
     private String trailer;
+
+    /**
+     *
+     * @return
+     *     The id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     *
+     * @param id
+     *     The id
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
 
     /**
      * 

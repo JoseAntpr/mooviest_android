@@ -11,6 +11,7 @@
     <color name="navigationBarColor">#000000</color>
     <color name="grey_light">#e4e4e4</color>
     <color name="grey_dark">#848484</color>
+    <color name="grey_extra_dark">#333333</color>
     <color name="celebrity_linear_transparent">#410a0a0a</color>
     <color name="red_500">#F44336</color>
     <color name="transparent">#00ffffff</color>

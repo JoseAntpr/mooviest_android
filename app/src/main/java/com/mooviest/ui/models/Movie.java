@@ -10,21 +10,28 @@ import java.util.List;
 public class Movie implements Parcelable {
 
     private int id;
+    private int movie_lang_id;
+    private String title;
+    private String image;
     private List<Genre> genres = new ArrayList<Genre>();
     private List<Participation> participations = new ArrayList<Participation>();
-    private List<Lang_> langs = new ArrayList<Lang_>();
+    private MovieLang langs;
     private List<Object> emotions = new ArrayList<Object>();
     private List<Rating> ratings = new ArrayList<Rating>();
     private String originalTitle;
     private int runtime;
     private int released;
     private String movieProducer;
+    private String synopsis;
     private int sagaOrder;
     private String average;
+
 
     protected Movie(Parcel in) {
         id = in.readInt();
         originalTitle = in.readString();
+        title = in.readString();
+        image = in.readString();
         runtime = in.readInt();
         released = in.readInt();
         movieProducer = in.readString();
@@ -60,6 +67,78 @@ public class Movie implements Parcelable {
      */
     public void setId(int id) {
         this.id = id;
+    }
+
+    /**
+     *
+     * @return
+     *     The movie_lang_id
+     */
+    public int getMovie_lang_id() {
+        return movie_lang_id;
+    }
+
+    /**
+     *
+     * @param movie_lang_id
+     *     The movie_lang_id
+     */
+    public void setMovie_lang_id(int movie_lang_id) {
+        this.movie_lang_id = movie_lang_id;
+    }
+
+    /**
+     *
+     * @return
+     *     The title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     *
+     * @param title
+     *     The title
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     *
+     * @return
+     *     The synopsis
+     */
+    public String getSynopsis() {
+        return synopsis;
+    }
+
+    /**
+     *
+     * @param synopsis
+     *     The synopsis
+     */
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
+    }
+
+    /**
+     *
+     * @return
+     *     The image
+     */
+    public String getImage() {
+        return image;
+    }
+
+    /**
+     *
+     * @param image
+     *     The image
+     */
+    public void setImage(String image) {
+        this.image = image;
     }
 
     /**
@@ -103,7 +182,7 @@ public class Movie implements Parcelable {
      * @return
      *     The langs
      */
-    public List<Lang_> getLangs() {
+    public MovieLang getLangs() {
         return langs;
     }
 
@@ -112,7 +191,7 @@ public class Movie implements Parcelable {
      * @param langs
      *     The langs
      */
-    public void setLangs(List<Lang_> langs) {
+    public void setLangs(MovieLang langs) {
         this.langs = langs;
     }
 
@@ -270,8 +349,10 @@ public class Movie implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
         parcel.writeString(originalTitle);
+        parcel.writeString(title);
         parcel.writeInt(runtime);
         parcel.writeInt(released);
+        parcel.writeString(image);
         parcel.writeString(movieProducer);
         parcel.writeInt(sagaOrder);
         parcel.writeString(average);
