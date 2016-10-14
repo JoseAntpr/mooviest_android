@@ -42,11 +42,7 @@
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.activities.MovieDetailActivity"
-            android:parentActivityName=".ui.activities.HomeActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.HomeActivity" />
+            android:name=".ui.activities.MovieDetailActivity">
         </activity>
         <activity
             android:name=".ui.activities.ProfileActivity"

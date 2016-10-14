@@ -6,24 +6,24 @@ import java.util.List;
 
 public class Genre {
 
-    private List<GenreLang> langs = new ArrayList<GenreLang>();
+    private String name;
 
     /**
-     * 
+     *
      * @return
-     *     The genreLangs
+     *     The name
      */
-    public List<GenreLang> getGenreLangs() {
-        return langs;
+    public String getName() {
+        return name;
     }
 
     /**
-     * 
-     * @param genreLangs
-     *     The genreLangs
+     *
+     * @param name
+     *     The name
      */
-    public void setGenreLangs(List<GenreLang> genreLangs) {
-        this.langs = langs;
+    public void setName(String name) {
+        this.name = name;
     }
 
 
