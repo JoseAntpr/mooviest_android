@@ -1,6 +1,7 @@
 package com.mooviest.ui.rest;
 
 import android.app.Application;
+import android.app.ProgressDialog;
 
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.models.User;
@@ -31,12 +32,15 @@ public class SingletonRestClient extends Application {
      *      python3 manage.py runserver 0.0.0.0:8000
      *
      */
-    private static String baseAPIUrl = "http://192.168.1.51:8000/api/";
-    public static String baseUrl = "http://192.168.1.51:8000";
+    private static String baseAPIUrl = "http://192.168.0.158:8000/api/";
+    public static String baseUrl = "http://192.168.0.158:8000";
     public static MooviestApiInterface mooviestApiInterface;
     private static Retrofit retrofit;
     public ArrayList<Movie> movies_buffer;
     public ArrayList<Movie> movies_list;
+    public ArrayList<Movie> seen_list;
+    public ArrayList<Movie> watchlist;
+    public ArrayList<Movie> favourite_list;
     public Movie movie_selected;
     public User user;
 

@@ -15,4 +15,6 @@
     <!-- Custom FilmCard -->
     <dimen name="paddingBottom_filmCard">80dp</dimen>
     <dimen name="height_linearButtons">60dp</dimen>
+    <dimen name="height_movie_user_list">175dp</dimen>
+    <dimen name="width_movie_user_list">120dp</dimen>
 </resources>

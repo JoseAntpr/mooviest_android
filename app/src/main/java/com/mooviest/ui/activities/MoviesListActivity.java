@@ -1,9 +1,7 @@
 package com.mooviest.ui.activities;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Build;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
