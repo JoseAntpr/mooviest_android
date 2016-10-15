@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mooviest.R;
@@ -27,6 +28,9 @@ public class UserListsFragment extends Fragment {
     private Button seen_button;
     private Button watchlist_button;
     private Button favourite_button;
+    private TextView no_favourite_list;
+    private TextView no_seen_list;
+    private TextView no_watchlist;
 
 
 
@@ -46,6 +50,7 @@ public class UserListsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user_lists, container, false);
 
         // SEEN
+        no_seen_list = (TextView) view.findViewById(R.id.no_seen_list);
         seen_button = (Button) view.findViewById(R.id.seen_button);
         seen_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,14 +59,19 @@ public class UserListsFragment extends Fragment {
             }
         });
 
-        seen_list_recycler = (RecyclerView) view.findViewById(R.id.seen_list_recycler);
-        LinearLayoutManager seenListLayoutManager= new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        seen_list_recycler.setLayoutManager(seenListLayoutManager);
-        MoviesUserListAdapter seenListAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().seen_list);
-        seen_list_recycler.setAdapter(seenListAdapter);
+        if(!SingletonRestClient.getInstance().seen_list.isEmpty()) {
+            no_seen_list.setVisibility(View.GONE);
+
+            seen_list_recycler = (RecyclerView) view.findViewById(R.id.seen_list_recycler);
+            LinearLayoutManager seenListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+            seen_list_recycler.setLayoutManager(seenListLayoutManager);
+            MoviesUserListAdapter seenListAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().seen_list);
+            seen_list_recycler.setAdapter(seenListAdapter);
+        }
 
 
         // WATCHLIST
+        no_watchlist = (TextView) view.findViewById(R.id.no_watchlist);
         watchlist_button = (Button) view.findViewById(R.id.watchlist_button);
         watchlist_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,8 +80,20 @@ public class UserListsFragment extends Fragment {
             }
         });
 
+        if(!SingletonRestClient.getInstance().watchlist.isEmpty()) {
+            no_watchlist.setVisibility(View.GONE);
+
+            watchlist_recycler = (RecyclerView) view.findViewById(R.id.watchlist_recycler);
+            LinearLayoutManager watchlistLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+            watchlist_recycler.setLayoutManager(watchlistLayoutManager);
+            MoviesUserListAdapter watchlistAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().seen_list);
+            watchlist_recycler.setAdapter(watchlistAdapter);
+
+        }
+
 
         // FAVOURITE_LIST
+        no_favourite_list = (TextView) view.findViewById(R.id.no_favourite_list);
         favourite_button = (Button) view.findViewById(R.id.favourite_button);
         favourite_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,11 +102,15 @@ public class UserListsFragment extends Fragment {
             }
         });
 
-        favourite_list_recycler = (RecyclerView) view.findViewById(R.id.favourite_list_recycler);
-        LinearLayoutManager favouriteListLayoutManager= new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        favourite_list_recycler.setLayoutManager(favouriteListLayoutManager);
-        MoviesUserListAdapter favouriteListAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().favourite_list);
-        favourite_list_recycler.setAdapter(favouriteListAdapter);
+        if(!SingletonRestClient.getInstance().favourite_list.isEmpty()) {
+            no_favourite_list.setVisibility(View.GONE);
+
+            favourite_list_recycler = (RecyclerView) view.findViewById(R.id.favourite_list_recycler);
+            LinearLayoutManager favouriteListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+            favourite_list_recycler.setLayoutManager(favouriteListLayoutManager);
+            MoviesUserListAdapter favouriteListAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().favourite_list);
+            favourite_list_recycler.setAdapter(favouriteListAdapter);
+        }
 
         return view;
 
@@ -111,7 +137,7 @@ public class UserListsFragment extends Fragment {
                         i.putExtra("COUNT",result.getCount());
                         startActivity(i);
                     }else{
-                        Toast.makeText(getActivity(), "No movies list in" + getString(titleResource), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), getString(R.string.no_movies_list), Toast.LENGTH_LONG).show();
                     }
                 }
             }

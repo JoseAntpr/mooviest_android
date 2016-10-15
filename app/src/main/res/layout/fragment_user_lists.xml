@@ -42,6 +42,13 @@
                     android:textColor="@color/colorPrimary"/>
             </RelativeLayout>
 
+            <TextView
+                android:id="@+id/no_seen_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/no_movies_list"/>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/seen_list_recycler"
                 android:layout_width="match_parent"
@@ -83,10 +90,12 @@
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/no_watchlist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="No hay películas en esta lista"/>
+                android:text="@string/no_movies_list"/>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/watchlist_recycler"
                 android:layout_width="match_parent"
@@ -126,6 +135,13 @@
                     android:textSize="15sp"
                     android:textColor="@color/colorPrimary"/>
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/no_favourite_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/no_movies_list"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/favourite_list_recycler"
