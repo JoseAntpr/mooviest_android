@@ -17,9 +17,15 @@ import retrofit2.Call;
 public class GetUserList extends AsyncTask<Integer, String, MooviestApiResult> {
 
     private String list_name;
+    private LoginResponseInterface loginResponseInterface = null;
 
     public GetUserList(String name){
         this.list_name = name;
+    }
+
+    public GetUserList(String name, LoginResponseInterface receiver){
+        this.list_name = name;
+        this.loginResponseInterface = receiver;
     }
 
     @Override
@@ -45,5 +51,14 @@ public class GetUserList extends AsyncTask<Integer, String, MooviestApiResult> {
         }
 
         return result;
+    }
+
+    @Override
+    protected void onPostExecute(MooviestApiResult mooviestApiResult) {
+        super.onPostExecute(mooviestApiResult);
+
+        if(loginResponseInterface != null){
+            loginResponseInterface.listsResponse(list_name, mooviestApiResult);
+        }
     }
 }

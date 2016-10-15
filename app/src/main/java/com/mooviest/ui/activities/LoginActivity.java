@@ -1,6 +1,5 @@
 package com.mooviest.ui.activities;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -24,14 +23,18 @@ import com.mooviest.ui.models.User;
 import com.mooviest.ui.rest.LoginResponse;
 import com.mooviest.ui.rest.MooviestApiInterface;
 import com.mooviest.ui.rest.SingletonRestClient;
+import com.mooviest.ui.tasks.GetUserList;
+import com.mooviest.ui.tasks.LoginUser;
+import com.mooviest.ui.tasks.LoginResponseInterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import retrofit2.Call;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements LoginResponseInterface {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
@@ -40,7 +43,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordText;
     private Button loginButton;
     private TextView signupLink;
-    private ProgressDialog mProgressDialog;
+    private static int countGetLists;
+    private static final Object countGetListsLock = new Object();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.btn_login);
         signupLink = (TextView) findViewById(R.id.link_signup);
 
-        mProgressDialog = null;
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +92,10 @@ public class LoginActivity extends AppCompatActivity {
         // hacer llamada para crear la lista de películas para swipe en la BD
         // Una vez terminada esta llamada hacer otra para traer las pelis para
         // movies buffer, terminada esta última llamar a HomeActivity
-        new APILogin().execute(emailUsername, password);
+        LoginUser loginUser = new LoginUser(this, LoginActivity.this){
+
+        };
+        loginUser.execute(emailUsername, password);
 
         //CON ASYNCTASK y en onPostExecute llamar al intent HomeActivity
         // GET API DATA TO MOVIES_BUFFER, lang, num_movies
@@ -145,9 +151,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginFailed(String message) {
         Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
-        if(mProgressDialog != null) {
-            mProgressDialog.dismiss();
-        }
 
         loginButton.setEnabled(true);
     }
@@ -186,66 +189,98 @@ public class LoginActivity extends AppCompatActivity {
         return valid;
     }
 
-    /************************  ASYNCTASKS  ************************/
+    public void getMoviesBuffer(){
+        GetMoviesBuffer getMoviesBuffer = new GetMoviesBuffer(){
+            @Override
+            protected void onPostExecute(ArrayList<Movie> result) {
+                super.onPostExecute(result);
+
+                if(result!=null) {
+
+                    // Counter response user lists
+                    countGetLists = 0;
+
+                    SingletonRestClient.getInstance().movies_buffer = result;
+                    GetUserList getSeenList = new GetUserList("seen_list", LoginActivity.this);
+                    getSeenList.execute(1);
+
+                    GetUserList getWatchlist = new GetUserList("watchlist", LoginActivity.this);
+                    getWatchlist.execute(1);
+
+                    GetUserList getFavouriteList = new GetUserList("favourite_list", LoginActivity.this);
+                    getFavouriteList.execute(1);
 
 
-    /*
-     * AYNCTASK USER LOGIN
-     */
-    public class APILogin extends AsyncTask<String, String, LoginResponse>{
-
-        public APILogin(){
-            mProgressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme_Dark_Dialog);
-            mProgressDialog.setMessage("Loading please wait...");
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            mProgressDialog.show();
-            super.onPreExecute();
-        }
-
-        @Override
-        protected LoginResponse doInBackground(String... params) {
-            //Inicialización del Cliente Rest
-            SingletonRestClient.getInstance().init();
-
-            MooviestApiInterface apiInterface= SingletonRestClient.getInstance().mooviestApiInterface;
-            Call<LoginResponse> call = apiInterface.login(params[0], params[1]);
-            LoginResponse result = null;
-            try {
-                result = call.execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(LoginResponse result) {
-            super.onPostExecute(result);
-
-            if(result!=null) {
-                int statusCode = result.getStatus();
-
-
-                if(statusCode == 200) {
-                    onLoginSuccess(result);
-
-                    new GetMoviesBuffer().execute(2,10);
-
-                }else if (statusCode == 404){
-                    onLoginFailed(result.getMessage());
+                }else{
+                    onLoginFailed("Load movies failed. Check your internet connection.");
                 }
-
-            }else{
-                onLoginFailed("Login failed. Check your internet connection.");
             }
+        };
+        getMoviesBuffer.execute(2,10);
+    }
+
+    @Override
+    public void loginResponse(LoginResponse result) {
+        if(result!=null) {
+            int statusCode = result.getStatus();
+
+
+            if(statusCode == 200) {
+                onLoginSuccess(result);
+
+                getMoviesBuffer();
+
+            }else if (statusCode == 404){
+                onLoginFailed(result.getMessage());
+            }
+
+        }else{
+            onLoginFailed("Login failed. Check your internet connection.");
         }
     }
 
+    @Override
+    public void listsResponse(String list_name, MooviestApiResult result) {
+        if(result != null) {
+            switch (list_name) {
+                case "seen_list":
+                    SingletonRestClient.getInstance().seen_list = result.getMovies();
+                    break;
+                case "watchlist":
+                    SingletonRestClient.getInstance().watchlist = result.getMovies();
+                    break;
+                case "favourite_list":
+                    SingletonRestClient.getInstance().favourite_list = result.getMovies();
+            };
+        }
+
+        incrementCountLists();
+
+        if(getCountLists() == 3){
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+
+            // close this activity
+            finish();
+        }
+    }
+
+    public void incrementCountLists() {
+        synchronized (countGetListsLock) {
+            countGetLists++;
+        }
+    }
+
+
+    public int getCountLists(){
+        synchronized (countGetListsLock){
+            return countGetLists;
+        }
+    }
+
+
+
+    /************************  ASYNCTASKS  ************************/
 
     /*
      * ASYNCTASK FOR GET MOVIES TO BUFFER
@@ -279,29 +314,6 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             return movies;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Movie> result) {
-            super.onPostExecute(result);
-
-            if (mProgressDialog != null || mProgressDialog.isShowing()){
-                mProgressDialog.dismiss();
-            }
-
-            if(result!=null) {
-
-                SingletonRestClient.getInstance().movies_buffer = result;
-
-                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                startActivity(intent);
-
-                // close this activity
-                finish();
-
-            }else{
-                onLoginFailed("Load movies failed. Check your internet connection.");
-            }
         }
     }
 
