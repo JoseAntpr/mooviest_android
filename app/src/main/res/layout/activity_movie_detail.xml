@@ -151,4 +151,55 @@
 
     </android.support.v4.view.ViewPager>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_linearButtons"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:paddingBottom="5dp"
+        android:background="@drawable/movie_gradient_buttons">
+
+        <ImageButton
+            android:id="@+id/button"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_close_eye"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="?android:selectableItemBackground"/>
+        <ImageButton
+            android:id="@+id/button4"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_clock"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="?android:selectableItemBackground" />
+        <ImageButton
+            android:id="@+id/button3"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_open_eye"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="?android:selectableItemBackground" />
+        <ImageButton
+            android:id="@+id/button2"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_heart"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="?android:selectableItemBackground" />
+    </LinearLayout>
+
+    
+
 </android.support.design.widget.CoordinatorLayout>

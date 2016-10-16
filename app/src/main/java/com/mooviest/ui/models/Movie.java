@@ -22,6 +22,7 @@ public class Movie implements Parcelable {
     private int runtime;
     private int released;
     private String movieProducer;
+    private Collection collection;
     private String synopsis;
     private int sagaOrder;
     private String average;
@@ -35,6 +36,7 @@ public class Movie implements Parcelable {
         runtime = in.readInt();
         released = in.readInt();
         movieProducer = in.readString();
+        collection = in.readParcelable(getClass().getClassLoader());
         sagaOrder = in.readInt();
         average = in.readString();
     }
@@ -304,6 +306,24 @@ public class Movie implements Parcelable {
     }
 
     /**
+     *
+     * @return
+     *     The collection
+     */
+    public Collection getCollection() {
+        return collection;
+    }
+
+    /**
+     *
+     * @param collection
+     *     The collection
+     */
+    public void setCollection(Collection collection) {
+        this.collection = collection;
+    }
+
+    /**
      * 
      * @return
      *     The sagaOrder
@@ -354,6 +374,7 @@ public class Movie implements Parcelable {
         parcel.writeInt(released);
         parcel.writeString(image);
         parcel.writeString(movieProducer);
+        parcel.writeParcelable(collection, i);
         parcel.writeInt(sagaOrder);
         parcel.writeString(average);
     }

@@ -9,6 +9,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
@@ -19,6 +20,8 @@ import retrofit2.http.Query;
  * Created by jesus on 26/8/16.
  */
 public interface MooviestApiInterface {
+
+    // ********** USER ************
 
     @GET("users/{id}/")
     Call<UserProfileResponse> getUserProfile(@Path("id") int id);
@@ -53,6 +56,16 @@ public interface MooviestApiInterface {
     @FormUrlEncoded
     @POST("users/login/")
     Call<LoginResponse> login(@Field("username") String emailUsername, @Field("password") String password);
+
+    @FormUrlEncoded
+    @POST("collection/")
+    Call<LoginResponse> setMovieCollection(@Field("user") int user, @Field("movie") int movie, @Field("typeMovie") int typeMovie);
+
+    @FormUrlEncoded
+    @PATCH("collection/{id}/")
+    Call<LoginResponse> updateMovieCollection(@Path("id") int id, @Field("typeMovie") int typeMovie);
+
+    // ********** MOVIE ************
 
     @GET("movie/")
     Call<MooviestApiResult> movie(@Query("search") String name);
