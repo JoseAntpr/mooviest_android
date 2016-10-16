@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,20 +15,24 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.mooviest.R;
 import com.mooviest.ui.RoundedTransformation;
 import com.mooviest.ui.adapters.ViewPagerAdapter;
+import com.mooviest.ui.models.Collection;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.SingletonRestClient;
+import com.mooviest.ui.tasks.MovieCollectionInterface;
+import com.mooviest.ui.tasks.UpdateMovieCollection;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-public class MovieDetailActivity extends AppCompatActivity {
+public class MovieDetailActivity extends AppCompatActivity implements MovieCollectionInterface {
 
     ImageView cover_detail;
     TextView title_detail;
@@ -37,6 +42,11 @@ public class MovieDetailActivity extends AppCompatActivity {
     TabLayout detail_tabs;
     LinearLayout linear_collapsing_detail;
     CollapsingToolbarLayout collapsingToolbarLayout;
+    FloatingActionButton floating_action_blacklist;
+    FloatingActionButton floating_action_seen;
+    FloatingActionButton floating_action_watchlist;
+    FloatingActionButton floating_action_favourite;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +129,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         runtime_detail = (TextView) findViewById(R.id.runtime_detail);
         runtime_detail.setText(movie.getRuntime() + " min");
 
-
+        // Floating buttons
+        setupFloatingButtons();
 
     }
 
@@ -142,6 +153,70 @@ public class MovieDetailActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void updateMovieCollectionResponse(Collection result) {
+
+        if(result != null){
+            View floatingActionMenuView = findViewById(R.id.floating_action_menu);
+            Snackbar.make(floatingActionMenuView,
+                    "Movida a la lista seleccionada correctamente", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
+
+    }
+
+    private void movieCollectionTask(String typeMovie){
+        Collection collection = SingletonRestClient.getInstance().movie_selected.getCollection();
+
+        if(collection != null) {
+            UpdateMovieCollection updateMovieCollection = new UpdateMovieCollection(MovieDetailActivity.this);
+            updateMovieCollection.execute(collection.getId(), getTypeMovieId(typeMovie));
+        }else{
+
+        }
+    }
+
+    private int getTypeMovieId(String typeMovie){
+        int typeMovieId = 1;
+        switch (typeMovie){
+            case "seen":
+                typeMovieId = 1;
+                break;
+            case "watchlist":
+                typeMovieId = 2;
+                break;
+            case "favourite":
+                typeMovieId = 3;
+                break;
+            case "blacklist":
+                typeMovieId = 4;
+                break;
+        };
+
+        return typeMovieId;
+    }
+
+    private void setupFloatingButtons(){
+
+        floating_action_seen = (FloatingActionButton) findViewById(R.id.floating_action_seen);
+        floating_action_seen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                floating_action_seen.setEnabled(false);
+                movieCollectionTask("seen");
+            }
+        });
+
+        floating_action_favourite = (FloatingActionButton) findViewById(R.id.floating_action_favourite);
+        floating_action_favourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                floating_action_favourite.setEnabled(false);
+                movieCollectionTask("favourite");
+            }
+        });
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -173,4 +248,6 @@ public class MovieDetailActivity extends AppCompatActivity {
             getWindow().setReturnTransition(transition);
         }
     }
+
+
 }

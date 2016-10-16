@@ -10,13 +10,13 @@ import android.os.Parcelable;
 public class Collection implements Parcelable{
 
     private int id;
-    private String type_movie;
+    private String typeMovie;
     private int user;
     private int movie;
 
     protected Collection(Parcel in) {
         id = in.readInt();
-        type_movie = in.readString();
+        typeMovie = in.readString();
         user = in.readInt();
         movie = in.readInt();
     }
@@ -54,19 +54,19 @@ public class Collection implements Parcelable{
     /**
      *
      * @return
-     * The type_movie
+     * The typeMovie
      */
-    public String getType_movie() {
-        return type_movie;
+    public String getTypeMovie() {
+        return typeMovie;
     }
 
     /**
      *
-     * @param type_movie
-     * The type_movie
+     * @param typeMovie
+     * The typeMovie
      */
-    public void setType_movie(String type_movie) {
-        this.type_movie = type_movie;
+    public void setTypeMovie(String typeMovie) {
+        this.typeMovie = typeMovie;
     }
 
     /**
@@ -113,7 +113,7 @@ public class Collection implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
-        parcel.writeString(type_movie);
+        parcel.writeString(typeMovie);
         parcel.writeInt(user);
         parcel.writeInt(movie);
     }

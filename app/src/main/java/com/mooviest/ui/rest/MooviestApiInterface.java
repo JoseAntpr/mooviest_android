@@ -1,5 +1,6 @@
 package com.mooviest.ui.rest;
 
+import com.mooviest.ui.models.Collection;
 import com.mooviest.ui.models.Movie;
 
 import okhttp3.MultipartBody;
@@ -59,11 +60,11 @@ public interface MooviestApiInterface {
 
     @FormUrlEncoded
     @POST("collection/")
-    Call<LoginResponse> setMovieCollection(@Field("user") int user, @Field("movie") int movie, @Field("typeMovie") int typeMovie);
+    Call<Collection> setMovieCollection(@Field("user") int user, @Field("movie") int movie, @Field("typeMovie") int typeMovie);
 
     @FormUrlEncoded
     @PATCH("collection/{id}/")
-    Call<LoginResponse> updateMovieCollection(@Path("id") int id, @Field("typeMovie") int typeMovie);
+    Call<Collection> updateMovieCollection(@Path("id") int id, @Field("typeMovie") int typeMovie);
 
     // ********** MOVIE ************
 
