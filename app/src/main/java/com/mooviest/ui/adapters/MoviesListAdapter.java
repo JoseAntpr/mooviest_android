@@ -109,6 +109,10 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
         return movies.size();
     }
 
+    public void removeItem(Movie movie){
+        this.movies.remove(movie);
+    }
+
     public void addItems(ArrayList<Movie> movies){
         this.movies.addAll(movies);
     }

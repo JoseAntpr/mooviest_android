@@ -25,12 +25,15 @@ public class UserListsFragment extends Fragment {
     private RecyclerView seen_list_recycler;
     private RecyclerView watchlist_recycler;
     private RecyclerView favourite_list_recycler;
+    private RecyclerView blacklist_recycler;
     private Button seen_button;
     private Button watchlist_button;
     private Button favourite_button;
+    private Button blacklist_button;
     private TextView no_favourite_list;
     private TextView no_seen_list;
     private TextView no_watchlist;
+    private TextView no_blacklist;
 
 
 
@@ -49,8 +52,11 @@ public class UserListsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_lists, container, false);
 
-        // SEEN
+        // ********* SEEN ***********
         no_seen_list = (TextView) view.findViewById(R.id.no_seen_list);
+        if(!SingletonRestClient.getInstance().seen_list.isEmpty()) {
+            no_seen_list.setVisibility(View.GONE);
+        }
         seen_button = (Button) view.findViewById(R.id.seen_button);
         seen_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,19 +65,19 @@ public class UserListsFragment extends Fragment {
             }
         });
 
-        if(!SingletonRestClient.getInstance().seen_list.isEmpty()) {
-            no_seen_list.setVisibility(View.GONE);
-
-            seen_list_recycler = (RecyclerView) view.findViewById(R.id.seen_list_recycler);
-            LinearLayoutManager seenListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-            seen_list_recycler.setLayoutManager(seenListLayoutManager);
-            MoviesUserListAdapter seenListAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().seen_list);
-            seen_list_recycler.setAdapter(seenListAdapter);
-        }
+        seen_list_recycler = (RecyclerView) view.findViewById(R.id.seen_list_recycler);
+        LinearLayoutManager seenListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        seen_list_recycler.setLayoutManager(seenListLayoutManager);
+        SingletonRestClient.getInstance().seenListAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().seen_list);
+        seen_list_recycler.setAdapter(SingletonRestClient.getInstance().seenListAdapter);
 
 
-        // WATCHLIST
+
+        // *********** WATCHLIST ***********
         no_watchlist = (TextView) view.findViewById(R.id.no_watchlist);
+        if(!SingletonRestClient.getInstance().watchlist.isEmpty()) {
+            no_watchlist.setVisibility(View.GONE);
+        }
         watchlist_button = (Button) view.findViewById(R.id.watchlist_button);
         watchlist_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,20 +86,19 @@ public class UserListsFragment extends Fragment {
             }
         });
 
-        if(!SingletonRestClient.getInstance().watchlist.isEmpty()) {
-            no_watchlist.setVisibility(View.GONE);
-
-            watchlist_recycler = (RecyclerView) view.findViewById(R.id.watchlist_recycler);
-            LinearLayoutManager watchlistLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-            watchlist_recycler.setLayoutManager(watchlistLayoutManager);
-            MoviesUserListAdapter watchlistAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().seen_list);
-            watchlist_recycler.setAdapter(watchlistAdapter);
-
-        }
+        watchlist_recycler = (RecyclerView) view.findViewById(R.id.watchlist_recycler);
+        LinearLayoutManager watchlistLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        watchlist_recycler.setLayoutManager(watchlistLayoutManager);
+        SingletonRestClient.getInstance().watchlistAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().watchlist);
+        watchlist_recycler.setAdapter(SingletonRestClient.getInstance().watchlistAdapter);
 
 
-        // FAVOURITE_LIST
+
+        // *********** FAVOURITE_LIST ***********
         no_favourite_list = (TextView) view.findViewById(R.id.no_favourite_list);
+        if(!SingletonRestClient.getInstance().favourite_list.isEmpty()) {
+            no_favourite_list.setVisibility(View.GONE);
+        }
         favourite_button = (Button) view.findViewById(R.id.favourite_button);
         favourite_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,15 +107,33 @@ public class UserListsFragment extends Fragment {
             }
         });
 
-        if(!SingletonRestClient.getInstance().favourite_list.isEmpty()) {
-            no_favourite_list.setVisibility(View.GONE);
+        favourite_list_recycler = (RecyclerView) view.findViewById(R.id.favourite_list_recycler);
+        LinearLayoutManager favouriteListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        favourite_list_recycler.setLayoutManager(favouriteListLayoutManager);
+        SingletonRestClient.getInstance().favouriteListAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().favourite_list);
+        favourite_list_recycler.setAdapter(SingletonRestClient.getInstance().favouriteListAdapter);
 
-            favourite_list_recycler = (RecyclerView) view.findViewById(R.id.favourite_list_recycler);
-            LinearLayoutManager favouriteListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-            favourite_list_recycler.setLayoutManager(favouriteListLayoutManager);
-            MoviesUserListAdapter favouriteListAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().favourite_list);
-            favourite_list_recycler.setAdapter(favouriteListAdapter);
+
+
+        // *********** BLACKLIST ***********
+        no_blacklist = (TextView) view.findViewById(R.id.no_blacklist);
+        if(!SingletonRestClient.getInstance().blacklist.isEmpty()) {
+            no_blacklist.setVisibility(View.GONE);
         }
+
+        blacklist_button = (Button) view.findViewById(R.id.blacklist_button);
+        blacklist_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getUserListAPI("blacklist", 1, R.string.blacklist);
+            }
+        });
+
+        blacklist_recycler = (RecyclerView) view.findViewById(R.id.blacklist_recycler);
+        LinearLayoutManager blacklistLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        blacklist_recycler.setLayoutManager(blacklistLayoutManager);
+        SingletonRestClient.getInstance().blacklistAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().blacklist);
+        blacklist_recycler.setAdapter(SingletonRestClient.getInstance().blacklistAdapter);
 
         return view;
 
