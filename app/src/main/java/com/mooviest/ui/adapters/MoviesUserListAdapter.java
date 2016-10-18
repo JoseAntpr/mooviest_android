@@ -129,6 +129,20 @@ public class MoviesUserListAdapter extends RecyclerView.Adapter<MoviesUserListAd
         this.movies.addAll(movies);
     }
 
+    public void addItem(Movie movie){
+        if(this.movies.size() < 10) {
+            this.movies.add(movie);
+        }
+    }
+
+    public void removeItem(Movie movie){
+        this.movies.remove(movie);
+    }
+
+    public void reloadItems(ArrayList<Movie> movies){
+        this.movies = movies;
+    }
+
     public ArrayList<Movie> getItems(){
         return movies;
     }

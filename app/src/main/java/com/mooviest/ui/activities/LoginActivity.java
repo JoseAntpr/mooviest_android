@@ -210,6 +210,9 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
                     GetUserList getFavouriteList = new GetUserList("favourite_list", LoginActivity.this);
                     getFavouriteList.execute(1);
 
+                    GetUserList getBlacklist = new GetUserList("blacklist", LoginActivity.this);
+                    getBlacklist.execute(1);
+
 
                 }else{
                     onLoginFailed("Load movies failed. Check your internet connection.");
@@ -241,18 +244,36 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
 
     @Override
     public void listsResponse(String list_name, MooviestApiResult result) {
-        if(result != null) {
-            switch (list_name) {
-                case "seen_list":
+        switch (list_name) {
+            case "seen_list":
+                if(result != null) {
                     SingletonRestClient.getInstance().seen_list = result.getMovies();
-                    break;
-                case "watchlist":
+                }else{
+                    SingletonRestClient.getInstance().seen_list = new ArrayList<Movie>();
+                }
+                break;
+            case "watchlist":
+                if(result != null) {
                     SingletonRestClient.getInstance().watchlist = result.getMovies();
-                    break;
-                case "favourite_list":
+                }else{
+                    SingletonRestClient.getInstance().watchlist = new ArrayList<Movie>();
+                }
+                break;
+            case "favourite_list":
+                if(result != null) {
                     SingletonRestClient.getInstance().favourite_list = result.getMovies();
-            };
-        }
+                }else{
+                    SingletonRestClient.getInstance().favourite_list = new ArrayList<Movie>();
+                }
+                break;
+            case "blacklist":
+                if(result != null) {
+                    SingletonRestClient.getInstance().blacklist = result.getMovies();
+                }else{
+                    SingletonRestClient.getInstance().blacklist = new ArrayList<Movie>();
+                }
+                break;
+        };
 
         incrementCountLists();
 

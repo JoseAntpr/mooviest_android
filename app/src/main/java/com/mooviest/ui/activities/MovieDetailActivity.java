@@ -26,7 +26,9 @@ import com.mooviest.ui.RoundedTransformation;
 import com.mooviest.ui.adapters.ViewPagerAdapter;
 import com.mooviest.ui.models.Collection;
 import com.mooviest.ui.models.Movie;
+import com.mooviest.ui.rest.MooviestApiResult;
 import com.mooviest.ui.rest.SingletonRestClient;
+import com.mooviest.ui.tasks.GetUserList;
 import com.mooviest.ui.tasks.MovieCollectionInterface;
 import com.mooviest.ui.tasks.UpdateMovieCollection;
 import com.squareup.picasso.Callback;
@@ -155,26 +157,152 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         return true;
     }
 
+    public void deleteMovieFromList(String typeMovie){
+        if(SingletonRestClient.getInstance().moviesListAdapter != null){
+            SingletonRestClient.getInstance().moviesListAdapter.removeItem(SingletonRestClient.getInstance().movie_selected);
+            SingletonRestClient.getInstance().moviesListAdapter.notifyDataSetChanged();
+        }
+        switch (typeMovie){
+            case "seen":
+                if(SingletonRestClient.getInstance().seenListAdapter.getItemCount() == 10){
+                    GetUserList getSeenList = new GetUserList("seen_list"){
+                        @Override
+                        protected void onPostExecute(MooviestApiResult result) {
+                            super.onPostExecute(result);
+                            if(result!=null) {
+                                if(result.getMovies().size() > 0) {
+                                    SingletonRestClient.getInstance().seenListAdapter.reloadItems(result.getMovies());
+                                    SingletonRestClient.getInstance().seenListAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    };
+                    getSeenList.execute(1);
+                }else{
+                    SingletonRestClient.getInstance().seenListAdapter.removeItem(SingletonRestClient.getInstance().movie_selected);
+                    SingletonRestClient.getInstance().seenListAdapter.notifyDataSetChanged();
+                }
+                break;
+            case "watchlist":
+                if(SingletonRestClient.getInstance().watchlistAdapter.getItemCount() == 10){
+                    GetUserList getSeenList = new GetUserList("watchlist"){
+                        @Override
+                        protected void onPostExecute(MooviestApiResult result) {
+                            super.onPostExecute(result);
+                            if(result!=null) {
+                                if(result.getMovies().size() > 0) {
+                                    SingletonRestClient.getInstance().watchlistAdapter.reloadItems(result.getMovies());
+                                    SingletonRestClient.getInstance().watchlistAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    };
+                    getSeenList.execute(1);
+                }else {
+                    SingletonRestClient.getInstance().watchlistAdapter.removeItem(SingletonRestClient.getInstance().movie_selected);
+                    SingletonRestClient.getInstance().watchlistAdapter.notifyDataSetChanged();
+                }
+                break;
+            case "favourite":
+                if(SingletonRestClient.getInstance().favouriteListAdapter.getItemCount() == 10){
+                    GetUserList getSeenList = new GetUserList("favourite_list"){
+                        @Override
+                        protected void onPostExecute(MooviestApiResult result) {
+                            super.onPostExecute(result);
+                            if(result!=null) {
+                                if(result.getMovies().size() > 0) {
+                                    SingletonRestClient.getInstance().favouriteListAdapter.reloadItems(result.getMovies());
+                                    SingletonRestClient.getInstance().favouriteListAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    };
+                    getSeenList.execute(1);
+                }else {
+                    SingletonRestClient.getInstance().favouriteListAdapter.removeItem(SingletonRestClient.getInstance().movie_selected);
+                    SingletonRestClient.getInstance().favouriteListAdapter.notifyDataSetChanged();
+                }
+                break;
+            case "blacklist":
+                if(SingletonRestClient.getInstance().blacklistAdapter.getItemCount() == 10){
+                    GetUserList getSeenList = new GetUserList("blacklist"){
+                        @Override
+                        protected void onPostExecute(MooviestApiResult result) {
+                            super.onPostExecute(result);
+                            if(result!=null) {
+                                if(result.getMovies().size() > 0) {
+                                    SingletonRestClient.getInstance().blacklistAdapter.reloadItems(result.getMovies());
+                                    SingletonRestClient.getInstance().blacklistAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    };
+                    getSeenList.execute(1);
+                }else {
+                    SingletonRestClient.getInstance().blacklistAdapter.removeItem(SingletonRestClient.getInstance().movie_selected);
+                    SingletonRestClient.getInstance().blacklistAdapter.notifyDataSetChanged();
+                }
+                break;
+        };
+
+    }
+
+    public void addMovieToList(String typeMovie){
+        switch (typeMovie){
+            case "seen":
+                SingletonRestClient.getInstance().seenListAdapter.addItem(SingletonRestClient.getInstance().movie_selected);
+                SingletonRestClient.getInstance().seenListAdapter.notifyDataSetChanged();
+                break;
+            case "watchlist":
+                SingletonRestClient.getInstance().watchlistAdapter.addItem(SingletonRestClient.getInstance().movie_selected);
+                SingletonRestClient.getInstance().watchlistAdapter.notifyDataSetChanged();
+                break;
+            case "favourite":
+                SingletonRestClient.getInstance().favouriteListAdapter.addItem(SingletonRestClient.getInstance().movie_selected);
+                SingletonRestClient.getInstance().favouriteListAdapter.notifyDataSetChanged();
+                break;
+            case "blacklist":
+                SingletonRestClient.getInstance().blacklistAdapter.addItem(SingletonRestClient.getInstance().movie_selected);
+                SingletonRestClient.getInstance().blacklistAdapter.notifyDataSetChanged();
+                break;
+        };
+    }
+
     @Override
     public void updateMovieCollectionResponse(Collection result) {
-
         if(result != null){
+
+            // Volver a habilitar el botón de su typeMovie anterior
+            disableEnableButton(SingletonRestClient.getInstance().movie_selected.getCollection().getTypeMovie(), true);
+
+            // Eliminamos la película seleccionada de la lista en la que se encontraba o recargamos toda la lista si había 10 películas
+            // Ésto lo hacemos por si en esa lista tiene más de 10 en la BD, seguirá habiendo 10 en la lista de previsualizaciones
+            deleteMovieFromList(SingletonRestClient.getInstance().movie_selected.getCollection().getTypeMovie());
+
+            // Set new Collection to movie_selected
+            SingletonRestClient.getInstance().movie_selected.setCollection(result);
+
+            // Después la añadimos a la lista seleccionada
+            addMovieToList(result.getTypeMovie());
+
             View floatingActionMenuView = findViewById(R.id.floating_action_menu);
             Snackbar.make(floatingActionMenuView,
                     "Movida a la lista seleccionada correctamente", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
+
         }
 
     }
 
     private void movieCollectionTask(String typeMovie){
+        Movie m = SingletonRestClient.getInstance().movie_selected;
         Collection collection = SingletonRestClient.getInstance().movie_selected.getCollection();
 
         if(collection != null) {
             UpdateMovieCollection updateMovieCollection = new UpdateMovieCollection(MovieDetailActivity.this);
             updateMovieCollection.execute(collection.getId(), getTypeMovieId(typeMovie));
         }else{
-
+            // La película no se encuentre en ninguna lista
         }
     }
 
@@ -191,11 +319,28 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
                 typeMovieId = 3;
                 break;
             case "blacklist":
-                typeMovieId = 4;
+                typeMovieId = 5;
                 break;
         };
 
         return typeMovieId;
+    }
+
+    private void disableEnableButton(String typeMovie, boolean action){
+        switch (typeMovie){
+            case "seen":
+                floating_action_seen.setEnabled(action);
+                break;
+            case "watchlist":
+                floating_action_watchlist.setEnabled(action);
+                break;
+            case "favourite":
+                floating_action_favourite.setEnabled(action);
+                break;
+            case "blacklist":
+                floating_action_blacklist.setEnabled(action);
+                break;
+        };
     }
 
     private void setupFloatingButtons(){
@@ -209,6 +354,15 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
             }
         });
 
+        floating_action_watchlist = (FloatingActionButton) findViewById(R.id.floating_action_watchlist);
+        floating_action_watchlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                floating_action_watchlist.setEnabled(false);
+                movieCollectionTask("watchlist");
+            }
+        });
+
         floating_action_favourite = (FloatingActionButton) findViewById(R.id.floating_action_favourite);
         floating_action_favourite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,6 +371,22 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
                 movieCollectionTask("favourite");
             }
         });
+
+
+        floating_action_blacklist = (FloatingActionButton) findViewById(R.id.floating_action_blacklist);
+        floating_action_blacklist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                floating_action_blacklist.setEnabled(false);
+                movieCollectionTask("blacklist");
+            }
+        });
+
+
+        // Deshabilitar botón perteneciente a su typeMovie
+        if(SingletonRestClient.getInstance().movie_selected.getCollection() != null){
+            disableEnableButton(SingletonRestClient.getInstance().movie_selected.getCollection().getTypeMovie(), false);
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {

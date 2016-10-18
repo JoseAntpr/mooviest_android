@@ -1,8 +1,9 @@
 package com.mooviest.ui.rest;
 
 import android.app.Application;
-import android.app.ProgressDialog;
 
+import com.mooviest.ui.adapters.MoviesListAdapter;
+import com.mooviest.ui.adapters.MoviesUserListAdapter;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.models.User;
 
@@ -38,9 +39,15 @@ public class SingletonRestClient extends Application {
     private static Retrofit retrofit;
     public ArrayList<Movie> movies_buffer;
     public ArrayList<Movie> movies_list;
+    public MoviesListAdapter moviesListAdapter;
+    public MoviesUserListAdapter seenListAdapter;
+    public MoviesUserListAdapter watchlistAdapter;
+    public MoviesUserListAdapter favouriteListAdapter;
+    public MoviesUserListAdapter blacklistAdapter;
     public ArrayList<Movie> seen_list;
     public ArrayList<Movie> watchlist;
     public ArrayList<Movie> favourite_list;
+    public ArrayList<Movie> blacklist;
     public Movie movie_selected;
     public User user;
 

@@ -45,5 +45,6 @@
     <string name="favourite_list">Favourites</string>
     <string name="seen_list">Seen</string>
     <string name="watchlist">Watchlist</string>
+    <string name="blacklist">Blacklist</string>
     <string name="no_movies_list">No movies on this list</string>
 </resources>

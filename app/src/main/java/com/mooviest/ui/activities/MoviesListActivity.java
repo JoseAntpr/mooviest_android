@@ -25,7 +25,6 @@ public class MoviesListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private GridLayoutManager layoutManager;
-    private MoviesListAdapter moviesListAdapter;
     private String title;
     private String list_name;
     private Boolean next;
@@ -65,9 +64,9 @@ public class MoviesListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
 
-        moviesListAdapter = new MoviesListAdapter(moviesAdapter);
+        SingletonRestClient.getInstance().moviesListAdapter = new MoviesListAdapter(moviesAdapter);
 
-        recyclerView.setAdapter(moviesListAdapter);
+        recyclerView.setAdapter(SingletonRestClient.getInstance().moviesListAdapter);
 
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -80,6 +79,12 @@ public class MoviesListActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        SingletonRestClient.getInstance().moviesListAdapter = null;
     }
 
     private void initActivityTransitions() {
@@ -106,10 +111,10 @@ public class MoviesListActivity extends AppCompatActivity {
                         if(result.getNext() == null){
                             next = false;
                         }
-                        int curSize = moviesListAdapter.getItemCount();
-                        moviesListAdapter.addItems(result.getMovies());
-                        int totalMovies = moviesListAdapter.getItemCount();
-                        moviesListAdapter.notifyItemRangeInserted(curSize, totalMovies-1);
+                        int curSize = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
+                        SingletonRestClient.getInstance().moviesListAdapter.addItems(result.getMovies());
+                        int totalMovies = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
+                        SingletonRestClient.getInstance().moviesListAdapter.notifyItemRangeInserted(curSize, totalMovies-1);
                     }else{
                         Toast.makeText(getApplication(), "No movies list", Toast.LENGTH_LONG).show();
                     }
@@ -127,7 +132,7 @@ public class MoviesListActivity extends AppCompatActivity {
         savedInstanceState.putString("LIST_NAME", list_name);
         savedInstanceState.putBoolean("NEXT", next);
         savedInstanceState.putInt("COUNT", count);
-        savedInstanceState.putParcelableArrayList("MOVIES_ADAPTER", moviesListAdapter.getItems());
+        savedInstanceState.putParcelableArrayList("MOVIES_ADAPTER", SingletonRestClient.getInstance().moviesListAdapter.getItems());
         super.onSaveInstanceState(savedInstanceState);
     }
 }

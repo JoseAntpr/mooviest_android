@@ -18,7 +18,7 @@ public class Movie implements Parcelable {
     private MovieLang langs;
     private List<Object> emotions = new ArrayList<Object>();
     private List<Rating> ratings = new ArrayList<Rating>();
-    private String originalTitle;
+    private String original_title;
     private int runtime;
     private int released;
     private String movieProducer;
@@ -30,7 +30,7 @@ public class Movie implements Parcelable {
 
     protected Movie(Parcel in) {
         id = in.readInt();
-        originalTitle = in.readString();
+        original_title = in.readString();
         title = in.readString();
         image = in.readString();
         runtime = in.readInt();
@@ -236,19 +236,19 @@ public class Movie implements Parcelable {
     /**
      * 
      * @return
-     *     The originalTitle
+     *     The original_title
      */
     public String getOriginalTitle() {
-        return originalTitle;
+        return original_title;
     }
 
     /**
      * 
-     * @param originalTitle
+     * @param original_title
      *     The original_title
      */
-    public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
+    public void setOriginalTitle(String original_title) {
+        this.original_title = original_title;
     }
 
     /**
@@ -368,7 +368,7 @@ public class Movie implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
-        parcel.writeString(originalTitle);
+        parcel.writeString(original_title);
         parcel.writeString(title);
         parcel.writeInt(runtime);
         parcel.writeInt(released);
@@ -377,5 +377,21 @@ public class Movie implements Parcelable {
         parcel.writeParcelable(collection, i);
         parcel.writeInt(sagaOrder);
         parcel.writeString(average);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Movie movie = (Movie) o;
+
+        return id == movie.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }

@@ -45,5 +45,6 @@
     <string name="favourite_list">Favoritas</string>
     <string name="seen_list">Vistas</string>
     <string name="watchlist">Pendientes</string>
+    <string name="blacklist">Lista negra</string>
     <string name="no_movies_list">No hay películas en esta lista</string>
 </resources>

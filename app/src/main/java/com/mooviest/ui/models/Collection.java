@@ -62,11 +62,11 @@ public class Collection implements Parcelable{
 
     /**
      *
-     * @param typeMovie
+     * @param type_movie
      * The typeMovie
      */
-    public void setTypeMovie(String typeMovie) {
-        this.typeMovie = typeMovie;
+    public void setTypeMovie(String type_movie) {
+        this.typeMovie = type_movie;
     }
 
     /**
