@@ -1,5 +1,7 @@
 package com.mooviest.ui.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
@@ -28,6 +30,7 @@ import com.mooviest.ui.models.Collection;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.MooviestApiResult;
 import com.mooviest.ui.rest.SingletonRestClient;
+import com.mooviest.ui.tasks.CreateMovieCollection;
 import com.mooviest.ui.tasks.GetUserList;
 import com.mooviest.ui.tasks.MovieCollectionInterface;
 import com.mooviest.ui.tasks.UpdateMovieCollection;
@@ -138,10 +141,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search, menu);
         setTitle(SingletonRestClient.getInstance().movie_selected.getTitle());
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setQueryHint(getString(R.string.search_query_hint));
+
         return true;
     }
 
@@ -294,15 +295,36 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
 
     }
 
+    @Override
+    public void createMovieCollectionResponse(Collection result) {
+
+        // Set new Collection to movie_selected
+        SingletonRestClient.getInstance().movie_selected.setCollection(result);
+
+        // Después la añadimos a la lista seleccionada
+        addMovieToList(result.getTypeMovie());
+
+        View floatingActionMenuView = findViewById(R.id.floating_action_menu);
+        Snackbar.make(floatingActionMenuView,
+                "Movida a la lista seleccionada correctamente", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+
     private void movieCollectionTask(String typeMovie){
         Movie m = SingletonRestClient.getInstance().movie_selected;
         Collection collection = SingletonRestClient.getInstance().movie_selected.getCollection();
 
         if(collection != null) {
+            //La película ya se encontraba en una lista y se actualiza a la nueva
             UpdateMovieCollection updateMovieCollection = new UpdateMovieCollection(MovieDetailActivity.this);
             updateMovieCollection.execute(collection.getId(), getTypeMovieId(typeMovie));
         }else{
-            // La película no se encuentre en ninguna lista
+            // La película no se encuentraba en ninguna lista y se introduce en la nueva
+            CreateMovieCollection createMovieCollection = new CreateMovieCollection(MovieDetailActivity.this);
+
+            SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+
+            createMovieCollection.execute(user_prefs.getInt("id", 0), m.getId(), getTypeMovieId(typeMovie));
         }
     }
 

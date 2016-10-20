@@ -29,7 +29,7 @@ public class MoviesListActivity extends AppCompatActivity {
     private String list_name;
     private Boolean next;
     private int count;
-    private ArrayList<Movie> moviesAdapter;
+    private ArrayList<Movie> moviesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +43,15 @@ public class MoviesListActivity extends AppCompatActivity {
             list_name = savedInstanceState.getString("LIST_NAME");
             next = savedInstanceState.getBoolean("NEXT");
             count = savedInstanceState.getInt("COUNT");
-            moviesAdapter = savedInstanceState.getParcelableArrayList("MOVIES_ADAPTER");
+            moviesList = savedInstanceState.getParcelableArrayList("MOVIES_ADAPTER");
         }else{
-            // GET TAG INTENT
+            // GET TAGS INTENT
             Intent i =getIntent();
             title = getString(i.getIntExtra("TITLE",R.string.app_name));
             list_name = i.getStringExtra("LIST_NAME");
             next = i.getBooleanExtra("NEXT",false);
             count = i.getIntExtra("COUNT",0);
-            moviesAdapter = SingletonRestClient.getInstance().movies_list;
+            moviesList = SingletonRestClient.getInstance().movies_list;
         }
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_movies_list));
@@ -64,7 +64,7 @@ public class MoviesListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
 
-        SingletonRestClient.getInstance().moviesListAdapter = new MoviesListAdapter(moviesAdapter);
+        SingletonRestClient.getInstance().moviesListAdapter = new MoviesListAdapter(moviesList);
 
         recyclerView.setAdapter(SingletonRestClient.getInstance().moviesListAdapter);
 

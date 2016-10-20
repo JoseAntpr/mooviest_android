@@ -60,7 +60,7 @@ public interface MooviestApiInterface {
 
     @FormUrlEncoded
     @POST("collection/")
-    Call<Collection> setMovieCollection(@Field("user") int user, @Field("movie") int movie, @Field("typeMovie") int typeMovie);
+    Call<Collection> createMovieCollection(@Field("user") int user, @Field("movie") int movie, @Field("typeMovie") int typeMovie);
 
     @FormUrlEncoded
     @PATCH("collection/{id}/")
@@ -77,4 +77,6 @@ public interface MooviestApiInterface {
     @GET("movie_app_bylang")
     Call<MooviestApiResult> movie_app_bylang(@Query("lang_id") int lang_id, @Query("limit") int limit);
 
+    @GET("movie_lang/")
+    Call<MooviestApiResult> searchMovies(@Query("search") String search, @Query("page") int page);
 }
