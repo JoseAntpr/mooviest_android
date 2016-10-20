@@ -29,6 +29,10 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
 
     private ArrayList<Movie> movies;
 
+    public MoviesListAdapter(){
+        this.movies = new ArrayList<Movie>();
+    };
+
     public MoviesListAdapter(ArrayList<Movie> movies){
         this.movies = movies;
     }
@@ -64,10 +68,12 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
         Picasso p = Picasso.with(viewHolder.itemView.getContext());
 
         String image = movie.getImage();
-        if(image.startsWith("http")){
-            p.load(image).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
-        }else{
-            p.load("https://img.tviso.com/ES/poster/w430"+image).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
+        if(image != null) {
+            if (image.startsWith("http")) {
+                p.load(image).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
+            } else {
+                p.load("https://img.tviso.com/ES/poster/w430" + image).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
+            }
         }
 
         viewHolder.title.setText(movie.getTitle());

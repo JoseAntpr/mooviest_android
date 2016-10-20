@@ -9,4 +9,6 @@ import com.mooviest.ui.models.Collection;
 public interface MovieCollectionInterface {
 
     public void updateMovieCollectionResponse(Collection result);
+
+    public void createMovieCollectionResponse(Collection result);
 }
