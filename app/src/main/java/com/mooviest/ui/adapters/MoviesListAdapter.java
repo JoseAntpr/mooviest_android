@@ -68,7 +68,9 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
         Picasso p = Picasso.with(viewHolder.itemView.getContext());
 
         String image = movie.getImage();
-        if(image != null) {
+        if(image == null || image == "") {
+            p.load(R.drawable.background_red).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
+        }else{
             if (image.startsWith("http")) {
                 p.load(image).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
             } else {
@@ -118,6 +120,8 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
     public void removeItem(Movie movie){
         this.movies.remove(movie);
     }
+
+    public void removeAllItems(){ this.movies = new ArrayList<Movie>();}
 
     public void addItems(ArrayList<Movie> movies){
         this.movies.addAll(movies);

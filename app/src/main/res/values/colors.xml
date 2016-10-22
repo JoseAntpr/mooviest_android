@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#940123</color>
+    <color name="colorHintSearch">#d493a2</color>
     <color name="colorPrimaryButton">#80001d</color>
     <color name="colorPrimaryTrans">#ecd7dc</color>
     <color name="colorPrimaryDark">#4d0000</color>

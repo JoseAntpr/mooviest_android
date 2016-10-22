@@ -86,6 +86,7 @@
         <item name="colorControlActivated">@color/colorAccent</item>
         <!-- Applied to framework control highlights (i.e ripples or list selectors) -->
         <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="android:textColorHint">@color/colorHintSearch</item>
     </style>
 
 
