@@ -13,6 +13,7 @@ public class Movie implements Parcelable {
     private int movie_lang_id;
     private String title;
     private String image;
+    private String backdrop;
     private List<Genre> genres = new ArrayList<Genre>();
     private List<Participation> participations = new ArrayList<Participation>();
     private MovieLang langs;
@@ -33,6 +34,7 @@ public class Movie implements Parcelable {
         original_title = in.readString();
         title = in.readString();
         image = in.readString();
+        backdrop = in.readString();
         runtime = in.readInt();
         released = in.readInt();
         movieProducer = in.readString();
@@ -141,6 +143,24 @@ public class Movie implements Parcelable {
      */
     public void setImage(String image) {
         this.image = image;
+    }
+
+    /**
+     *
+     * @return
+     *     The backdrop
+     */
+    public String getBackdrop() {
+        return backdrop;
+    }
+
+    /**
+     *
+     * @param backdrop
+     *     The backdrop
+     */
+    public void setBackdrop(String backdrop) {
+        this.backdrop = backdrop;
     }
 
     /**
@@ -373,6 +393,7 @@ public class Movie implements Parcelable {
         parcel.writeInt(runtime);
         parcel.writeInt(released);
         parcel.writeString(image);
+        parcel.writeString(backdrop);
         parcel.writeString(movieProducer);
         parcel.writeParcelable(collection, i);
         parcel.writeInt(sagaOrder);

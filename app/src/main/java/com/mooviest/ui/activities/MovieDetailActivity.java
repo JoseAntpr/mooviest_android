@@ -12,7 +12,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.view.Menu;
@@ -67,12 +66,17 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         final String background;
         String cover;
 
-        if(image.startsWith("http")){
-            background = image;
-            cover = image;
+        if(image == null || image == "") {
+            background = "";
+            cover = "";
         }else{
-            background = "https://img.tviso.com/ES/backdrop/w600" + image;
-            cover = "https://img.tviso.com/ES/poster/w430" + image;
+            if (image.startsWith("http")) {
+                background = image;
+                cover = image;
+            } else {
+                background = "https://img.tviso.com/ES/backdrop/w600" + image;
+                cover = "https://img.tviso.com/ES/poster/w430" + image;
+            }
         }
 
 
@@ -97,28 +101,49 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
 
         // Load background image
         final ImageView background_detail = (ImageView) findViewById(R.id.background_detail);
-        Picasso.with(this).load(background).into(background_detail, new Callback() {
-            @Override
-            public void onSuccess() {
-                Bitmap bitmap = ((BitmapDrawable) background_detail.getDrawable()).getBitmap();
-                Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-                    public void onGenerated(Palette palette) {
-                        applyPalette(palette);
-                    }
-                });
-            }
+        if(background != "") {
+            Picasso.with(this).load(background).into(background_detail, new Callback() {
+                @Override
+                public void onSuccess() {
+                    Bitmap bitmap = ((BitmapDrawable) background_detail.getDrawable()).getBitmap();
+                    Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                        public void onGenerated(Palette palette) {
+                            applyPalette(palette);
+                        }
+                    });
+                }
 
-            @Override
-            public void onError() {
+                @Override
+                public void onError() {
 
-            }
-        });
+                }
+            });
+        }else{
+            Picasso.with(this).load(R.drawable.background_red).into(background_detail, new Callback() {
+                @Override
+                public void onSuccess() {
+                    Bitmap bitmap = ((BitmapDrawable) background_detail.getDrawable()).getBitmap();
+                    Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                        public void onGenerated(Palette palette) {
+                            applyPalette(palette);
+                        }
+                    });
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            });
+        }
         Picasso.with(this).setIndicatorsEnabled(false);
 
 
         // Load cover image
         cover_detail = (ImageView) findViewById(R.id.cover_detail);
-        Picasso.with(this).load(cover).transform(new RoundedTransformation(10, 0)).into(cover_detail);
+        if(cover != "") {
+            Picasso.with(this).load(cover).transform(new RoundedTransformation(10, 0)).into(cover_detail);
+        }
         Picasso.with(this).setIndicatorsEnabled(false);
 
 

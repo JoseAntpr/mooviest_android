@@ -1,12 +1,19 @@
 package com.mooviest.ui.activities;
 
 import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import com.mooviest.R;
@@ -20,7 +27,7 @@ import com.mooviest.ui.tasks.SearchMoviesInterface;
 
 import java.util.ArrayList;
 
-public class SearchableActivity extends AppCompatActivity implements SearchMoviesInterface{
+public class SearchableActivity extends AppCompatActivity implements SearchMoviesInterface, SearchView.OnQueryTextListener{
 
     private String query;
     private RecyclerView recyclerView;
@@ -74,8 +81,28 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_movies_search_list));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(query);
+        //getSupportActionBar().setTitle(query);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this add SearchView to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_search_fixed, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setQueryHint(getString(R.string.search_query_hint));
+        searchView.setIconifiedByDefault(false);
+        searchView.setOnQueryTextListener(this);
+        searchView.setQuery(query, false);
+
+        // Remove underline
+        View v = searchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
+        v.setBackgroundColor(getResources().getColor(R.color.transparent));
+
+        //SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        //searchView.setSearchableInfo(searchManager.getSearchableInfo(
+        //        new ComponentName(this, SearchableActivity.class)));
+        return true;
     }
 
     @Override
@@ -109,5 +136,24 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
         savedInstanceState.putInt("COUNT", count);
         savedInstanceState.putParcelableArrayList("MOVIES_ADAPTER", SingletonRestClient.getInstance().moviesListAdapter.getItems());
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        this.query = query;
+        next = true;
+        count = 0;
+
+        SingletonRestClient.getInstance().moviesListAdapter.removeAllItems();
+        SingletonRestClient.getInstance().moviesListAdapter.notifyDataSetChanged();
+
+        SearchMovies searchMovies = new SearchMovies(SearchableActivity.this, query, 1);
+        searchMovies.execute();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }

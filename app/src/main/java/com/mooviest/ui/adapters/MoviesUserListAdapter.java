@@ -80,10 +80,14 @@ public class MoviesUserListAdapter extends RecyclerView.Adapter<MoviesUserListAd
         Picasso p = Picasso.with(viewHolder.itemView.getContext());
 
         String image = movie.getImage();
-        if(image.startsWith("http")){
-            p.load(image).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
-        }else{
-            p.load("https://img.tviso.com/ES/poster/w430"+image).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
+        if(image == null || image == "") {
+            p.load(R.drawable.background_red).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
+        }else {
+            if (image.startsWith("http")) {
+                p.load(image).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
+            } else {
+                p.load("https://img.tviso.com/ES/poster/w430" + image).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
+            }
         }
 
         viewHolder.title.setText(movie.getTitle());
