@@ -22,6 +22,8 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     private boolean loading = true;
     // Sets the starting page index
     private int startingPageIndex = 1;
+    // PAGINATE API
+    private int itemsPaginate = 10;
 
     RecyclerView.LayoutManager mLayoutManager;
 
@@ -92,6 +94,7 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
         // If we do need to reload some more data, we execute onLoadMore to fetch the data.
         // threshold should reflect how many total columns there are too
         if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
+            currentPage = totalItemCount/itemsPaginate;
             currentPage++;
             onLoadMore(currentPage, totalItemCount);
             loading = true;
