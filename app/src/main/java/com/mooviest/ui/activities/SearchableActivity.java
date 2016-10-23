@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.mooviest.R;
@@ -58,15 +59,6 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
         }
 
         recyclerView.setAdapter(SingletonRestClient.getInstance().moviesListAdapter);
-
-        Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction()) && savedInstanceState == null) {
-            query = intent.getStringExtra(SearchManager.QUERY);
-            next = true;
-            SearchMovies searchMovies = new SearchMovies(SearchableActivity.this, query, 1);
-            searchMovies.execute();
-        }
-
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
@@ -81,7 +73,6 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_movies_search_list));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setTitle(query);
 
     }
 
@@ -93,15 +84,18 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
         searchView.setQueryHint(getString(R.string.search_query_hint));
         searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(this);
-        searchView.setQuery(query, false);
+
+        if(query == null) {
+            searchView.setFocusable(true);
+            searchView.requestFocusFromTouch();
+        }else{
+            searchView.setQuery(query, false);
+        }
 
         // Remove underline
         View v = searchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
         v.setBackgroundColor(getResources().getColor(R.color.transparent));
 
-        //SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        //searchView.setSearchableInfo(searchManager.getSearchableInfo(
-        //        new ComponentName(this, SearchableActivity.class)));
         return true;
     }
 
@@ -118,7 +112,7 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
                 int totalMovies = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
                 SingletonRestClient.getInstance().moviesListAdapter.notifyItemRangeInserted(curSize, totalMovies-1);
             }else{
-                Toast.makeText(getApplication(), "No movies list", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplication(), "No movies found with title "+ query, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -134,6 +128,7 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
         savedInstanceState.putString("QUERY", query);
         savedInstanceState.putBoolean("NEXT", next);
         savedInstanceState.putInt("COUNT", count);
+
         savedInstanceState.putParcelableArrayList("MOVIES_ADAPTER", SingletonRestClient.getInstance().moviesListAdapter.getItems());
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -141,15 +136,21 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
     @Override
     public boolean onQueryTextSubmit(String query) {
         this.query = query;
-        next = true;
-        count = 0;
+        this.next = true;
+        this.count = 0;
 
         SingletonRestClient.getInstance().moviesListAdapter.removeAllItems();
         SingletonRestClient.getInstance().moviesListAdapter.notifyDataSetChanged();
 
         SearchMovies searchMovies = new SearchMovies(SearchableActivity.this, query, 1);
         searchMovies.execute();
-        return false;
+
+        // Hide keyboard when click in search button
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return true;
     }
 
     @Override
