@@ -61,7 +61,7 @@ public class UserListsFragment extends Fragment {
         seen_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getUserListAPI("seen_list", 1, R.string.seen_list);
+                getUserListAPI("seen", 1, R.string.seen_list);
             }
         });
 
@@ -103,7 +103,7 @@ public class UserListsFragment extends Fragment {
         favourite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getUserListAPI("favourite_list", 1, R.string.favourite_list);
+                getUserListAPI("favourite", 1, R.string.favourite_list);
             }
         });
 
