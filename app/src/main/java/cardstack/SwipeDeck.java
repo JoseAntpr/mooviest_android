@@ -53,6 +53,8 @@ public class SwipeDeck extends FrameLayout {
     private SwipeListener swipeListener;
     private int leftImageResource;
     private int rightImageResource;
+    private int upImageResource;
+    private int downImageResource;
     private boolean cardInteraction;
 
     public SwipeDeck(Context context, AttributeSet attrs) {
@@ -281,6 +283,8 @@ public class SwipeDeck extends FrameLayout {
             //alpha animation is handled in the swipe listener
             if (leftImageResource != 0) child.findViewById(leftImageResource).setAlpha(0);
             if (rightImageResource != 0) child.findViewById(rightImageResource).setAlpha(0);
+            if (upImageResource != 0) child.findViewById(upImageResource).setAlpha(0);
+            if (downImageResource != 0) child.findViewById(downImageResource).setAlpha(0);
         }
         setZTranslations();
     }
@@ -417,10 +421,16 @@ public class SwipeDeck extends FrameLayout {
             //for the sake of animating them
             View rightView = null;
             View leftView = null;
+            View upView = null;
+            View downView = null;
             if (!(rightImageResource == 0)) rightView = child.findViewById(rightImageResource);
             if (!(leftImageResource == 0)) leftView = child.findViewById(leftImageResource);
+            if (!(upImageResource == 0)) upView = child.findViewById(upImageResource);
+            if (!(downImageResource == 0)) downView = child.findViewById(downImageResource);
             swipeListener.setLeftView(leftView);
             swipeListener.setRightView(rightView);
+            swipeListener.setUpView(upView);
+            swipeListener.setDownView(downView);
 
             child.setOnTouchListener(swipeListener);
         }
@@ -506,6 +516,14 @@ public class SwipeDeck extends FrameLayout {
         rightImageResource = imageResource;
     }
 
+    public void setUpImage(int imageResource) {
+        upImageResource = imageResource;
+    }
+
+    public void setDownImage(int imageResource) {
+        downImageResource = imageResource;
+    }
+
     public interface SwipeEventCallback {
         //returning the object position in the adapter
         void cardSwipedLeft(int position);
@@ -547,6 +565,8 @@ public class SwipeDeck extends FrameLayout {
             }
         }
     }
+
+
 }
 
 

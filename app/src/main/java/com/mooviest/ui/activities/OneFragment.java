@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.mooviest.R;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.SingletonRestClient;
@@ -46,6 +47,10 @@ public class OneFragment extends Fragment {
     private SwipeDeckAdapter adapter;
     private ArrayList<Movie> movies_buffer;
     private ArrayList<Movie> movies_swipe;
+    private FloatingActionButton fab_seen;
+    private FloatingActionButton fab_watchlist;
+    private FloatingActionButton fab_favourite;
+    private FloatingActionButton fab_blacklist;
 
     Bundle savedInstanceState;
     private Resources resources;
@@ -182,9 +187,11 @@ public class OneFragment extends Fragment {
 
         cardStack.setLeftImage(R.id.left_image);
         cardStack.setRightImage(R.id.right_image);
+        cardStack.setUpImage(R.id.up_image);
+        cardStack.setDownImage(R.id.down_image);
 
-        ImageButton btn = (ImageButton) v.findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
+        fab_watchlist = (FloatingActionButton) v.findViewById(R.id.fab_watchlist);
+        fab_watchlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(adapter.data.size()>1) {
@@ -193,8 +200,8 @@ public class OneFragment extends Fragment {
 
             }
         });
-        ImageButton btn2 = (ImageButton) v.findViewById(R.id.button2);
-        btn2.setOnClickListener(new View.OnClickListener() {
+        fab_seen = (FloatingActionButton) v.findViewById(R.id.fab_seen);
+        fab_seen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(adapter.data.size()>1) {
@@ -202,8 +209,8 @@ public class OneFragment extends Fragment {
                 }
             }
         });
-        ImageButton btn4 = (ImageButton) v.findViewById(R.id.button4);
-        btn4.setOnClickListener(new View.OnClickListener() {
+        fab_favourite = (FloatingActionButton) v.findViewById(R.id.fab_favourite);
+        fab_favourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(adapter.data.size()>1) {
@@ -212,8 +219,8 @@ public class OneFragment extends Fragment {
             }
         });
 
-        ImageButton btn3 = (ImageButton) v.findViewById(R.id.button3);
-        btn3.setOnClickListener(new View.OnClickListener() {
+        fab_blacklist = (FloatingActionButton) v.findViewById(R.id.fab_blacklist);
+        fab_blacklist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(adapter.data.size()>1) {

@@ -2,12 +2,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:swipedeck="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/swipeLayout"
     android:orientation="vertical"
     tools:context=".ui.activities.OneFragment">
-
 
 
     <RelativeLayout
@@ -35,51 +35,58 @@
         <!-- Custom height Linear Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/height_linearButtons"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:gravity="center"
-            android:paddingBottom="5dp">
+            android:layout_marginBottom="5dp">
 
-            <ImageButton
-                android:id="@+id/button"
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_blacklist"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_close_eye"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:background="?android:selectableItemBackground"/>
-            <ImageButton
-                android:id="@+id/button4"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_gravity="bottom|center"
+                android:src="@drawable/ic_blacklist"
+                fab:fab_colorNormal="@color/blacklist"
+                fab:fab_colorPressed="@color/blacklist"
+                fab:fab_colorRipple="#99FFFFFF"/>
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_watchlist"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_clock"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:background="?android:selectableItemBackground" />
-            <ImageButton
-                android:id="@+id/button3"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:src="@drawable/ic_watchlist"
+                fab:fab_colorNormal="@color/watchlist"
+                fab:fab_colorPressed="@color/watchlist"
+                fab:fab_colorRipple="#99FFFFFF"/>
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_seen"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_open_eye"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:background="?android:selectableItemBackground" />
-            <ImageButton
-                android:id="@+id/button2"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:src="@drawable/ic_seen"
+                fab:fab_colorNormal="@color/seen"
+                fab:fab_colorPressed="@color/seen"
+                fab:fab_colorRipple="#99FFFFFF"/>
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_favourite"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_heart"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:background="?android:selectableItemBackground" />
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:src="@drawable/ic_favourite"
+                fab:fab_colorNormal="@color/favourite"
+                fab:fab_colorPressed="@color/favourite"
+                fab:fab_colorRipple="#99FFFFFF"/>
         </LinearLayout>
 
     </RelativeLayout>

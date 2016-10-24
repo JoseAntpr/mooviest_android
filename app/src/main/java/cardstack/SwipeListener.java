@@ -27,12 +27,15 @@ public class SwipeListener implements View.OnTouchListener {
     private float parentWidth;
     private float parentHeight;
     private int paddingLeft;
+    private int paddingTop;
 
     private View card;
     SwipeCallback callback;
     private boolean deactivated;
     private View rightView;
     private View leftView;
+    private View upView;
+    private View downView;
 
 
     public SwipeListener(View card, final SwipeCallback callback, float initialX, float initialY, float rotation, float opacityEnd) {
@@ -46,6 +49,7 @@ public class SwipeListener implements View.OnTouchListener {
         this.ROTATION_DEGREES = rotation;
         this.OPACITY_END = opacityEnd;
         this.paddingLeft = ((ViewGroup) card.getParent()).getPaddingLeft();
+        this.paddingTop = ((ViewGroup) card.getParent()).getPaddingTop();
     }
 
     public SwipeListener(View card, final SwipeCallback callback, float initialX, float initialY, float rotation, float opacityEnd, int screenWidth) {
@@ -58,6 +62,7 @@ public class SwipeListener implements View.OnTouchListener {
         this.ROTATION_DEGREES = rotation;
         this.OPACITY_END = opacityEnd;
         this.paddingLeft = ((ViewGroup) card.getParent()).getPaddingLeft();
+        this.paddingTop = ((ViewGroup) card.getParent()).getPaddingTop();
     }
 
 
@@ -133,6 +138,12 @@ public class SwipeListener implements View.OnTouchListener {
                 float rotation = ROTATION_DEGREES * 2.f * distobjectX / parentWidth;
                 card.setRotation(rotation);
 
+                Log.d("POS X",posX+"");
+                Log.d("POS Y",posY+"");
+                Log.d("paddingLeft",paddingLeft+"");
+                Log.d("paddingTOP",paddingTop+"");
+
+
                 if (rightView != null && leftView != null){
                     //set alpha of left and right image
                     float alpha = (((posX - paddingLeft) / (parentWidth * OPACITY_END)));
@@ -140,6 +151,15 @@ public class SwipeListener implements View.OnTouchListener {
                     //Log.i("alpha: ", Float.toString(alpha));
                     rightView.setAlpha(alpha);
                     leftView.setAlpha(-alpha);
+                }
+
+                if(upView != null && leftView !=null){
+                    //set alpha of up and down image
+                    float alpha = (((posY - paddingTop) / (parentWidth * OPACITY_END)));
+                    //float alpha = (((posX - paddingLeft) / parentWidth) * ALPHA_MAGNITUDE );
+                    //Log.i("alpha: ", Float.toString(alpha));
+                    upView.setAlpha(-alpha);
+                    downView.setAlpha(alpha);
                 }
 
                 break;
@@ -158,6 +178,11 @@ public class SwipeListener implements View.OnTouchListener {
 
                 if (click) v.performClick();
                 //if(click) return false;
+
+                rightView.setAlpha(0);
+                leftView.setAlpha(0);
+                upView.setAlpha(0);
+                downView.setAlpha(0);
 
                 break;
 
@@ -320,7 +345,7 @@ public class SwipeListener implements View.OnTouchListener {
 
     public ViewPropertyAnimator animateOffScreenLeft(int duration) {
         //Log.i("AnimateUP","up:"+(-parentWidth));
-
+        leftView.setAlpha(1);
 
         //Log.i("Positionx","X:"+card.getX());
 
@@ -335,7 +360,7 @@ public class SwipeListener implements View.OnTouchListener {
 
     public ViewPropertyAnimator animateOffScreenRight(int duration) {
         //Log.i("AnimateUP","up:"+(parentWidth * 2));
-
+        rightView.setAlpha(1);
 
         //Log.i("Positionx","X:"+card.getX());
 
@@ -349,7 +374,7 @@ public class SwipeListener implements View.OnTouchListener {
 
     public ViewPropertyAnimator animateOffScreenUp(int duration) {
         //Log.i("AnimateUP","up:"+(-(parentHeight)));
-
+        upView.setAlpha(1);
 
         //Log.i("Positionx","X:"+card.getX());
 
@@ -363,7 +388,7 @@ public class SwipeListener implements View.OnTouchListener {
 
     public ViewPropertyAnimator animateOffScreenDown(int duration) {
         //Log.i("AnimateUP","up:"+((parentHeight)));
-
+        downView.setAlpha(1);
 
         //Log.i("Positionx","X:"+card.getX());
 
@@ -382,6 +407,14 @@ public class SwipeListener implements View.OnTouchListener {
 
     public void setLeftView(View image) {
         this.leftView = image;
+    }
+
+    public void setUpView(View image) {
+        this.upView = image;
+    }
+
+    public void setDownView(View image) {
+        this.downView = image;
     }
 
     public interface SwipeCallback {

@@ -254,25 +254,34 @@
             android:id="@+id/floating_action_blacklist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_thumb_up"
+            android:src="@drawable/ic_blacklist"
+            app:fab_colorNormal="#9d9fa2"
+            app:fab_colorPressed="#c1c4c7"
+            app:fab_colorDisabled="#e74034"
             fab:fab_size="mini"
-            fab:fab_label="No me gusta"
+            fab:fab_label="No me interesa"
             />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/floating_action_favourite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_thumb_up"
+            android:src="@drawable/ic_favourite"
+            app:fab_colorNormal="#9d9fa2"
+            app:fab_colorPressed="#c1c4c7"
+            app:fab_colorDisabled="#ffcc00"
             fab:fab_size="mini"
-            fab:fab_label="Favorito"
+            fab:fab_label="Favorita"
             />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/floating_action_watchlist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_thumb_up"
+            android:src="@drawable/ic_watchlist"
+            app:fab_colorNormal="#9d9fa2"
+            app:fab_colorPressed="#c1c4c7"
+            app:fab_colorDisabled="#0090ff"
             fab:fab_size="mini"
             fab:fab_label="Pendiente"
             />
@@ -281,10 +290,12 @@
             android:id="@+id/floating_action_seen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_thumb_up"
-            app:fab_colorDisabled="#9d9fa2"
+            android:src="@drawable/ic_seen"
+            app:fab_colorNormal="#9d9fa2"
+            app:fab_colorPressed="#c1c4c7"
+            app:fab_colorDisabled="#3cca81"
             fab:fab_size="mini"
-            fab:fab_label="Visto"
+            fab:fab_label="Vista"
             />
 
     </com.github.clans.fab.FloatingActionMenu>
