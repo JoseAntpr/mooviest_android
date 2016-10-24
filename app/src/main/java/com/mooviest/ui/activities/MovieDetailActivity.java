@@ -170,8 +170,9 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         Collection collection = SingletonRestClient.getInstance().movie_selected.getCollection();
         floating_action_menu = (FloatingActionMenu) findViewById(R.id.floating_action_menu);
         floating_action_menu.setIconAnimated(false);
-        setFabActionMenuDesign(collection.getTypeMovie());
-
+        if(collection != null) {
+            setFabActionMenuDesign(collection.getTypeMovie());
+        }
 
         floating_action_seen = (FloatingActionButton) findViewById(R.id.floating_action_seen);
         floating_action_seen.setOnClickListener(new View.OnClickListener() {
@@ -414,6 +415,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
 
         // Después la añadimos a la lista seleccionada
         addMovieToList(result.getTypeMovie());
+        // Cambiamos icono del action menu y su color al seleccionado
+        setFabActionMenuDesign(result.getTypeMovie());
 
         View floatingActionMenuView = findViewById(R.id.floating_action_menu);
         Snackbar.make(floatingActionMenuView,
@@ -477,8 +480,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
     }
 
     private void setFabActionMenuDesign(String typeMovie){
-        int imageResource = R.drawable.fab_add;
-        int colorResource = R.color.blacklist;
+        int imageResource;
+        int colorResource;
         switch (typeMovie){
             case "seen":
                 imageResource =  R.drawable.ic_seen;
@@ -494,6 +497,10 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
                 break;
             case "blacklist":
                 imageResource =  R.drawable.ic_blacklist;
+                colorResource = R.color.blacklist;
+                break;
+            default:
+                imageResource = R.drawable.fab_add;
                 colorResource = R.color.blacklist;
                 break;
         };
