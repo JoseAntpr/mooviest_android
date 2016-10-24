@@ -16,4 +16,8 @@
     <color name="celebrity_linear_transparent">#410a0a0a</color>
     <color name="red_500">#F44336</color>
     <color name="transparent">#00ffffff</color>
+    <color name="seen">#3cca81</color>
+    <color name="watchlist">#0090ff</color>
+    <color name="favourite">#ffcc00</color>
+    <color name="blacklist">#e74034</color>
 </resources>

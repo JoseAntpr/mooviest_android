@@ -54,8 +54,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private int[] tabIcons = {
             R.drawable.ic_swipe,
-            R.drawable.ic_thumb_up,
-            R.drawable.ic_account
+            R.drawable.ic_recommendations,
+            R.drawable.ic_lists
     };
 
     @Override

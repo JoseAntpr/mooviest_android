@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.mooviest.R;
 import com.mooviest.ui.RoundedTransformation;
 import com.mooviest.ui.adapters.ViewPagerAdapter;
@@ -46,6 +47,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
     TabLayout detail_tabs;
     LinearLayout linear_collapsing_detail;
     CollapsingToolbarLayout collapsingToolbarLayout;
+    FloatingActionMenu floating_action_menu;
     FloatingActionButton floating_action_blacklist;
     FloatingActionButton floating_action_seen;
     FloatingActionButton floating_action_watchlist;
@@ -162,6 +164,87 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         // Floating buttons
         setupFloatingButtons();
 
+    }
+
+    private void setupFloatingButtons(){
+        Collection collection = SingletonRestClient.getInstance().movie_selected.getCollection();
+        floating_action_menu = (FloatingActionMenu) findViewById(R.id.floating_action_menu);
+        floating_action_menu.setIconAnimated(false);
+        setFabActionMenuDesign(collection.getTypeMovie());
+
+
+        floating_action_seen = (FloatingActionButton) findViewById(R.id.floating_action_seen);
+        floating_action_seen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                floating_action_seen.setEnabled(false);
+                movieCollectionTask("seen");
+            }
+        });
+
+        floating_action_watchlist = (FloatingActionButton) findViewById(R.id.floating_action_watchlist);
+        floating_action_watchlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                floating_action_watchlist.setEnabled(false);
+                movieCollectionTask("watchlist");
+            }
+        });
+
+        floating_action_favourite = (FloatingActionButton) findViewById(R.id.floating_action_favourite);
+        floating_action_favourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                floating_action_favourite.setEnabled(false);
+                movieCollectionTask("favourite");
+            }
+        });
+
+
+        floating_action_blacklist = (FloatingActionButton) findViewById(R.id.floating_action_blacklist);
+        floating_action_blacklist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                floating_action_blacklist.setEnabled(false);
+                movieCollectionTask("blacklist");
+            }
+        });
+
+
+        // Deshabilitar botón perteneciente a su typeMovie
+        if(collection != null){
+            disableEnableButton(collection.getTypeMovie(), false);
+        }
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new MovieInformationFragment(), "Information");
+        adapter.addFragment(new MovieCastFragment(), "Cast");
+        adapter.addFragment(new MovieWatchFragment(), "Watch");
+        viewPager.setAdapter(adapter);
+    }
+
+    private void applyPalette(Palette palette) {
+        int primary = getResources().getColor(R.color.colorPrimary);
+        collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
+        collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
+
+        linear_collapsing_detail = (LinearLayout) findViewById(R.id.linear_collapsing_detail);
+        linear_collapsing_detail.setBackgroundColor(palette.getMutedColor(primary));
+
+        detail_tabs.setBackgroundColor(palette.getMutedColor(primary));
+
+        supportStartPostponedEnterTransition();
+    }
+
+    private void initActivityTransitions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Slide transition = new Slide();
+            transition.excludeTarget(android.R.id.statusBarBackground, true);
+            getWindow().setEnterTransition(transition);
+            getWindow().setReturnTransition(transition);
+        }
     }
 
     @Override
@@ -297,19 +380,22 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
     @Override
     public void updateMovieCollectionResponse(Collection result) {
         if(result != null){
+            Collection collection = SingletonRestClient.getInstance().movie_selected.getCollection();
 
             // Volver a habilitar el botón de su typeMovie anterior
-            disableEnableButton(SingletonRestClient.getInstance().movie_selected.getCollection().getTypeMovie(), true);
+            disableEnableButton(collection.getTypeMovie(), true);
 
             // Eliminamos la película seleccionada de la lista en la que se encontraba o recargamos toda la lista si había 10 películas
             // Ésto lo hacemos por si en esa lista tiene más de 10 en la BD, seguirá habiendo 10 en la lista de previsualizaciones
-            deleteMovieFromList(SingletonRestClient.getInstance().movie_selected.getCollection().getTypeMovie());
+            deleteMovieFromList(collection.getTypeMovie());
 
             // Set new Collection to movie_selected
             SingletonRestClient.getInstance().movie_selected.setCollection(result);
 
             // Después la añadimos a la lista seleccionada
             addMovieToList(result.getTypeMovie());
+            // Cambiamos icono del action menu y su color al seleccionado
+            setFabActionMenuDesign(result.getTypeMovie());
 
             View floatingActionMenuView = findViewById(R.id.floating_action_menu);
             Snackbar.make(floatingActionMenuView,
@@ -390,80 +476,30 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         };
     }
 
-    private void setupFloatingButtons(){
-
-        floating_action_seen = (FloatingActionButton) findViewById(R.id.floating_action_seen);
-        floating_action_seen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                floating_action_seen.setEnabled(false);
-                movieCollectionTask("seen");
-            }
-        });
-
-        floating_action_watchlist = (FloatingActionButton) findViewById(R.id.floating_action_watchlist);
-        floating_action_watchlist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                floating_action_watchlist.setEnabled(false);
-                movieCollectionTask("watchlist");
-            }
-        });
-
-        floating_action_favourite = (FloatingActionButton) findViewById(R.id.floating_action_favourite);
-        floating_action_favourite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                floating_action_favourite.setEnabled(false);
-                movieCollectionTask("favourite");
-            }
-        });
-
-
-        floating_action_blacklist = (FloatingActionButton) findViewById(R.id.floating_action_blacklist);
-        floating_action_blacklist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                floating_action_blacklist.setEnabled(false);
-                movieCollectionTask("blacklist");
-            }
-        });
-
-
-        // Deshabilitar botón perteneciente a su typeMovie
-        if(SingletonRestClient.getInstance().movie_selected.getCollection() != null){
-            disableEnableButton(SingletonRestClient.getInstance().movie_selected.getCollection().getTypeMovie(), false);
-        }
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new MovieInformationFragment(), "Information");
-        adapter.addFragment(new MovieCastFragment(), "Cast");
-        adapter.addFragment(new MovieWatchFragment(), "Watch");
-        viewPager.setAdapter(adapter);
-    }
-
-    private void applyPalette(Palette palette) {
-        int primary = getResources().getColor(R.color.colorPrimary);
-        collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
-        collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(primary));
-
-        linear_collapsing_detail = (LinearLayout) findViewById(R.id.linear_collapsing_detail);
-        linear_collapsing_detail.setBackgroundColor(palette.getMutedColor(primary));
-
-        detail_tabs.setBackgroundColor(palette.getMutedColor(primary));
-
-        supportStartPostponedEnterTransition();
-    }
-
-    private void initActivityTransitions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Slide transition = new Slide();
-            transition.excludeTarget(android.R.id.statusBarBackground, true);
-            getWindow().setEnterTransition(transition);
-            getWindow().setReturnTransition(transition);
-        }
+    private void setFabActionMenuDesign(String typeMovie){
+        int imageResource = R.drawable.fab_add;
+        int colorResource = R.color.blacklist;
+        switch (typeMovie){
+            case "seen":
+                imageResource =  R.drawable.ic_seen;
+                colorResource = R.color.seen;
+                break;
+            case "watchlist":
+                imageResource =  R.drawable.ic_watchlist;
+                colorResource = R.color.watchlist;
+                break;
+            case "favourite":
+                imageResource =  R.drawable.ic_favourite;
+                colorResource = R.color.favourite;
+                break;
+            case "blacklist":
+                imageResource =  R.drawable.ic_blacklist;
+                colorResource = R.color.blacklist;
+                break;
+        };
+        floating_action_menu.getMenuIconView().setImageResource(imageResource);
+        floating_action_menu.setMenuButtonColorNormalResId(colorResource);
+        floating_action_menu.setMenuButtonColorPressedResId(colorResource);
     }
 
 

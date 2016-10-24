@@ -2,5 +2,5 @@
 <resources>
     <!-- Custom FilmCard -->
     <dimen name="paddingBottom_filmCard">80dp</dimen>
-    <dimen name="height_linearButtons">60dp</dimen>
+    <dimen name="height_linearButtons">70dp</dimen>
 </resources>
