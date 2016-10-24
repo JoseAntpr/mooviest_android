@@ -42,8 +42,8 @@ public interface MooviestApiInterface {
             @Part MultipartBody.Part imageFile
     );
 
-    @GET("users/{id}/{list_name}/")
-    Call<MooviestApiResult> getUserList(@Path("id") int id, @Path("list_name") String list_name, @Query("page") int page);
+    @GET("users/{id}/collection/")
+    Call<MooviestApiResult> getUserList(@Path("id") int id, @Query("name") String list_name, @Query("page") int page);
 
     @FormUrlEncoded
     @POST("users/")

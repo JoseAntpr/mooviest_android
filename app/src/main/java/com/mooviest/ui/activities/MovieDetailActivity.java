@@ -274,7 +274,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         switch (typeMovie){
             case "seen":
                 if(SingletonRestClient.getInstance().seenListAdapter.getItemCount() == 10){
-                    GetUserList getSeenList = new GetUserList("seen_list"){
+                    GetUserList getSeenList = new GetUserList("seen"){
                         @Override
                         protected void onPostExecute(MooviestApiResult result) {
                             super.onPostExecute(result);
@@ -314,7 +314,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
                 break;
             case "favourite":
                 if(SingletonRestClient.getInstance().favouriteListAdapter.getItemCount() == 10){
-                    GetUserList getSeenList = new GetUserList("favourite_list"){
+                    GetUserList getSeenList = new GetUserList("favourite"){
                         @Override
                         protected void onPostExecute(MooviestApiResult result) {
                             super.onPostExecute(result);

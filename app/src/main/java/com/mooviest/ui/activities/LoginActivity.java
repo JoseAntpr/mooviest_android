@@ -201,13 +201,13 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
                     countGetLists = 0;
 
                     SingletonRestClient.getInstance().movies_buffer = result;
-                    GetUserList getSeenList = new GetUserList("seen_list", LoginActivity.this);
+                    GetUserList getSeenList = new GetUserList("seen", LoginActivity.this);
                     getSeenList.execute(1);
 
                     GetUserList getWatchlist = new GetUserList("watchlist", LoginActivity.this);
                     getWatchlist.execute(1);
 
-                    GetUserList getFavouriteList = new GetUserList("favourite_list", LoginActivity.this);
+                    GetUserList getFavouriteList = new GetUserList("favourite", LoginActivity.this);
                     getFavouriteList.execute(1);
 
                     GetUserList getBlacklist = new GetUserList("blacklist", LoginActivity.this);
@@ -245,7 +245,7 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
     @Override
     public void listsResponse(String list_name, MooviestApiResult result) {
         switch (list_name) {
-            case "seen_list":
+            case "seen":
                 if(result != null) {
                     SingletonRestClient.getInstance().seen_list = result.getMovies();
                 }else{
@@ -259,7 +259,7 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
                     SingletonRestClient.getInstance().watchlist = new ArrayList<Movie>();
                 }
                 break;
-            case "favourite_list":
+            case "favourite":
                 if(result != null) {
                     SingletonRestClient.getInstance().favourite_list = result.getMovies();
                 }else{
@@ -277,7 +277,7 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
 
         incrementCountLists();
 
-        if(getCountLists() == 3){
+        if(getCountLists() == 4){
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
 
