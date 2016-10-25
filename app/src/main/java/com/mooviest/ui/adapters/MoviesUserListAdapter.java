@@ -84,9 +84,11 @@ public class MoviesUserListAdapter extends RecyclerView.Adapter<MoviesUserListAd
             p.load(R.drawable.background_red).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
         }else {
             if (image.startsWith("http")) {
-                p.load(image).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
+                p.load(image).placeholder(R.color.colorPrimary).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
+            } else if (image.startsWith("EXTERNAL#")) {
+                p.load("https://cdn.tviso.com/" + image.substring(9, image.length())).placeholder(R.color.colorPrimary).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
             } else {
-                p.load("https://img.tviso.com/ES/poster/w430" + image).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
+                p.load("https://img.tviso.com/ES/poster/w430" + image).placeholder(R.color.colorPrimary).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
             }
         }
 
