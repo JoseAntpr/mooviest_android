@@ -42,6 +42,9 @@ public interface MooviestApiInterface {
             @Part MultipartBody.Part imageFile
     );
 
+    @GET("users/{id}/swipelist/")
+    Call<MooviestApiResult> getSwipeList(@Path("id") int id);
+
     @GET("users/{id}/collection/")
     Call<MooviestApiResult> getUserList(@Path("id") int id, @Query("name") String list_name, @Query("page") int page);
 

@@ -11,21 +11,19 @@ import java.io.IOException;
 import retrofit2.Call;
 
 /**
- * Created by jesus on 8/10/16.
+ * Created by jesus on 25/10/16.
  */
 
-public class GetUserList extends AsyncTask<Integer, String, MooviestApiResult> {
+public class GetSwipeList extends AsyncTask<Integer, String, MooviestApiResult>{
 
-    private String list_name;
     private InitialValuesInterface initialValuesInterface = null;
 
-    public GetUserList(String name){
-        this.list_name = name;
+    public GetSwipeList(InitialValuesInterface initialValuesInterface){
+        this.initialValuesInterface = initialValuesInterface;
     }
 
-    public GetUserList(String name, InitialValuesInterface initialValuesInterface){
-        this.list_name = name;
-        this.initialValuesInterface = initialValuesInterface;
+    public GetSwipeList(){
+
     }
 
     @Override
@@ -37,9 +35,7 @@ public class GetUserList extends AsyncTask<Integer, String, MooviestApiResult> {
     protected MooviestApiResult doInBackground(Integer... params) {
         MooviestApiInterface apiInterface= SingletonRestClient.getInstance().mooviestApiInterface;
 
-        Call<MooviestApiResult> call = apiInterface.getUserList(
-                SingletonRestClient.getInstance().user.getId(),
-                list_name,
+        Call<MooviestApiResult> call = apiInterface.getSwipeList(
                 params[0]
         );
 
@@ -58,7 +54,7 @@ public class GetUserList extends AsyncTask<Integer, String, MooviestApiResult> {
         super.onPostExecute(mooviestApiResult);
 
         if(initialValuesInterface != null){
-            initialValuesInterface.listsResponse(list_name, mooviestApiResult);
+            initialValuesInterface.swipeResponse(mooviestApiResult);
         }
     }
 }

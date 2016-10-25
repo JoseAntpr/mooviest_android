@@ -2,6 +2,7 @@ package com.mooviest.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,7 +17,9 @@ import android.widget.ImageView;
 import com.github.clans.fab.FloatingActionButton;
 import com.mooviest.R;
 import com.mooviest.ui.models.Movie;
+import com.mooviest.ui.rest.MooviestApiResult;
 import com.mooviest.ui.rest.SingletonRestClient;
+import com.mooviest.ui.tasks.GetSwipeList;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -133,6 +136,7 @@ public class OneFragment extends Fragment {
         cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
             @Override
             public void cardSwipedLeft(int position) {
+                checkMoviesSwipe();
                 adapter.data.remove(0);
                 if(movies_buffer.size() >= 1) {
                     addMoviesToSwipe(1);
@@ -142,6 +146,7 @@ public class OneFragment extends Fragment {
 
             @Override
             public void cardSwipedRight(int position) {
+                checkMoviesSwipe();
                 adapter.data.remove(0);
                 if(movies_buffer.size() >= 1) {
                     addMoviesToSwipe(1);
@@ -152,6 +157,7 @@ public class OneFragment extends Fragment {
 
             @Override
             public void cardSwipedUp(int position) {
+                checkMoviesSwipe();
                 adapter.data.remove(0);
                 if(movies_buffer.size() >= 1) {
                     addMoviesToSwipe(1);
@@ -161,6 +167,7 @@ public class OneFragment extends Fragment {
 
             @Override
             public void cardSwipedDown(int position) {
+                checkMoviesSwipe();
                 adapter.data.remove(0);
                 if(movies_buffer.size() >= 1) {
                     addMoviesToSwipe(1);
@@ -242,6 +249,22 @@ public class OneFragment extends Fragment {
         }
     }
 
+    public void checkMoviesSwipe(){
+        if(movies_buffer.size() <= 6 ) {
+            SharedPreferences user_prefs = this.getActivity().getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+
+            // GET SWIPE LIST
+            GetSwipeList getSwipeList = new GetSwipeList() {
+                @Override
+                protected void onPostExecute(MooviestApiResult mooviestApiResult) {
+                    super.onPostExecute(mooviestApiResult);
+                    movies_buffer.addAll(movies_buffer.size(), mooviestApiResult.getMovies());
+                }
+            };
+            getSwipeList.execute(user_prefs.getInt("id", 0));
+        }
+    }
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         Log.i("OneFragment", "onSaveInstanceState");
@@ -293,7 +316,7 @@ public class OneFragment extends Fragment {
             Log.i("OneFragment", "load new Image");
             //GET IMAGE
             final Movie item = (Movie)getItem(position);
-            String image = item.getLangs().getImage();
+            String image = item.getImage();
             String cover;
 
             if(image.startsWith("http")){
