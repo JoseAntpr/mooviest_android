@@ -81,5 +81,5 @@ public interface MooviestApiInterface {
     Call<MooviestApiResult> movie_app_bylang(@Query("lang_id") int lang_id, @Query("limit") int limit);
 
     @GET("movie_lang/")
-    Call<MooviestApiResult> searchMovies(@Query("search") String search, @Query("page") int page);
+    Call<MooviestApiResult> searchMovies(@Query("title") String search, @Query("code") String lang_code, @Query("page") int page);
 }

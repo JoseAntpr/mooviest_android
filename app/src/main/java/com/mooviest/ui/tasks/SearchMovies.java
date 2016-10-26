@@ -23,13 +23,15 @@ import retrofit2.Call;
 public class SearchMovies extends AsyncTask<Integer, String, MooviestApiResult> {
 
     private String query;
+    private String lang_code;
     private SearchMoviesInterface searchMoviesInterface = null;
     private int page;
     //private ProgressDialog progressDialog = null;
     private ProgressBar progressBar =null;
 
-    public SearchMovies(SearchableActivity searchableActivity, String query, int page){
+    public SearchMovies(SearchableActivity searchableActivity, String query, String lang_code, int page){
         this.query = query;
+        this.lang_code = lang_code;
         this.searchMoviesInterface = searchableActivity;
         this.page = page;
         if (page == 1) {
@@ -50,7 +52,7 @@ public class SearchMovies extends AsyncTask<Integer, String, MooviestApiResult> 
     protected MooviestApiResult doInBackground(Integer... integers) {
         MooviestApiInterface apiInterface= SingletonRestClient.getInstance().mooviestApiInterface;
 
-        Call<MooviestApiResult> call = apiInterface.searchMovies(query, page);
+        Call<MooviestApiResult> call = apiInterface.searchMovies(query, lang_code, page);
 
         MooviestApiResult result = null;
         try {
