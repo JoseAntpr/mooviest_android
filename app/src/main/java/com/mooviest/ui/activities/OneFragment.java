@@ -2,6 +2,7 @@ package com.mooviest.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,11 +13,21 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.mooviest.R;
+import com.mooviest.ui.adapters.SwipeDeckAdapter;
+import com.mooviest.ui.models.Collection;
 import com.mooviest.ui.models.Movie;
+import com.mooviest.ui.rest.MooviestApiResult;
 import com.mooviest.ui.rest.SingletonRestClient;
+import com.mooviest.ui.tasks.CreateMovieCollection;
+import com.mooviest.ui.tasks.GetMovieDetail;
+import com.mooviest.ui.tasks.GetSwipeList;
+import com.mooviest.ui.tasks.MovieCollectionInterface;
+import com.mooviest.ui.tasks.SwipeMovieInterface;
+import com.mooviest.ui.tasks.UpdateMovieCollection;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -25,23 +36,7 @@ import java.util.List;
 import cardstack.SwipeDeck;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {//@link OneFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link OneFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class OneFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class OneFragment extends Fragment implements MovieCollectionInterface, SwipeMovieInterface {
 
     private SwipeDeck cardStack;
     private SwipeDeckAdapter adapter;
@@ -53,40 +48,17 @@ public class OneFragment extends Fragment {
     private FloatingActionButton fab_blacklist;
 
     Bundle savedInstanceState;
+    Movie movieSelectedUpdate;
     private Resources resources;
     private int id_image;
-
-    //private OnFragmentInteractionListener mListener;
 
     public OneFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment OneFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static OneFragment newInstance(String param1, String param2) {
-        OneFragment fragment = new OneFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         if (savedInstanceState != null) {
             Log.i("OneFragment", "restoreInstanceState");
@@ -122,7 +94,7 @@ public class OneFragment extends Fragment {
         Log.i("OneFragment", "Movies_size: "+ movies_swipe.size());
 
 
-        adapter = new SwipeDeckAdapter(movies_swipe, getContext());
+        adapter = new SwipeDeckAdapter(movies_swipe, getContext(), this);
         cardStack.setAdapter(adapter);
 
         if(movies_swipe.isEmpty() && movies_buffer.size()>=2){
@@ -133,7 +105,9 @@ public class OneFragment extends Fragment {
         cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
             @Override
             public void cardSwipedLeft(int position) {
-                adapter.data.remove(0);
+                movieCollectionTask("watchlist", adapter.getItem(0));
+                checkMoviesSwipe();
+                adapter.removeItem(0);
                 if(movies_buffer.size() >= 1) {
                     addMoviesToSwipe(1);
                 }
@@ -142,7 +116,9 @@ public class OneFragment extends Fragment {
 
             @Override
             public void cardSwipedRight(int position) {
-                adapter.data.remove(0);
+                movieCollectionTask("seen", adapter.getItem(0));
+                checkMoviesSwipe();
+                adapter.removeItem(0);
                 if(movies_buffer.size() >= 1) {
                     addMoviesToSwipe(1);
                 }
@@ -152,7 +128,9 @@ public class OneFragment extends Fragment {
 
             @Override
             public void cardSwipedUp(int position) {
-                adapter.data.remove(0);
+                movieCollectionTask("favourite", adapter.getItem(0));
+                checkMoviesSwipe();
+                adapter.removeItem(0);
                 if(movies_buffer.size() >= 1) {
                     addMoviesToSwipe(1);
                 }
@@ -161,11 +139,22 @@ public class OneFragment extends Fragment {
 
             @Override
             public void cardSwipedDown(int position) {
-                adapter.data.remove(0);
+                movieCollectionTask("blacklist", adapter.getItem(0));
+                checkMoviesSwipe();
+                adapter.removeItem(0);
                 if(movies_buffer.size() >= 1) {
                     addMoviesToSwipe(1);
                 }
                 Log.i("HomeActivity", "card was swiped down, position in adapter: " + position);
+            }
+
+            @Override
+            public void cardRemove(int position) {
+                checkMoviesSwipe();
+                adapter.removeItem(0);
+                if(movies_buffer.size() >= 1) {
+                    addMoviesToSwipe(1);
+                }
             }
 
             @Override
@@ -194,8 +183,9 @@ public class OneFragment extends Fragment {
         fab_watchlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(adapter.data.size()>1) {
+                if(adapter.getCount() > 1) {
                     cardStack.swipeTopCardLeft(180);
+
                 }
 
             }
@@ -204,7 +194,7 @@ public class OneFragment extends Fragment {
         fab_seen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(adapter.data.size()>1) {
+                if(adapter.getCount() > 1) {
                     cardStack.swipeTopCardRight(260);
                 }
             }
@@ -213,7 +203,7 @@ public class OneFragment extends Fragment {
         fab_favourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(adapter.data.size()>1) {
+                if(adapter.getCount() > 1) {
                     cardStack.swipeTopCardUp(150);
                 }
             }
@@ -223,7 +213,7 @@ public class OneFragment extends Fragment {
         fab_blacklist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(adapter.data.size()>1) {
+                if(adapter.getCount() > 1) {
                     cardStack.swipeTopCardDown(180);
                 }
             }
@@ -237,8 +227,62 @@ public class OneFragment extends Fragment {
 
     private void addMoviesToSwipe(int num){
         for(int i=0; i < num; i++){
-            adapter.data.add(movies_buffer.get(0));
+            adapter.addItem(movies_buffer.get(0));
             movies_buffer.remove(0);
+        }
+    }
+
+    public void checkMoviesSwipe(){
+        if(movies_buffer.size() <= 6 ) {
+            SharedPreferences user_prefs = this.getActivity().getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+
+            // GET SWIPE LIST
+            GetSwipeList getSwipeList = new GetSwipeList() {
+                @Override
+                protected void onPostExecute(MooviestApiResult mooviestApiResult) {
+                    super.onPostExecute(mooviestApiResult);
+                    movies_buffer.addAll(movies_buffer.size(), mooviestApiResult.getMovies());
+                }
+            };
+            getSwipeList.execute(user_prefs.getInt("id", 0));
+        }
+    }
+
+    private int getTypeMovieId(String typeMovie){
+        int typeMovieId = 1;
+        switch (typeMovie){
+            case "seen":
+                typeMovieId = 1;
+                break;
+            case "watchlist":
+                typeMovieId = 2;
+                break;
+            case "favourite":
+                typeMovieId = 3;
+                break;
+            case "blacklist":
+                typeMovieId = 5;
+                break;
+        };
+
+        return typeMovieId;
+    }
+
+    private void movieCollectionTask(String typeMovie, Movie movie){
+        Collection collection = movie.getCollection();
+        movieSelectedUpdate = movie;
+
+        if(collection != null) {
+            //La película ya se encontraba en una lista y se actualiza a la nueva
+            UpdateMovieCollection updateMovieCollection = new UpdateMovieCollection(this);
+            updateMovieCollection.execute(collection.getId(), getTypeMovieId(typeMovie));
+        }else{
+            // La película no se encuentraba en ninguna lista y se introduce en la nueva
+            CreateMovieCollection createMovieCollection = new CreateMovieCollection(this);
+
+            SharedPreferences user_prefs = this.getActivity().getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+
+            createMovieCollection.execute(user_prefs.getInt("id", 0), movie.getId(), getTypeMovieId(typeMovie));
         }
     }
 
@@ -254,120 +298,48 @@ public class OneFragment extends Fragment {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    public class SwipeDeckAdapter extends BaseAdapter {
+    @Override
+    public void updateMovieCollectionResponse(Collection result) {
+        if(result != null){
+            Collection collection = movieSelectedUpdate.getCollection();
 
-        private List<Movie> data;
-        private Context context;
+            // Eliminamos la película seleccionada de la lista en la que se encontraba o recargamos toda la lista si había 10 películas
+            // Ésto lo hacemos por si en esa lista tiene más de 10 en la BD, seguirá habiendo 10 en la lista de previsualizaciones
+            MovieActions movieActions = new MovieActions();
+            movieActions.deleteMovieFromList(collection.getTypeMovie(), movieSelectedUpdate);
 
-        public SwipeDeckAdapter(List<Movie> data, Context context) {
-            this.data = data;
-            this.context = context;
-        }
+            movieSelectedUpdate.setCollection(result);
 
-        @Override
-        public int getCount() {
-            return data.size();
-        }
+            // Después la añadimos a la lista seleccionada
+            movieActions.addMovieToList(result.getTypeMovie(), movieSelectedUpdate);
 
-        @Override
-        public Object getItem(int position) {
-            return data.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-
-            View v = convertView;
-            if (v == null) {
-                LayoutInflater inflater = getLayoutInflater(savedInstanceState);
-                // normally use a viewholder
-                v = inflater.inflate(R.layout.card, parent, false);
-            }
-            //((TextView) v.findViewById(R.id.textView2)).setText(data.get(position));
-            ImageView imageView = (ImageView) v.findViewById(R.id.offer_image);
-            Log.i("OneFragment", "load new Image");
-            //GET IMAGE
-            final Movie item = (Movie)getItem(position);
-            String image = item.getLangs().getImage();
-            String cover;
-
-            if(image.startsWith("http")){
-                cover = image;
-            }else{
-                cover = "https://img.tviso.com/ES/poster/w430" + image;
-            }
-
-            //resources.getIdentifier(item.getGenreLangs().get(0).getImage(),"drawable",context.getPackageName())
-            Picasso.with(context).load(cover).fit().centerCrop().into(imageView);
-            Picasso.with(context).setIndicatorsEnabled(false);
-            //TextView textView = (TextView) v.findViewById(R.id.sample_text);
-
-            //textView.setText(item);
-
-            //Click in movie
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SingletonRestClient.getInstance().movie_selected= item;
-                    Log.i("Layer type: ", Integer.toString(v.getLayerType()));
-                    Log.i("Hwardware Accel type:", Integer.toString(View.LAYER_TYPE_HARDWARE));
-                    Intent i = new Intent(v.getContext(), MovieDetailActivity.class);
-                    v.getContext().startActivity(i);
-                }
-            });
-            return v;
-        }
-    }
-
-    /*
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
         }
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void createMovieCollectionResponse(Collection result) {
+        if(result != null) {
+
+            // La añadimos a la lista seleccionada
+            MovieActions movieActions = new MovieActions();
+            movieActions.addMovieToList(result.getTypeMovie(), movieSelectedUpdate);
+
         }
     }
 
+
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void movieClicked() {
+        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+        intent.putExtra("FROM","swipe");
+        startActivityForResult(intent, 1);
     }
 
-    */
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(!data.getStringExtra("typeMovie").equals("")){
+            cardStack.swipeRemove(0);
+        }
     }
-     */
-
-
-
 }

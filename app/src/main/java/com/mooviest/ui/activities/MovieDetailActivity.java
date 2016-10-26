@@ -1,6 +1,7 @@
 package com.mooviest.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -52,6 +53,9 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
     FloatingActionButton floating_action_seen;
     FloatingActionButton floating_action_watchlist;
     FloatingActionButton floating_action_favourite;
+    MovieActions movieActions;
+
+    private String from;
 
 
     @Override
@@ -60,25 +64,40 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         initActivityTransitions();
         setContentView(R.layout.activity_movie_detail);
 
+        Intent i =getIntent();
+        if(i.hasExtra("FROM")){
+            from = i.getStringExtra("FROM");
+        }else{
+            from = "";
+        }
+
+        // Acciones para clasificar las películas en una clase externa
+        movieActions = new MovieActions();
 
 
         Movie movie = SingletonRestClient.getInstance().movie_selected;
 
         String image = movie.getImage();
+        String backdrop = movie.getBackdrop();
         final String background;
         String cover;
 
         if(image == null || image == "") {
-            background = "";
             cover = "";
         }else{
             if (image.startsWith("http")) {
-                background = image;
                 cover = image;
+            } else if (image.startsWith("EXTERNAL#")) {
+                cover = "";
             } else {
-                background = "https://img.tviso.com/ES/backdrop/w600" + image;
                 cover = "https://img.tviso.com/ES/poster/w430" + image;
             }
+        }
+
+        if(backdrop == "" || backdrop == null){
+            background = "";
+        }else {
+            background = "https://img.tviso.com/ES/backdrop/w600" + image;
         }
 
 
@@ -104,7 +123,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         // Load background image
         final ImageView background_detail = (ImageView) findViewById(R.id.background_detail);
         if(background != "") {
-            Picasso.with(this).load(background).into(background_detail, new Callback() {
+            Picasso.with(this).load(background).placeholder(R.drawable.background_red).into(background_detail, new Callback() {
                 @Override
                 public void onSuccess() {
                     Bitmap bitmap = ((BitmapDrawable) background_detail.getDrawable()).getBitmap();
@@ -117,26 +136,12 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
 
                 @Override
                 public void onError() {
-
+                    applyDefaultPalette();
                 }
             });
         }else{
-            Picasso.with(this).load(R.drawable.background_red).into(background_detail, new Callback() {
-                @Override
-                public void onSuccess() {
-                    Bitmap bitmap = ((BitmapDrawable) background_detail.getDrawable()).getBitmap();
-                    Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-                        public void onGenerated(Palette palette) {
-                            applyPalette(palette);
-                        }
-                    });
-                }
-
-                @Override
-                public void onError() {
-
-                }
-            });
+            Picasso.with(this).load(R.drawable.background_red).into(background_detail);
+            applyDefaultPalette();
         }
         Picasso.with(this).setIndicatorsEnabled(false);
 
@@ -239,6 +244,20 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         supportStartPostponedEnterTransition();
     }
 
+    private void applyDefaultPalette(){
+        int primary = getResources().getColor(R.color.colorPrimary);
+        int primaryDark = getResources().getColor(R.color.colorPrimaryDark);
+        collapsingToolbarLayout.setContentScrimColor(primary);
+        collapsingToolbarLayout.setStatusBarScrimColor(primaryDark);
+
+        linear_collapsing_detail = (LinearLayout) findViewById(R.id.linear_collapsing_detail);
+        linear_collapsing_detail.setBackgroundColor(primary);
+
+        detail_tabs.setBackgroundColor(primary);
+
+        supportStartPostponedEnterTransition();
+    }
+
     private void initActivityTransitions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Slide transition = new Slide();
@@ -267,115 +286,20 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         return true;
     }
 
-    public void deleteMovieFromList(String typeMovie){
-        if(SingletonRestClient.getInstance().moviesListAdapter != null){
-            SingletonRestClient.getInstance().moviesListAdapter.removeItem(SingletonRestClient.getInstance().movie_selected);
-            SingletonRestClient.getInstance().moviesListAdapter.notifyDataSetChanged();
+    @Override
+    public void onBackPressed() {
+        if(from.equals("swipe")) {
+            String data = "Prueba";
+            Intent intent = new Intent();
+            if(SingletonRestClient.getInstance().movie_selected.getCollection() != null){
+                intent.putExtra("typeMovie", SingletonRestClient.getInstance().movie_selected.getCollection().getTypeMovie());
+            }else{
+                intent.putExtra("typeMovie", "");
+            }
+
+            setResult(1, intent);
         }
-        switch (typeMovie){
-            case "seen":
-                if(SingletonRestClient.getInstance().seenListAdapter.getItemCount() == 10){
-                    GetUserList getSeenList = new GetUserList("seen"){
-                        @Override
-                        protected void onPostExecute(MooviestApiResult result) {
-                            super.onPostExecute(result);
-                            if(result!=null) {
-                                if(result.getMovies().size() > 0) {
-                                    SingletonRestClient.getInstance().seenListAdapter.reloadItems(result.getMovies());
-                                    SingletonRestClient.getInstance().seenListAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-                    };
-                    getSeenList.execute(1);
-                }else{
-                    SingletonRestClient.getInstance().seenListAdapter.removeItem(SingletonRestClient.getInstance().movie_selected);
-                    SingletonRestClient.getInstance().seenListAdapter.notifyDataSetChanged();
-                }
-                break;
-            case "watchlist":
-                if(SingletonRestClient.getInstance().watchlistAdapter.getItemCount() == 10){
-                    GetUserList getSeenList = new GetUserList("watchlist"){
-                        @Override
-                        protected void onPostExecute(MooviestApiResult result) {
-                            super.onPostExecute(result);
-                            if(result!=null) {
-                                if(result.getMovies().size() > 0) {
-                                    SingletonRestClient.getInstance().watchlistAdapter.reloadItems(result.getMovies());
-                                    SingletonRestClient.getInstance().watchlistAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-                    };
-                    getSeenList.execute(1);
-                }else {
-                    SingletonRestClient.getInstance().watchlistAdapter.removeItem(SingletonRestClient.getInstance().movie_selected);
-                    SingletonRestClient.getInstance().watchlistAdapter.notifyDataSetChanged();
-                }
-                break;
-            case "favourite":
-                if(SingletonRestClient.getInstance().favouriteListAdapter.getItemCount() == 10){
-                    GetUserList getSeenList = new GetUserList("favourite"){
-                        @Override
-                        protected void onPostExecute(MooviestApiResult result) {
-                            super.onPostExecute(result);
-                            if(result!=null) {
-                                if(result.getMovies().size() > 0) {
-                                    SingletonRestClient.getInstance().favouriteListAdapter.reloadItems(result.getMovies());
-                                    SingletonRestClient.getInstance().favouriteListAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-                    };
-                    getSeenList.execute(1);
-                }else {
-                    SingletonRestClient.getInstance().favouriteListAdapter.removeItem(SingletonRestClient.getInstance().movie_selected);
-                    SingletonRestClient.getInstance().favouriteListAdapter.notifyDataSetChanged();
-                }
-                break;
-            case "blacklist":
-                if(SingletonRestClient.getInstance().blacklistAdapter.getItemCount() == 10){
-                    GetUserList getSeenList = new GetUserList("blacklist"){
-                        @Override
-                        protected void onPostExecute(MooviestApiResult result) {
-                            super.onPostExecute(result);
-                            if(result!=null) {
-                                if(result.getMovies().size() > 0) {
-                                    SingletonRestClient.getInstance().blacklistAdapter.reloadItems(result.getMovies());
-                                    SingletonRestClient.getInstance().blacklistAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-                    };
-                    getSeenList.execute(1);
-                }else {
-                    SingletonRestClient.getInstance().blacklistAdapter.removeItem(SingletonRestClient.getInstance().movie_selected);
-                    SingletonRestClient.getInstance().blacklistAdapter.notifyDataSetChanged();
-                }
-                break;
-        };
-
-    }
-
-    public void addMovieToList(String typeMovie){
-        switch (typeMovie){
-            case "seen":
-                SingletonRestClient.getInstance().seenListAdapter.addItem(SingletonRestClient.getInstance().movie_selected);
-                SingletonRestClient.getInstance().seenListAdapter.notifyDataSetChanged();
-                break;
-            case "watchlist":
-                SingletonRestClient.getInstance().watchlistAdapter.addItem(SingletonRestClient.getInstance().movie_selected);
-                SingletonRestClient.getInstance().watchlistAdapter.notifyDataSetChanged();
-                break;
-            case "favourite":
-                SingletonRestClient.getInstance().favouriteListAdapter.addItem(SingletonRestClient.getInstance().movie_selected);
-                SingletonRestClient.getInstance().favouriteListAdapter.notifyDataSetChanged();
-                break;
-            case "blacklist":
-                SingletonRestClient.getInstance().blacklistAdapter.addItem(SingletonRestClient.getInstance().movie_selected);
-                SingletonRestClient.getInstance().blacklistAdapter.notifyDataSetChanged();
-                break;
-        };
+        super.onBackPressed();
     }
 
     @Override
@@ -388,13 +312,19 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
 
             // Eliminamos la película seleccionada de la lista en la que se encontraba o recargamos toda la lista si había 10 películas
             // Ésto lo hacemos por si en esa lista tiene más de 10 en la BD, seguirá habiendo 10 en la lista de previsualizaciones
-            deleteMovieFromList(collection.getTypeMovie());
+            movieActions.deleteMovieFromList(collection.getTypeMovie(), SingletonRestClient.getInstance().movie_selected);
 
             // Set new Collection to movie_selected
             SingletonRestClient.getInstance().movie_selected.setCollection(result);
 
+            // Añadir o eliminar del adapter
+            if(SingletonRestClient.getInstance().moviesListAdapter != null){
+                movieActions.addDeleteFromAdapter(from, result.getTypeMovie(), SingletonRestClient.getInstance().movie_selected);
+            }
+
+
             // Después la añadimos a la lista seleccionada
-            addMovieToList(result.getTypeMovie());
+            movieActions.addMovieToList(result.getTypeMovie(), SingletonRestClient.getInstance().movie_selected);
             // Cambiamos icono del action menu y su color al seleccionado
             setFabActionMenuDesign(result.getTypeMovie());
 
@@ -409,19 +339,21 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
 
     @Override
     public void createMovieCollectionResponse(Collection result) {
+        if(result != null) {
+            // Set new Collection to movie_selected
+            SingletonRestClient.getInstance().movie_selected.setCollection(result);
 
-        // Set new Collection to movie_selected
-        SingletonRestClient.getInstance().movie_selected.setCollection(result);
+            // Después la añadimos a la lista seleccionada
+            movieActions.addMovieToList(result.getTypeMovie(), SingletonRestClient.getInstance().movie_selected);
 
-        // Después la añadimos a la lista seleccionada
-        addMovieToList(result.getTypeMovie());
-        // Cambiamos icono del action menu y su color al seleccionado
-        setFabActionMenuDesign(result.getTypeMovie());
+            // Cambiamos icono del action menu y su color al seleccionado
+            setFabActionMenuDesign(result.getTypeMovie());
 
-        View floatingActionMenuView = findViewById(R.id.floating_action_menu);
-        Snackbar.make(floatingActionMenuView,
-                "Movida a la lista seleccionada correctamente", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+            View floatingActionMenuView = findViewById(R.id.floating_action_menu);
+            Snackbar.make(floatingActionMenuView,
+                    "Movida a la lista seleccionada correctamente", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
     private void movieCollectionTask(String typeMovie){

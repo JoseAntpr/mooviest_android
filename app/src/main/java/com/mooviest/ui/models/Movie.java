@@ -16,7 +16,6 @@ public class Movie implements Parcelable {
     private String backdrop;
     private List<Genre> genres = new ArrayList<Genre>();
     private List<Participation> participations = new ArrayList<Participation>();
-    private MovieLang langs;
     private List<Object> emotions = new ArrayList<Object>();
     private List<Rating> ratings = new ArrayList<Rating>();
     private String original_title;
@@ -197,24 +196,6 @@ public class Movie implements Parcelable {
      */
     public void setParticipations(List<Participation> participations) {
         this.participations = participations;
-    }
-
-    /**
-     * 
-     * @return
-     *     The langs
-     */
-    public MovieLang getLangs() {
-        return langs;
-    }
-
-    /**
-     * 
-     * @param langs
-     *     The langs
-     */
-    public void setLangs(MovieLang langs) {
-        this.langs = langs;
     }
 
     /**

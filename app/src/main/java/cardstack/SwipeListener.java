@@ -400,6 +400,14 @@ public class SwipeListener implements View.OnTouchListener {
                 .rotation(0);
     }
 
+    public ViewPropertyAnimator animateOffScreen(int duration) {
+        return card.animate()
+                .setDuration(duration)
+                .x(initialX)
+                .y(initialY)
+                .rotation(0);
+    }
+
 
     public void setRightView(View image) {
         this.rightView = image;

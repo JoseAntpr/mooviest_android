@@ -28,13 +28,21 @@ import java.util.ArrayList;
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.ViewHolder> {
 
     private ArrayList<Movie> movies;
+    private String list_name;
 
     public MoviesListAdapter(){
         this.movies = new ArrayList<Movie>();
+        this.list_name = "";
     };
 
     public MoviesListAdapter(ArrayList<Movie> movies){
         this.movies = movies;
+        this.list_name = "";
+    }
+
+    public MoviesListAdapter(ArrayList<Movie> movies, String list_name){
+        this.movies = movies;
+        this.list_name = list_name;
     }
 
 
@@ -72,9 +80,11 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
             p.load(R.drawable.background_red).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
         }else{
             if (image.startsWith("http")) {
-                p.load(image).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
+                p.load(image).placeholder(R.color.colorPrimary).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
+            } else if (image.startsWith("EXTERNAL#")) {
+                p.load("https://cdn.tviso.com/" + image.substring(9, image.length())).placeholder(R.color.colorPrimary).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
             } else {
-                p.load("https://img.tviso.com/ES/poster/w430" + image).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
+                p.load("https://img.tviso.com/ES/poster/w430" + image).placeholder(R.color.colorPrimary).transform(new RoundedTransformation(6, 0)).fit().centerCrop().into(viewHolder.poster);
             }
         }
 
@@ -100,8 +110,9 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
                 super.onPostExecute(result);
                 if(result != null){
                     SingletonRestClient.getInstance().movie_selected = result;
-
-                    view.getContext().startActivity(new Intent(view.getContext(), MovieDetailActivity.class));
+                    Intent intent = new Intent(view.getContext(), MovieDetailActivity.class);
+                    intent.putExtra("FROM", list_name);
+                    view.getContext().startActivity(intent);
                 }else {
                     Toast.makeText(view.getContext(), "No detail for movie selected", Toast.LENGTH_LONG).show();
                 }
@@ -126,6 +137,8 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
     public void addItems(ArrayList<Movie> movies){
         this.movies.addAll(movies);
     }
+
+    public void addItem(Movie movie){this.movies.add(movie);}
 
     public ArrayList<Movie> getItems(){
         return movies;

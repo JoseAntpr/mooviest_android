@@ -200,7 +200,7 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
                     // Counter response user lists
                     countGetLists = 0;
 
-                    SingletonRestClient.getInstance().movies_buffer = result;
+                    /*SingletonRestClient.getInstance().movies_buffer = result;
                     GetUserList getSeenList = new GetUserList("seen", LoginActivity.this);
                     getSeenList.execute(1);
 
@@ -211,7 +211,7 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
                     getFavouriteList.execute(1);
 
                     GetUserList getBlacklist = new GetUserList("blacklist", LoginActivity.this);
-                    getBlacklist.execute(1);
+                    getBlacklist.execute(1);*/
 
 
                 }else{
@@ -231,7 +231,9 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
             if(statusCode == 200) {
                 onLoginSuccess(result);
 
-                getMoviesBuffer();
+                //getMoviesBuffer();
+                GetInitialValues getInitialValues = new GetInitialValues(this, this);
+                getInitialValues.getValues();
 
             }else if (statusCode == 404){
                 onLoginFailed(result.getMessage());
