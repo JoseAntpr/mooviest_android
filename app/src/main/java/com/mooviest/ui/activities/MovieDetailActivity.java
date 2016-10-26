@@ -1,6 +1,7 @@
 package com.mooviest.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -53,6 +54,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
     FloatingActionButton floating_action_watchlist;
     FloatingActionButton floating_action_favourite;
 
+    private String from;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,12 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         initActivityTransitions();
         setContentView(R.layout.activity_movie_detail);
 
+        Intent i =getIntent();
+        if(i.hasExtra("FROM")){
+            from = i.getStringExtra("FROM");
+        }else{
+            from = "";
+        }
 
 
         Movie movie = SingletonRestClient.getInstance().movie_selected;
@@ -271,6 +280,22 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(from.equals("swipe")) {
+            String data = "Prueba";
+            Intent intent = new Intent();
+            if(SingletonRestClient.getInstance().movie_selected.getCollection() != null){
+                intent.putExtra("typeMovie", SingletonRestClient.getInstance().movie_selected.getCollection().getTypeMovie());
+            }else{
+                intent.putExtra("typeMovie", "");
+            }
+
+            setResult(1, intent);
+        }
+        super.onBackPressed();
     }
 
     @Override

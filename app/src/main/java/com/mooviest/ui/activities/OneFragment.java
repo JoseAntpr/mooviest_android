@@ -26,6 +26,7 @@ import com.mooviest.ui.tasks.CreateMovieCollection;
 import com.mooviest.ui.tasks.GetMovieDetail;
 import com.mooviest.ui.tasks.GetSwipeList;
 import com.mooviest.ui.tasks.MovieCollectionInterface;
+import com.mooviest.ui.tasks.SwipeMovieInterface;
 import com.mooviest.ui.tasks.UpdateMovieCollection;
 import com.squareup.picasso.Picasso;
 
@@ -35,7 +36,7 @@ import java.util.List;
 import cardstack.SwipeDeck;
 
 
-public class OneFragment extends Fragment implements MovieCollectionInterface {
+public class OneFragment extends Fragment implements MovieCollectionInterface, SwipeMovieInterface {
 
     private SwipeDeck cardStack;
     private SwipeDeckAdapter adapter;
@@ -93,7 +94,7 @@ public class OneFragment extends Fragment implements MovieCollectionInterface {
         Log.i("OneFragment", "Movies_size: "+ movies_swipe.size());
 
 
-        adapter = new SwipeDeckAdapter(movies_swipe, getContext());
+        adapter = new SwipeDeckAdapter(movies_swipe, getContext(), this);
         cardStack.setAdapter(adapter);
 
         if(movies_swipe.isEmpty() && movies_buffer.size()>=2){
@@ -145,6 +146,15 @@ public class OneFragment extends Fragment implements MovieCollectionInterface {
                     addMoviesToSwipe(1);
                 }
                 Log.i("HomeActivity", "card was swiped down, position in adapter: " + position);
+            }
+
+            @Override
+            public void cardRemove(int position) {
+                checkMoviesSwipe();
+                adapter.removeItem(0);
+                if(movies_buffer.size() >= 1) {
+                    addMoviesToSwipe(1);
+                }
             }
 
             @Override
@@ -318,4 +328,18 @@ public class OneFragment extends Fragment implements MovieCollectionInterface {
     }
 
 
+    @Override
+    public void movieClicked() {
+        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+        intent.putExtra("FROM","swipe");
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(!data.getStringExtra("typeMovie").equals("")){
+            cardStack.swipeRemove(0);
+        }
+    }
 }

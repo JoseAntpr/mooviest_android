@@ -16,6 +16,7 @@ import com.mooviest.ui.activities.MovieDetailActivity;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.SingletonRestClient;
 import com.mooviest.ui.tasks.GetMovieDetail;
+import com.mooviest.ui.tasks.SwipeMovieInterface;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -28,10 +29,12 @@ public class SwipeDeckAdapter extends BaseAdapter {
 
     private List<Movie> data;
     private Context context;
+    private SwipeMovieInterface swipeMovieInterface;
 
-    public SwipeDeckAdapter(List<Movie> data, Context context) {
+    public SwipeDeckAdapter(List<Movie> data, Context context, SwipeMovieInterface swipeMovieInterface) {
         this.data = data;
         this.context = context;
+        this.swipeMovieInterface = swipeMovieInterface;
     }
 
     @Override
@@ -108,7 +111,10 @@ public class SwipeDeckAdapter extends BaseAdapter {
                 if(result != null){
                     SingletonRestClient.getInstance().movie_selected = result;
 
-                    view.getContext().startActivity(new Intent(view.getContext(), MovieDetailActivity.class));
+                    if(swipeMovieInterface != null) {
+                        swipeMovieInterface.movieClicked();
+                        //view.getContext().startActivity(new Intent(view.getContext(), MovieDetailActivity.class));
+                    }
                 }else {
                     Toast.makeText(view.getContext(), "No detail for movie selected", Toast.LENGTH_LONG).show();
                 }
