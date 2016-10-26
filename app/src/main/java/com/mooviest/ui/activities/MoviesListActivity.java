@@ -64,7 +64,7 @@ public class MoviesListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
 
-        SingletonRestClient.getInstance().moviesListAdapter = new MoviesListAdapter(moviesList);
+        SingletonRestClient.getInstance().moviesListAdapter = new MoviesListAdapter(moviesList, list_name);
 
         recyclerView.setAdapter(SingletonRestClient.getInstance().moviesListAdapter);
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {

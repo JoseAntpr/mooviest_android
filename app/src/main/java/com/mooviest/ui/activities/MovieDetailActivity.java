@@ -53,6 +53,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
     FloatingActionButton floating_action_seen;
     FloatingActionButton floating_action_watchlist;
     FloatingActionButton floating_action_favourite;
+    MovieActions movieActions;
 
     private String from;
 
@@ -69,6 +70,9 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         }else{
             from = "";
         }
+
+        // Acciones para clasificar las películas en una clase externa
+        movieActions = new MovieActions();
 
 
         Movie movie = SingletonRestClient.getInstance().movie_selected;
@@ -308,11 +312,16 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
 
             // Eliminamos la película seleccionada de la lista en la que se encontraba o recargamos toda la lista si había 10 películas
             // Ésto lo hacemos por si en esa lista tiene más de 10 en la BD, seguirá habiendo 10 en la lista de previsualizaciones
-            MovieActions movieActions = new MovieActions();
             movieActions.deleteMovieFromList(collection.getTypeMovie(), SingletonRestClient.getInstance().movie_selected);
 
             // Set new Collection to movie_selected
             SingletonRestClient.getInstance().movie_selected.setCollection(result);
+
+            // Añadir o eliminar del adapter
+            if(SingletonRestClient.getInstance().moviesListAdapter != null){
+                movieActions.addDeleteFromAdapter(from, result.getTypeMovie(), SingletonRestClient.getInstance().movie_selected);
+            }
+
 
             // Después la añadimos a la lista seleccionada
             movieActions.addMovieToList(result.getTypeMovie(), SingletonRestClient.getInstance().movie_selected);
@@ -335,7 +344,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
             SingletonRestClient.getInstance().movie_selected.setCollection(result);
 
             // Después la añadimos a la lista seleccionada
-            MovieActions movieActions = new MovieActions();
             movieActions.addMovieToList(result.getTypeMovie(), SingletonRestClient.getInstance().movie_selected);
 
             // Cambiamos icono del action menu y su color al seleccionado

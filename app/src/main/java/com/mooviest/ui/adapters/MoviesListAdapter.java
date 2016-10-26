@@ -28,13 +28,21 @@ import java.util.ArrayList;
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.ViewHolder> {
 
     private ArrayList<Movie> movies;
+    private String list_name;
 
     public MoviesListAdapter(){
         this.movies = new ArrayList<Movie>();
+        this.list_name = "";
     };
 
     public MoviesListAdapter(ArrayList<Movie> movies){
         this.movies = movies;
+        this.list_name = "";
+    }
+
+    public MoviesListAdapter(ArrayList<Movie> movies, String list_name){
+        this.movies = movies;
+        this.list_name = list_name;
     }
 
 
@@ -102,8 +110,9 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
                 super.onPostExecute(result);
                 if(result != null){
                     SingletonRestClient.getInstance().movie_selected = result;
-
-                    view.getContext().startActivity(new Intent(view.getContext(), MovieDetailActivity.class));
+                    Intent intent = new Intent(view.getContext(), MovieDetailActivity.class);
+                    intent.putExtra("FROM", list_name);
+                    view.getContext().startActivity(intent);
                 }else {
                     Toast.makeText(view.getContext(), "No detail for movie selected", Toast.LENGTH_LONG).show();
                 }
@@ -128,6 +137,8 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
     public void addItems(ArrayList<Movie> movies){
         this.movies.addAll(movies);
     }
+
+    public void addItem(Movie movie){this.movies.add(movie);}
 
     public ArrayList<Movie> getItems(){
         return movies;

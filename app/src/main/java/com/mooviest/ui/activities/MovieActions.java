@@ -36,10 +36,6 @@ public class MovieActions {
 
 
     public void deleteMovieFromList(String typeMovie, Movie movie){
-        if(SingletonRestClient.getInstance().moviesListAdapter != null){
-            SingletonRestClient.getInstance().moviesListAdapter.removeItem(movie);
-            SingletonRestClient.getInstance().moviesListAdapter.notifyDataSetChanged();
-        }
         switch (typeMovie){
             case "seen":
                 if(SingletonRestClient.getInstance().seenListAdapter.getItemCount() == 10){
@@ -123,5 +119,18 @@ public class MovieActions {
                 break;
         };
 
+    }
+
+    public void addDeleteFromAdapter(String fromTypeMovie, String newtypeMovie, Movie movie) {
+        if(fromTypeMovie.equals("seen") || fromTypeMovie.equals("watchlist") || fromTypeMovie.equals("favourite") || fromTypeMovie.equals("blacklist")){
+            if(fromTypeMovie.equals(newtypeMovie)) {
+                SingletonRestClient.getInstance().moviesListAdapter.addItem(movie);
+                SingletonRestClient.getInstance().moviesListAdapter.notifyDataSetChanged();
+            }else{
+                SingletonRestClient.getInstance().moviesListAdapter.removeItem(movie);
+                SingletonRestClient.getInstance().moviesListAdapter.notifyDataSetChanged();
+            }
+
+        }
     }
 }
