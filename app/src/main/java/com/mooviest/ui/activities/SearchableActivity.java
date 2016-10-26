@@ -27,6 +27,7 @@ import com.mooviest.ui.tasks.SearchMovies;
 import com.mooviest.ui.tasks.SearchMoviesInterface;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class SearchableActivity extends AppCompatActivity implements SearchMoviesInterface, SearchView.OnQueryTextListener{
 
@@ -35,6 +36,7 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
     private GridLayoutManager layoutManager;
     private Boolean next;
     private int count;
+    private String lang_code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,13 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
             count = 0;
         }
 
+        if(Locale.getDefault().getLanguage().equals("es")){
+            lang_code = "es";
+        }else{
+            lang_code = "en";
+        }
+
+
         recyclerView.setAdapter(SingletonRestClient.getInstance().moviesListAdapter);
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -65,7 +74,7 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
                 if(next && (count != totalItemsCount)) {
-                    SearchMovies searchMovies = new SearchMovies(SearchableActivity.this, query, page);
+                    SearchMovies searchMovies = new SearchMovies(SearchableActivity.this, query, lang_code, page);
                     searchMovies.execute();
                 }
             }
@@ -142,7 +151,7 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
         SingletonRestClient.getInstance().moviesListAdapter.removeAllItems();
         SingletonRestClient.getInstance().moviesListAdapter.notifyDataSetChanged();
 
-        SearchMovies searchMovies = new SearchMovies(SearchableActivity.this, query, 1);
+        SearchMovies searchMovies = new SearchMovies(SearchableActivity.this, query, lang_code, 1);
         searchMovies.execute();
 
         // Hide keyboard when click in search button
