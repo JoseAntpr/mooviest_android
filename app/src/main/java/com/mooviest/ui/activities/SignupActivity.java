@@ -160,8 +160,9 @@ public class SignupActivity extends AppCompatActivity {
 
             signupButton.setEnabled(false);
 
-            //CON ASYNCTASK y en onPostExecute llamar al intent HomeActivity
-            //REGISTRAR Y LOGEAR en doInBackground
+            /*
+             * Registro usuario
+             */
             new APISignup().execute(username, email, password, Locale.getDefault().getLanguage());
         }
     }
