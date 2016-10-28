@@ -1,8 +1,7 @@
 package com.mooviest.ui.activities;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,21 +16,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mooviest.R;
-import com.mooviest.ui.rest.MooviestApiResult;
-import com.mooviest.ui.models.Movie;
+import com.mooviest.ui.models.User;
 import com.mooviest.ui.rest.Errors;
-import com.mooviest.ui.rest.MooviestApiInterface;
 import com.mooviest.ui.rest.SignupResponse;
 import com.mooviest.ui.rest.SingletonRestClient;
+import com.mooviest.ui.tasks.RegisterResponseInterface;
+import com.mooviest.ui.tasks.RegisterUser;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Locale;
 
-import retrofit2.Call;
 
-
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity implements RegisterResponseInterface{
     private static final String TAG = "SignupActivity";
 
 
@@ -42,7 +37,6 @@ public class SignupActivity extends AppCompatActivity {
     private boolean textWatcher = false;
     private Button signupButton;
     private TextView loginLink;
-    private ProgressDialog mProgressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +50,6 @@ public class SignupActivity extends AppCompatActivity {
         signupButton = (Button) findViewById(R.id.btn_signup);
         loginLink = (TextView) findViewById(R.id.link_login);
 
-        mProgressDialog = null;
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,15 +156,48 @@ public class SignupActivity extends AppCompatActivity {
             /*
              * Registro usuario
              */
-            new APISignup().execute(username, email, password, Locale.getDefault().getLanguage());
+            //new APISignup().execute(username, email, password, Locale.getDefault().getLanguage());
+            RegisterUser loginUser = new RegisterUser(this, SignupActivity.this);
+            String lang = "en";
+            if(Locale.getDefault().getLanguage().equals("es")){
+                lang = "es";
+            }
+            loginUser.execute(username, email, password, lang);
         }
     }
 
 
-    public void onSignupSuccess() {
-        signupButton.setEnabled(true);
+    public void onSignupSuccess(SignupResponse result) {
+        //signupButton.setEnabled(true)
         setResult(RESULT_OK, null);
-        finish();
+        //finish();
+
+        SharedPreferences app_prefs = getSharedPreferences("APP_PREFS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editorAppPrefs = app_prefs.edit();
+        editorAppPrefs.putBoolean("logged", true);
+        editorAppPrefs.commit();
+
+        SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = user_prefs.edit();
+
+        SingletonRestClient.getInstance().user = result.getUser();
+        User user = result.getUser();
+        String avatar = user.getProfile().getAvatar();
+
+        if(avatar.contains("http")){
+            editor.putBoolean("default_avatar", false);
+            editor.putString("avatar_image", avatar);
+        }
+
+        editor.putInt("id", user.getId());
+        editor.putString("username", user.getUsername());
+        editor.putString("email", user.getEmail());
+        editor.putString("token", result.getToken());
+
+        editor.commit();
+
+        // Actualización del cliente para usar el nuevo token
+        SingletonRestClient.getInstance().setNewToken(result.getToken());
     }
 
     @Override
@@ -191,11 +217,8 @@ public class SignupActivity extends AppCompatActivity {
         if(errors.getPassword().size() != 0){
             message += errors.getPassword().get(0);
         }
-        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
-        if(mProgressDialog != null) {
-            mProgressDialog.dismiss();
-        }
 
+        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
         signupButton.setEnabled(true);
     }
 
@@ -250,123 +273,27 @@ public class SignupActivity extends AppCompatActivity {
         return valid;
     }
 
-    /************************  ASYNCTASKS  ************************/
+    @Override
+    public void registerResponse(SignupResponse result) {
+        if(result !=null){
+            int statusCode = result.getStatus();
 
-    /*
-     * ASYNCTASK USER SIGN UP
-     */
-    public class APISignup extends AsyncTask<String, String, SignupResponse>{
+            if(statusCode == 201) {
+                // Save SharedPreferences and init SingletonRestClient with the new token
+                onSignupSuccess(result);
 
-        public APISignup(){
-            mProgressDialog = new ProgressDialog(SignupActivity.this, R.style.AppTheme_Dark_Dialog);
-            mProgressDialog.setMessage("Loading please wait...");
-            mProgressDialog.setIndeterminate(true);
-        }
 
-        @Override
-        protected void onPreExecute() {
-            mProgressDialog.show();
-            super.onPreExecute();
-        }
+                GetInitialValues getInitialValues = new GetInitialValues(this, this);
+                getInitialValues.getValues();
 
-        @Override
-        protected SignupResponse doInBackground(String... params) {
-            //Inicialización del Cliente Rest
-            SingletonRestClient.getInstance().init();
-
-            MooviestApiInterface apiInterface = SingletonRestClient.getInstance().mooviestApiInterface;
-
-            Call<SignupResponse> call = apiInterface.signup(params[0], params[1], params[2], params[3]);
-            SignupResponse result = null;
-
-            try{
-                result = call.execute().body();
-            }catch (IOException e) {
-                e.printStackTrace();
+            }else if (statusCode == 404){
+                onSignupFailed(result.getErrors());
             }
 
-            return result;
-        }
+        }else{
+            Toast.makeText(getBaseContext(), "Register failed. Check your internet connection.", Toast.LENGTH_LONG).show();
 
-        @Override
-        protected void onPostExecute(SignupResponse result){
-            super.onPostExecute(result);
-
-            if(result !=null){
-                int statusCode = result.getStatus();
-
-                if(statusCode == 201) {
-                    //onSignupSuccess(result)
-                    //en ese metodo guardar los sharedpreferences e inicializar el cliente rest con el nuevo token
-                    new GetMoviesBuffer().execute(2,10);
-
-                }else if (statusCode == 404){
-                    onSignupFailed(result.getErrors());
-                }
-
-            }else{
-                Toast.makeText(getBaseContext(), "Register failed. Check your internet connection.", Toast.LENGTH_LONG).show();
-
-            }
         }
     }
-
-    /*
-     * ASYNCTASK FOR GET MOVIES TO BUFFER
-     */
-    public class GetMoviesBuffer extends AsyncTask<Integer, String, ArrayList<Movie>>{
-
-
-        private ArrayList<Movie> movies;
-
-        public GetMoviesBuffer(){
-            movies = null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected ArrayList<Movie> doInBackground(Integer... params) {
-            MooviestApiInterface apiInterface= SingletonRestClient.getInstance().mooviestApiInterface;
-
-            //lang, num movies to get
-            Call<MooviestApiResult> call = apiInterface.movie_app_bylang(params[0], params[1]);
-
-            try {
-                MooviestApiResult result = call.execute().body();
-                movies = result.getMovies();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return movies;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Movie> result) {
-            super.onPostExecute(result);
-
-            if (mProgressDialog != null || mProgressDialog.isShowing()){
-                mProgressDialog.dismiss();
-            }
-
-            if(result!=null) {
-
-                SingletonRestClient.getInstance().movies_buffer = result;
-
-                Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
-                startActivity(intent);
-
-                onSignupSuccess();
-
-            }else{
-                Toast.makeText(getBaseContext(), "Load movies failed. Check your internet connection.", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
 
 }
