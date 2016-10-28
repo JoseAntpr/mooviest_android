@@ -10,6 +10,4 @@ import com.mooviest.ui.rest.MooviestApiResult;
 public interface LoginResponseInterface {
     public void loginResponse(LoginResponse result);
 
-    public void listsResponse(String list_name, MooviestApiResult mooviestApiResult);
-
 }
