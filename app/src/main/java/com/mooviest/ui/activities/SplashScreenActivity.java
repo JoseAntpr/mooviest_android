@@ -106,7 +106,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
-    public final boolean isInternetOn() {
+
+    private final boolean isInternetOn() {
         boolean internetOn = false;
 
         // get Connectivity Manager object to check connection
