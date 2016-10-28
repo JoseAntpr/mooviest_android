@@ -70,7 +70,7 @@ public class EditProfileActivity extends AppCompatActivity{
         toolbar = (Toolbar) findViewById(R.id.toolbar_edit_profile);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Editar perfil");
+        getSupportActionBar().setTitle(R.string.edit_profile);
 
         user = SingletonRestClient.getInstance().user;
         userProfile = user.getProfile();

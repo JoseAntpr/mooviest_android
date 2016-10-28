@@ -1,6 +1,8 @@
 package com.mooviest.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -120,15 +122,23 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
+        boolean result = super.onOptionsItemSelected(item);
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.edit_profile:
-                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
                 startActivity(intent);
                 //finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+                result = true;
+            case R.id.logout:
+                setSharedPreferencesLogout();
+                intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                result = true;
         }
+
+        return result;
     }
 
     @Override
@@ -155,5 +165,22 @@ public class ProfileActivity extends AppCompatActivity {
             getWindow().setEnterTransition(transition);
             getWindow().setReturnTransition(transition);
         }
+    }
+
+    private void setSharedPreferencesLogout(){
+        SharedPreferences app_prefs = getSharedPreferences("APP_PREFS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editorAppPrefs = app_prefs.edit();
+        editorAppPrefs.putBoolean("logged", false);
+        editorAppPrefs.commit();
+
+        SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = user_prefs.edit();
+
+        editor.putInt("id", 0);
+        user_prefs.getString("username", "");
+        user_prefs.getString("email", "");
+        user_prefs.getString("token", "");
+
+        editor.commit();
     }
 }

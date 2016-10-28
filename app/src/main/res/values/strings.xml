@@ -15,6 +15,9 @@
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <string name="celebrities">Celebrities</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="logout">Log out</string>
+    <string name="save">Save</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

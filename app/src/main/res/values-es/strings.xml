@@ -15,6 +15,9 @@
     <string name="celebrities">Famosos</string>
     <string name="followers">Seguidores</string>
     <string name="following">Siguiendo</string>
+    <string name="edit_profile">Editar perfil</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="save">Guardar</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
