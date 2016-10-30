@@ -15,6 +15,11 @@
     <string name="swipe">Swipe</string>
     <string name="recommendations">Recomendaciones</string>
     <string name="my_lists">Mis listas</string>
+    <string name="nav_others">Otros</string>
+    <string name="settings">Ajustes</string>
+    <string name="share">Compartir</string>
+    <string name="feedback">Enviar sugerencias</string>
+    <string name="help">Ayuda</string>
 
     <!-- Strings related to profile -->
     <string name="my_profile">Mi perfil</string>
