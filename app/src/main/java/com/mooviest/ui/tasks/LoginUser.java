@@ -25,7 +25,7 @@ public class LoginUser extends AsyncTask<String, String, LoginResponse> {
     public LoginUser(Context context, LoginResponseInterface receiver){
         loginResponseInterface = receiver;
         progressDialog = new ProgressDialog(context, R.style.AppTheme_Dark_Dialog);
-        progressDialog.setMessage("Loading please wait...");
+        progressDialog.setMessage(context.getString(R.string.loading));
         progressDialog.setIndeterminate(true);
     }
 

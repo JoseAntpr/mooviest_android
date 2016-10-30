@@ -82,7 +82,7 @@ public class UserListsFragment extends Fragment {
         watchlist_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getUserListAPI("watchlist", 1, R.string.watchlist);
+                getUserListAPI("watchlist", 1, R.string.watchlist_list);
             }
         });
 
@@ -125,7 +125,7 @@ public class UserListsFragment extends Fragment {
         blacklist_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getUserListAPI("blacklist", 1, R.string.blacklist);
+                getUserListAPI("blacklist", 1, R.string.blacklist_list);
             }
         });
 

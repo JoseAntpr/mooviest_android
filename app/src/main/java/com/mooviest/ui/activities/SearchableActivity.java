@@ -121,7 +121,7 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
                 int totalMovies = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
                 SingletonRestClient.getInstance().moviesListAdapter.notifyItemRangeInserted(curSize, totalMovies-1);
             }else{
-                Toast.makeText(getApplication(), "No movies found with title "+ query, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplication(), getString(R.string.no_movies_found)+ " " + query, Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -8,7 +8,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_no_internet">Log in fallido. No hay conexión a internet</string>
+    <string name="register_no_internet">Registro fallido. No hay conexión a internet</string>
+    <string name="no_internet_connection">No hay conexión a internet</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="swipe">Swipe</string>
+    <string name="recommendations">Recomendaciones</string>
+    <string name="my_lists">Mis listas</string>
 
     <!-- Strings related to profile -->
     <string name="my_profile">Mi perfil</string>
@@ -18,36 +24,59 @@
     <string name="edit_profile">Editar perfil</string>
     <string name="logout">Cerrar sesión</string>
     <string name="save">Guardar</string>
+    <string name="username_profile">Nombre de usuario *</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="first_name">Nombre</string>
+    <string name="last_name">Apellidos</string>
+    <string name="email_profile">Email *</string>
+    <string name="email">Email</string>
+    <string name="born">Fecha de nacimiento</string>
+    <string name="city">Ciudad</string>
+    <string name="postal_code">Código postal</string>
 
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <!-- Strings related to login and register -->
+    <string name="register_check_errors">Registro fallido. Por favor, revise los errores</string>
+    <string name="email_username">Email o nombre de usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="confirm_password">Confirme su contraseña</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="not_account">¿No tiene cuenta todavía? Cree una</string>
+    <string name="already_member">¿Ya eres usuario? Inicie sesión</string>
+    <string name="create_account">Crear cuenta</string>
+    <string name="loading">Cargando, por favor espere...</string>
+    <string name="username_least">El nombre de usuario debe tener al menos 3 caracteres</string>
+    <string name="invalid_email">Introduzca una dirección de email válida</string>
+    <string name="password_least">La contraseña debe tener al menos 6 caracteres alfanuméricos</string>
+    <string name="password_match">Las contraseñas no coinciden</string>
     <string name="title_activity_signup">Sign up</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
 
     <!-- Search Menu -->
+    <string name="search">Buscar</string>
     <string name="search_query_hint">Buscar película en Mooviest</string>
+    <string name="no_movies_found">No se han encontrado películas con el título</string>
+    <string name="relevance">RELEVANCIA</string>
 
     <!-- Mooviest Detail -->
     <string name="movie">Película</string>
+    <string name="no_movie_detail">No hay detalle para la película</string>
     <string name="information">Información</string>
     <string name="cast">Reparto</string>
     <string name="watch">Ver</string>
+    <string name="watch_movies">Enlaces de películas...</string>
+    <string name="synopsis">Sinopsis</string>
+    <string name="movie_updated">Movida a la lista seleccionada correctamente</string>
 
     <!-- Movies List -->
     <string name="more">Más</string>
+    <string name="classify">Clasificar</string>
     <string name="favourite_list">Favoritas</string>
+    <string name="favourite">Favorita</string>
     <string name="seen_list">Vistas</string>
-    <string name="watchlist">Pendientes</string>
-    <string name="blacklist">Lista negra</string>
+    <string name="seen">Vista</string>
+    <string name="watchlist_list">Pendientes</string>
+    <string name="watchlist">Pendiente</string>
+    <string name="blacklist_list">Lista negra</string>
+    <string name="blacklist">No me interesa</string>
     <string name="no_movies_list">No hay películas en esta lista</string>
 </resources>

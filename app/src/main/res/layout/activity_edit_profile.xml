@@ -29,21 +29,6 @@
             android:paddingLeft="24dp"
             android:paddingRight="24dp">
 
-            <!--<com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/edit_profile_avatar_image"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:fitsSystemWindows="true"
-                android:layout_marginBottom="10dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                app:civ_border_color="#000000"
-                app:civ_border_width="1dp"
-                app:civ_shadow="false"
-                app:civ_shadow_radius="10"
-                app:civ_shadow_color="#63000000"/>-->
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -82,7 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:hint="Username *"
+                    android:hint="@string/username_profile"
                     android:maxLines="1"
                     android:ems="10"
                     android:textColor="@color/colorPrimaryDark"/>
@@ -99,7 +84,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:hint="First name"
+                    android:hint="@string/first_name"
                     android:maxLines="1"
                     android:ems="10"
                     android:textColor="@color/colorPrimaryDark"/>
@@ -117,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:hint="Last name"
+                    android:hint="@string/last_name"
                     android:maxLines="1"
                     android:ems="10"
                     android:textColor="@color/colorPrimaryDark"/>
@@ -135,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:hint="Email *"
+                    android:hint="@string/email_profile"
                     android:maxLines="1"
                     android:ems="10"
                     android:textColor="@color/colorPrimaryDark"/>
@@ -151,7 +136,7 @@
                 <EditText android:id="@+id/input_edit_born"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Born"
+                    android:hint="@string/born"
                     android:maxLines="1"
                     android:ems="10"
                     android:focusable="false"
@@ -170,7 +155,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:hint="City"
+                    android:hint="@string/city"
                     android:maxLines="1"
                     android:ems="10"
                     android:textColor="@color/colorPrimaryDark"/>
@@ -187,7 +172,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:hint="Postal code"
+                    android:hint="@string/postal_code"
                     android:maxLines="1"
                     android:ems="10"
                     android:textColor="@color/colorPrimaryDark"/>
@@ -197,5 +182,5 @@
 
     </ScrollView>
 
-    
+
 </LinearLayout>

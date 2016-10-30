@@ -27,7 +27,7 @@ public class RegisterUser extends AsyncTask<String, String, SignupResponse> {
         this.context = context;
         this.registerResponseInterface = registerResponseInterface;
         mProgressDialog = new ProgressDialog(context, R.style.AppTheme_Dark_Dialog);
-        mProgressDialog.setMessage("Loading please wait...");
+        mProgressDialog.setMessage(context.getString(R.string.loading));
         mProgressDialog.setIndeterminate(true);
     }
 
