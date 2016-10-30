@@ -175,6 +175,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         Collection collection = SingletonRestClient.getInstance().movie_selected.getCollection();
         floating_action_menu = (FloatingActionMenu) findViewById(R.id.floating_action_menu);
         floating_action_menu.setIconAnimated(false);
+        floating_action_menu.setClosedOnTouchOutside(true);
         if(collection != null) {
             setFabActionMenuDesign(collection.getTypeMovie());
         }
@@ -288,18 +289,21 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
 
     @Override
     public void onBackPressed() {
-        if(from.equals("swipe")) {
-            String data = "Prueba";
-            Intent intent = new Intent();
-            if(SingletonRestClient.getInstance().movie_selected.getCollection() != null){
-                intent.putExtra("typeMovie", SingletonRestClient.getInstance().movie_selected.getCollection().getTypeMovie());
-            }else{
-                intent.putExtra("typeMovie", "");
-            }
+        if(floating_action_menu.isOpened()){
+            floating_action_menu.close(true);
+        }else {
+            if (from.equals("swipe")) {
+                Intent intent = new Intent();
+                if (SingletonRestClient.getInstance().movie_selected.getCollection() != null) {
+                    intent.putExtra("typeMovie", SingletonRestClient.getInstance().movie_selected.getCollection().getTypeMovie());
+                } else {
+                    intent.putExtra("typeMovie", "");
+                }
 
-            setResult(1, intent);
+                setResult(1, intent);
+            }
+            super.onBackPressed();
         }
-        super.onBackPressed();
     }
 
     @Override
