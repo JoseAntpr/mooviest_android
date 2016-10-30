@@ -74,7 +74,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:textSize="20sp"
-                    android:text="@string/watchlist" />
+                    android:text="@string/watchlist_list" />
 
                 <Button
                     android:id="@+id/watchlist_button"
@@ -168,7 +168,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:textSize="20sp"
-                    android:text="@string/blacklist" />
+                    android:text="@string/blacklist_list" />
 
                 <Button
                     android:id="@+id/blacklist_button"

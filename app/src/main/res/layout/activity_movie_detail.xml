@@ -20,57 +20,6 @@
 
     </android.support.v4.view.ViewPager>
 
-    <!--<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_linearButtons"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom"
-        android:gravity="center"
-        android:paddingBottom="5dp"
-        android:background="@drawable/movie_gradient_buttons">
-
-        <ImageButton
-            android:id="@+id/button"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_close_eye"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:background="?android:selectableItemBackground"/>
-        <ImageButton
-            android:id="@+id/button4"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_clock"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:background="?android:selectableItemBackground" />
-        <ImageButton
-            android:id="@+id/button3"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_open_eye"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:background="?android:selectableItemBackground" />
-        <ImageButton
-            android:id="@+id/button2"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_heart"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:background="?android:selectableItemBackground" />
-    </LinearLayout>-->
-
-
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
@@ -252,7 +201,7 @@
         fab:menu_labels_position="left"
         fab:menu_openDirection="up"
         fab:menu_backgroundColor="@android:color/transparent"
-        fab:menu_fab_label="Clasificar">
+        fab:menu_fab_label="@string/classify">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/floating_action_blacklist"
@@ -263,7 +212,7 @@
             app:fab_colorPressed="#c1c4c7"
             app:fab_colorDisabled="#e74034"
             fab:fab_size="mini"
-            fab:fab_label="No me interesa"
+            fab:fab_label="@string/blacklist"
             />
 
         <com.github.clans.fab.FloatingActionButton
@@ -275,7 +224,7 @@
             app:fab_colorPressed="#c1c4c7"
             app:fab_colorDisabled="#ffcc00"
             fab:fab_size="mini"
-            fab:fab_label="Favorita"
+            fab:fab_label="@string/favourite"
             />
 
         <com.github.clans.fab.FloatingActionButton
@@ -287,7 +236,7 @@
             app:fab_colorPressed="#c1c4c7"
             app:fab_colorDisabled="#0090ff"
             fab:fab_size="mini"
-            fab:fab_label="Pendiente"
+            fab:fab_label="@string/watchlist"
             />
 
         <com.github.clans.fab.FloatingActionButton
@@ -299,7 +248,7 @@
             app:fab_colorPressed="#c1c4c7"
             app:fab_colorDisabled="#3cca81"
             fab:fab_size="mini"
-            fab:fab_label="Vista"
+            fab:fab_label="@string/seen"
             />
 
     </com.github.clans.fab.FloatingActionMenu>

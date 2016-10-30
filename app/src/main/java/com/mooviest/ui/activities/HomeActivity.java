@@ -1,12 +1,8 @@
 package com.mooviest.ui.activities;
 
-import android.app.ProgressDialog;
-import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -15,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
@@ -24,6 +19,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.mooviest.R;
@@ -31,16 +27,13 @@ import com.mooviest.ui.RoundedTransformation;
 import com.mooviest.ui.SingletonSwipe;
 import com.mooviest.ui.adapters.ViewPagerAdapter;
 import com.mooviest.ui.models.User;
-import com.mooviest.ui.rest.MooviestApiInterface;
 import com.mooviest.ui.rest.SingletonRestClient;
 import com.mooviest.ui.rest.UserProfileResponse;
+import com.mooviest.ui.tasks.GetUserProfile;
+import com.mooviest.ui.tasks.UserProfileResponseInterface;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-
-import retrofit2.Call;
-
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, UserProfileResponseInterface{
 
     private ImageView side_avatar_image;
     private Toolbar toolbar;
@@ -49,7 +42,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private LinearLayout linear_nav_header;
     TextView side_username;
     TextView side_email;
-    private ProgressDialog mProgressDialog;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private int[] tabIcons = {
@@ -95,10 +87,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         View headerLayout = navigationView.getHeaderView(0);
 
-        setupNavHeader(headerLayout);
+        setupNavHeader(headerLayout, this);
     }
 
-    public void setupNavHeader(final View headerLayout){
+    public void setupNavHeader(final View headerLayout, final Context context){
 
         User u = SingletonRestClient.getInstance().user;
 
@@ -107,7 +99,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 // ASYNCTASK GET USER AND PROFILE
-                new GetUserProfile().execute(SingletonRestClient.getInstance().user.getId());
+                new GetUserProfile(context, HomeActivity.this).execute(SingletonRestClient.getInstance().user.getId());
                 // Close nav bar left
                 drawerLayout.closeDrawer(Gravity.LEFT);
             }
@@ -196,9 +188,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new OneFragment(), "ONE");
-        adapter.addFragment(new TwoFragment(), "TWO");
-        adapter.addFragment(new UserListsFragment(), "My lists");
+        adapter.addFragment(new OneFragment(), getString(R.string.swipe));
+        adapter.addFragment(new TwoFragment(), getString(R.string.recommendations));
+        adapter.addFragment(new UserListsFragment(), getString(R.string.my_lists));
         viewPager.setAdapter(adapter);
     }
 
@@ -208,55 +200,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
     }
 
-
-    /************************  ASYNCTASKS  ************************/
-
-
-    /*
-     * AYNCTASK GET USER AND PROFILE
-     */
-    public class GetUserProfile extends AsyncTask<Integer, String, UserProfileResponse> {
-
-        public GetUserProfile(){
-            mProgressDialog = new ProgressDialog(HomeActivity.this, R.style.AppTheme_Dark_Dialog);
-            mProgressDialog.setMessage("Loading please wait...");
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            mProgressDialog.show();
-            super.onPreExecute();
-        }
-
-        @Override
-        protected UserProfileResponse doInBackground(Integer... params) {
-            MooviestApiInterface apiInterface= SingletonRestClient.getInstance().mooviestApiInterface;
-
-            Call<UserProfileResponse> call = apiInterface.getUserProfile(params[0]);
-            UserProfileResponse result = null;
-            try {
-                result = call.execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(UserProfileResponse result) {
-            super.onPostExecute(result);
-
-            if (mProgressDialog != null || mProgressDialog.isShowing()){
-                mProgressDialog.dismiss();
-            }
-
-            if(result!=null) {
-                SingletonRestClient.getInstance().user = result.getUser();
-                Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
-                startActivity(intent);
-            }
+    @Override
+    public void userProfileResponse(UserProfileResponse result) {
+        if(result!=null) {
+            SingletonRestClient.getInstance().user = result.getUser();
+            Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        }else{
+            Toast.makeText(getBaseContext(), getString(R.string.no_internet_connection), Toast.LENGTH_LONG).show();
         }
     }
 

@@ -225,9 +225,9 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new MovieInformationFragment(), "Information");
-        adapter.addFragment(new MovieCastFragment(), "Cast");
-        adapter.addFragment(new MovieWatchFragment(), "Watch");
+        adapter.addFragment(new MovieInformationFragment(), getString(R.string.information));
+        adapter.addFragment(new MovieCastFragment(), getString(R.string.cast));
+        adapter.addFragment(new MovieWatchFragment(), getString(R.string.watch));
         viewPager.setAdapter(adapter);
     }
 
@@ -330,7 +330,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
 
             View floatingActionMenuView = findViewById(R.id.floating_action_menu);
             Snackbar.make(floatingActionMenuView,
-                    "Movida a la lista seleccionada correctamente", Snackbar.LENGTH_LONG)
+                    getString(R.string.movie_updated), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
 
         }
@@ -351,7 +351,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
 
             View floatingActionMenuView = findViewById(R.id.floating_action_menu);
             Snackbar.make(floatingActionMenuView,
-                    "Movida a la lista seleccionada correctamente", Snackbar.LENGTH_LONG)
+                    getString(R.string.movie_updated), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
     }

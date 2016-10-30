@@ -122,23 +122,19 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
-        boolean result = super.onOptionsItemSelected(item);
         Intent intent;
-        switch (item.getItemId()) {
-            case R.id.edit_profile:
-                intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-                startActivity(intent);
-                //finish();
-                result = true;
-            case R.id.logout:
-                setSharedPreferencesLogout();
-                intent = new Intent(ProfileActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-                result = true;
+
+        if(item.getItemId() == R.id.edit_profile){
+            intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+            startActivity(intent);
+        }else if(item.getItemId() == R.id.logout){
+            setSharedPreferencesLogout();
+            intent = new Intent(ProfileActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
 
-        return result;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -150,9 +146,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new FollowersFragment(), "Followers");
-        adapter.addFragment(new FollowingFragment(), "Following");
-        adapter.addFragment(new CelebritiesFragment(), "Celebrities");
+        adapter.addFragment(new FollowersFragment(), getString(R.string.followers));
+        adapter.addFragment(new FollowingFragment(), getString(R.string.following));
+        adapter.addFragment(new CelebritiesFragment(), getString(R.string.celebrities));
         viewPager.setAdapter(adapter);
     }
 

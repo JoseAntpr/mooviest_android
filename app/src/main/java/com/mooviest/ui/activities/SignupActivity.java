@@ -148,7 +148,7 @@ public class SignupActivity extends AppCompatActivity implements RegisterRespons
 
         if (!validate(username, email, password, confirmPassword)) {
 
-            Toast.makeText(getBaseContext(), "Sign up failed, check fields errors", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), getString(R.string.register_check_errors), Toast.LENGTH_LONG).show();
         }else {
 
             signupButton.setEnabled(false);
@@ -156,7 +156,6 @@ public class SignupActivity extends AppCompatActivity implements RegisterRespons
             /*
              * Registro usuario
              */
-            //new APISignup().execute(username, email, password, Locale.getDefault().getLanguage());
             RegisterUser loginUser = new RegisterUser(this, SignupActivity.this);
             String lang = "en";
             if(Locale.getDefault().getLanguage().equals("es")){
@@ -234,7 +233,7 @@ public class SignupActivity extends AppCompatActivity implements RegisterRespons
     public boolean validUsername(String username){
         boolean valid = true;
         if (username.isEmpty() || username.length() < 3) {
-            tilUsername.setError("Username must be at least 3 characters");
+            tilUsername.setError(getString(R.string.username_least));
             valid = false;
         } else {
             tilUsername.setError(null);
@@ -246,7 +245,7 @@ public class SignupActivity extends AppCompatActivity implements RegisterRespons
     public boolean validEmail(String email){
         boolean valid = true;
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            tilEmail.setError("Enter a valid email address");
+            tilEmail.setError(getString(R.string.invalid_email));
             valid = false;
         } else {
             tilEmail.setError(null);
@@ -258,7 +257,7 @@ public class SignupActivity extends AppCompatActivity implements RegisterRespons
     public boolean validPassword(String password, String confirmPassword){
         boolean valid = true;
         if (password.isEmpty() || password.length() < 6) {
-            tilSignupPassword.setError("Password must be at least 6 alphanumeric characters");
+            tilSignupPassword.setError(getString(R.string.password_least));
             valid = false;
         } else {
             tilSignupPassword.setError(null);
@@ -266,7 +265,7 @@ public class SignupActivity extends AppCompatActivity implements RegisterRespons
                 tilConfirmPassword.setError(null);
             }else {
                 valid = false;
-                tilConfirmPassword.setError("Passwords do not match");
+                tilConfirmPassword.setError(getString(R.string.password_match));
             }
         }
 
@@ -291,7 +290,7 @@ public class SignupActivity extends AppCompatActivity implements RegisterRespons
             }
 
         }else{
-            Toast.makeText(getBaseContext(), "Register failed. Check your internet connection.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), getString(R.string.register_no_internet), Toast.LENGTH_LONG).show();
 
         }
     }

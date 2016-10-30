@@ -8,7 +8,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_no_internet">Log in failed. No internet connection</string>
+    <string name="register_no_internet">Register failed. No internet connection</string>
+    <string name="no_internet_connection">No internet connection</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="swipe">Swipe</string>
+    <string name="recommendations">Recommendations</string>
+    <string name="my_lists">My lists</string>
 
     <!-- Strings related to profile -->
     <string name="my_profile">My profile</string>
@@ -18,36 +24,59 @@
     <string name="edit_profile">Edit profile</string>
     <string name="logout">Log out</string>
     <string name="save">Save</string>
+    <string name="username_profile">Username *</string>
+    <string name="username">Username</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="email_profile">Email *</string>
+    <string name="email">Email</string>
+    <string name="born">Born</string>
+    <string name="city">City</string>
+    <string name="postal_code">Postal code</string>
 
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <!-- Strings related to login and register -->
+    <string name="register_check_errors">Register failed. Please, check fields errors</string>
+    <string name="email_username">Email or username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="login">Log in</string>
+    <string name="not_account">Not account yet? Create one</string>
+    <string name="already_member">Already a member? Log in</string>
+    <string name="create_account">Create account</string>
+    <string name="loading">Loading, please wait...</string>
+    <string name="username_least">Username must be at least 3 characters</string>
+    <string name="invalid_email">Enter a valid email address</string>
+    <string name="password_least">Password must be at least 6 alphanumeric characters</string>
+    <string name="password_match">Passwords do not match</string>
     <string name="title_activity_signup">Sign up</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
 
     <!-- Search Menu -->
+    <string name="search">Search</string>
     <string name="search_query_hint">Search film in Mooviest</string>
+    <string name="no_movies_found">No movies found with title</string>
+    <string name="relevance">RELEVANCE</string>
 
     <!-- Mooviest Detail -->
     <string name="movie">Movie</string>
+    <string name="no_movie_detail">No detail for movie</string>
     <string name="information">Information</string>
     <string name="cast">Cast</string>
     <string name="watch">Watch</string>
+    <string name="watch_movies">Watch movies links...</string>
+    <string name="synopsis">Synopsis</string>
+    <string name="movie_updated">Moved to the selected list successfully</string>
 
     <!-- Movies List -->
     <string name="more">More</string>
+    <string name="classify">Classify</string>
     <string name="favourite_list">Favourites</string>
+    <string name="favourite">Favourite</string>
     <string name="seen_list">Seen</string>
+    <string name="seen">Seen</string>
+    <string name="watchlist_list">Watchlist</string>
     <string name="watchlist">Watchlist</string>
+    <string name="blacklist_list">Blacklist</string>
     <string name="blacklist">Blacklist</string>
     <string name="no_movies_list">No movies on this list</string>
 </resources>

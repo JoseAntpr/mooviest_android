@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mooviest.R;
@@ -65,11 +66,17 @@ public class SwipeDeckAdapter extends BaseAdapter {
             // normally use a viewholder
             v = inflater.inflate(R.layout.card, parent, false);
         }
-        //((TextView) v.findViewById(R.id.textView2)).setText(data.get(position));
+        final Movie movie = (Movie)getItem(position);
+
+        TextView title = (TextView) v.findViewById(R.id.movie_title);
+        title.setText(movie.getTitle());
+
+        TextView average = (TextView) v.findViewById(R.id.movie_average);
+        average.setText(movie.getAverage());
+
         ImageView imageView = (ImageView) v.findViewById(R.id.offer_image);
         Log.i("OneFragment", "load new Image");
         //GET IMAGE
-        final Movie movie = (Movie)getItem(position);
         String image = movie.getImage();
         String cover = "";
 
@@ -81,9 +88,9 @@ public class SwipeDeckAdapter extends BaseAdapter {
             } else {
                 cover = "https://img.tviso.com/ES/poster/w430" + image;
             }
-            Picasso.with(context).load(cover).placeholder(R.drawable.background_red).fit().centerCrop().into(imageView);
+            Picasso.with(context).load(cover).placeholder(R.drawable.no_movie_swipe).fit().centerCrop().into(imageView);
         }else{
-            Picasso.with(context).load(R.drawable.background_red).fit().centerCrop().into(imageView);
+            Picasso.with(context).load(R.drawable.no_movie_swipe).fit().centerCrop().into(imageView);
         }
         Log.d("COVER", cover);
 
@@ -113,10 +120,9 @@ public class SwipeDeckAdapter extends BaseAdapter {
 
                     if(swipeMovieInterface != null) {
                         swipeMovieInterface.movieClicked();
-                        //view.getContext().startActivity(new Intent(view.getContext(), MovieDetailActivity.class));
                     }
                 }else {
-                    Toast.makeText(view.getContext(), "No detail for movie selected", Toast.LENGTH_LONG).show();
+                    Toast.makeText(view.getContext(), view.getContext().getString(R.string.no_movie_detail), Toast.LENGTH_LONG).show();
                 }
             }
         };

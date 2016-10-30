@@ -144,11 +144,11 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
         boolean valid = true;
         if (!emailUsername.isEmpty()) {
             if(emailUsername.contains("@") && !Patterns.EMAIL_ADDRESS.matcher(emailUsername).matches()) {
-                emailUsernameText.setError("Enter a valid email address");
+                emailUsernameText.setError(getString(R.string.invalid_email));
                 valid = false;
             }
             if(emailUsername.length() < 3){
-                emailUsernameText.setError("Username must be at least 3 characters");
+                emailUsernameText.setError(getString(R.string.username_least));
                 valid = false;
             }
         }else {
@@ -161,7 +161,7 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
     public boolean validPassword(String password){
         boolean valid = true;
         if (password.isEmpty() || password.length() < 6) {
-            passwordText.setError("Password must be at least 6 characters");
+            passwordText.setError(getString(R.string.password_least));
             valid = false;
         } else {
             passwordText.setError(null);
@@ -187,7 +187,7 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
             }
 
         }else{
-            onLoginFailed("Login failed. Check your internet connection.");
+            onLoginFailed(getString(R.string.login_no_internet));
         }
     }
 
