@@ -111,8 +111,6 @@ public class EditProfileActivity extends AppCompatActivity{
         fab_change_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Floating button pressed", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 Intent takePictureIntent = new Intent(Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
