@@ -19,12 +19,15 @@ import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.SingletonRestClient;
 
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 
 public class MovieInformationFragment extends Fragment {
 
     private TextView movie_synopsis;
+    private TextView movie_released;
 
     private RecyclerView ratings_recycler;
     private GridLayoutManager gridLayoutManagerRatings;
@@ -62,9 +65,13 @@ public class MovieInformationFragment extends Fragment {
 
         ratings_recycler.setAdapter(ratingsAdapter);
 
+        //Released
+        movie_released = (TextView) view.findViewById(R.id.movie_released);
+        movie_released.setText(String.valueOf(movie_selected.getReleased()));
+
         //Synopsis
         movie_synopsis = (TextView) view.findViewById(R.id.movie_synopsis);
-        movie_synopsis.setText(SingletonRestClient.getInstance().movie_selected.getSynopsis());
+        movie_synopsis.setText(movie_selected.getSynopsis());
 
 
         //Genres

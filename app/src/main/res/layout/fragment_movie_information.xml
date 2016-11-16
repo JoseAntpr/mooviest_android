@@ -18,17 +18,41 @@
             android:paddingBottom="20dp"
             android:scrollbars="vertical"/>
 
-        <TextView
-            android:paddingRight="30dp"
-            android:paddingLeft="30dp"
-            android:paddingTop="30dp"
-            android:paddingBottom="20dp"
-            android:textSize="22sp"
-            android:background="@color/grey_light"
-            android:id="@+id/title_synopsis"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/synopsis" />
+            android:background="@color/grey_light">
+            <TextView
+                android:id="@+id/title_synopsis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+
+                android:paddingRight="30dp"
+                android:paddingLeft="30dp"
+                android:paddingTop="30dp"
+                android:paddingBottom="20dp"
+                android:textSize="22sp"
+
+                android:text="@string/synopsis"
+                />
+            <TextView
+                android:id="@+id/movie_released"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+
+                android:paddingRight="30dp"
+                android:paddingLeft="30dp"
+                android:paddingTop="30dp"
+                android:paddingBottom="20dp"
+                android:textSize="18sp"
+
+                android:text="2000"
+                />
+        </RelativeLayout>
+
+
 
         <TextView
             android:paddingRight="35dp"
