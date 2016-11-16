@@ -4,7 +4,7 @@ package com.mooviest.ui.models;
 public class Participation {
 
     private Celebrity celebrity;
-    private int role;
+    private String role;
     private String character;
     private String award;
 
@@ -31,7 +31,7 @@ public class Participation {
      * @return
      *     The role
      */
-    public int getRole() {
+    public String getRole() {
         return role;
     }
 
@@ -40,7 +40,7 @@ public class Participation {
      * @param role
      *     The role
      */
-    public void setRole(int role) {
+    public void setRole(String role) {
         this.role = role;
     }
 

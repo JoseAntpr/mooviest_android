@@ -1,0 +1,23 @@
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid
+        android:color="@color/celebrity_linear_transparent" >
+    </solid>
+
+    <padding
+        android:left="5dp"
+        android:top="5dp"
+        android:right="5dp"
+        android:bottom="5dp"    >
+    </padding>
+
+    <corners
+        android:topLeftRadius="1000000dp"
+        android:topRightRadius="1000000dp"
+        android:bottomLeftRadius="1000000dp"
+        android:bottomRightRadius="1000000dp"   >
+    </corners>
+
+</shape>

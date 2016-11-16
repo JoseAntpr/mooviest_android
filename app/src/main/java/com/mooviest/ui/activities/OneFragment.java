@@ -107,10 +107,7 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
             public void cardSwipedLeft(int position) {
                 movieCollectionTask("watchlist", adapter.getItem(0));
                 checkMoviesSwipe();
-                adapter.removeItem(0);
-                if(movies_buffer.size() >= 1) {
-                    addMoviesToSwipe(1);
-                }
+                removeAndAddMovieToAdapter(0, 1);
                 Log.i("HomeActivity", "card was swiped left, position in adapter: " + position);
             }
 
@@ -118,11 +115,7 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
             public void cardSwipedRight(int position) {
                 movieCollectionTask("seen", adapter.getItem(0));
                 checkMoviesSwipe();
-                adapter.removeItem(0);
-                if(movies_buffer.size() >= 1) {
-                    addMoviesToSwipe(1);
-                }
-
+                removeAndAddMovieToAdapter(0, 1);
                 Log.i("HomeActivity", "card was swiped right, position in adapter: " + position);
             }
 
@@ -130,10 +123,7 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
             public void cardSwipedUp(int position) {
                 movieCollectionTask("favourite", adapter.getItem(0));
                 checkMoviesSwipe();
-                adapter.removeItem(0);
-                if(movies_buffer.size() >= 1) {
-                    addMoviesToSwipe(1);
-                }
+                removeAndAddMovieToAdapter(0, 1);
                 Log.i("HomeActivity", "card was swiped Up, position in adapter: " + position);
             }
 
@@ -141,20 +131,14 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
             public void cardSwipedDown(int position) {
                 movieCollectionTask("blacklist", adapter.getItem(0));
                 checkMoviesSwipe();
-                adapter.removeItem(0);
-                if(movies_buffer.size() >= 1) {
-                    addMoviesToSwipe(1);
-                }
+                removeAndAddMovieToAdapter(0, 1);
                 Log.i("HomeActivity", "card was swiped down, position in adapter: " + position);
             }
 
             @Override
             public void cardRemove(int position) {
                 checkMoviesSwipe();
-                adapter.removeItem(0);
-                if(movies_buffer.size() >= 1) {
-                    addMoviesToSwipe(1);
-                }
+                removeAndAddMovieToAdapter(0, 1);
             }
 
             @Override
@@ -245,6 +229,13 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
                 }
             };
             getSwipeList.execute(user_prefs.getInt("id", 0));
+        }
+    }
+
+    public void removeAndAddMovieToAdapter(int item_pos, int num_movies){
+        adapter.removeItem(item_pos);
+        if(movies_buffer.size() >= 1) {
+            addMoviesToSwipe(num_movies);
         }
     }
 
