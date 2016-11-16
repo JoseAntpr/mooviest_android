@@ -71,6 +71,7 @@
     <string name="watch">Ver</string>
     <string name="watch_movies">Enlaces de películas...</string>
     <string name="synopsis">Sinopsis</string>
+    <string name="genres">Géneros</string>
     <string name="movie_updated">Movida a la lista seleccionada correctamente</string>
 
     <!-- Movies List -->
