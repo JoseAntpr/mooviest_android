@@ -129,7 +129,8 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
         }else if(item.getItemId() == R.id.logout){
             setSharedPreferencesLogout();
-            intent = new Intent(ProfileActivity.this, LoginActivity.class);
+            intent = new Intent(ProfileActivity.this, LoginActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
         }

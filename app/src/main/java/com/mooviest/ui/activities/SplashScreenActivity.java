@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.mooviest.R;
 import com.mooviest.ui.models.User;
@@ -18,6 +19,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 1000;
+    private SharedPreferences app_prefs;
+    private SharedPreferences user_prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +37,11 @@ public class SplashScreenActivity extends AppCompatActivity {
          * SharedPreferences.Editor editor = user_prefs.edit();
          * editor.putBoolean("default_avatar", false);
          */
-        SharedPreferences app_prefs = getSharedPreferences("APP_PREFS", Context.MODE_PRIVATE);
+        app_prefs = getSharedPreferences("APP_PREFS", Context.MODE_PRIVATE);
         boolean tutorial = app_prefs.getBoolean("tutorial", false);
         boolean logged = app_prefs.getBoolean("logged", false);
 
-        SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+        user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
         user_prefs.getBoolean("default_avatar", true);
         user_prefs.getString("avatar_image", "");
         user_prefs.getInt("id", 0);
@@ -85,24 +88,28 @@ public class SplashScreenActivity extends AppCompatActivity {
          * Si ya estaba logeado
          */
         }else{
-            if(isInternetOn()) {
+            isLogged();
+        }
+    }
+
+    private void isLogged(){
+        if(isInternetOn()) {
             /*
              * Inicializamos la instancia SingletonRestClient,
              * le añadimos el token del usuario y cargamos el usuario en una variable
              * del Singleton para su posterior uso en la aplicación
              */
-                SingletonRestClient.getInstance();
-                SingletonRestClient.getInstance().setNewToken(user_prefs.getString("token", ""));
-                SingletonRestClient.getInstance().user = new User(user_prefs.getInt("id", 0), user_prefs.getString("username", ""), user_prefs.getString("email", ""));
+            SingletonRestClient.getInstance();
+            SingletonRestClient.getInstance().setNewToken(user_prefs.getString("token", ""));
+            SingletonRestClient.getInstance().user = new User(user_prefs.getInt("id", 0), user_prefs.getString("username", ""), user_prefs.getString("email", ""));
 
             /*
              * Obtenemos los valores iniciales, que sería la lista de películas para el
              * Swipe, y las 4 listas del usuario: seen, watchlist, favourite y blacklist.
              * Una vez obtenidos, cargamos HomeActivity
              */
-                GetInitialValues getInitialValues = new GetInitialValues(this, this);
-                getInitialValues.getValues();
-            }
+            GetInitialValues getInitialValues = new GetInitialValues(this, this);
+            getInitialValues.getValues();
         }
     }
 
@@ -137,8 +144,14 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         if(!internetOn){
             Snackbar.make(findViewById(R.id.splash_screen),
-                    "No internet connection", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Action", null).show();
+                    getString(R.string.no_internet_connection), Snackbar.LENGTH_INDEFINITE)
+                    .setActionTextColor(getResources().getColor(R.color.snackbar_action))
+                    .setAction(getString(R.string.retry), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            isLogged();
+                        }
+                    }).show();
         }
 
 

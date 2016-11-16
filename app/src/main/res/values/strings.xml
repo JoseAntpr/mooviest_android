@@ -11,6 +11,7 @@
     <string name="login_no_internet">Log in failed. No internet connection</string>
     <string name="register_no_internet">Register failed. No internet connection</string>
     <string name="no_internet_connection">No internet connection</string>
+    <string name="retry">Retry</string>
     <string name="title_activity_login">Sign in</string>
     <string name="swipe">Swipe</string>
     <string name="recommendations">Recommendations</string>

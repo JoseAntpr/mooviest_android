@@ -20,4 +20,5 @@
     <color name="watchlist">#0090ff</color>
     <color name="favourite">#ffcc00</color>
     <color name="blacklist">#e74034</color>
+    <color name="snackbar_action">#ffcc00</color>
 </resources>
