@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mooviest.R;
+import com.mooviest.ui.PaddingItemDecoration;
 import com.mooviest.ui.adapters.MoviesListAdapter;
 import com.mooviest.ui.adapters.MoviesUserListAdapter;
 import com.mooviest.ui.rest.MooviestApiResult;
@@ -52,6 +53,8 @@ public class UserListsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_lists, container, false);
 
+        PaddingItemDecoration paddingItemDecoration = new PaddingItemDecoration(10, getContext());
+
         // ********* SEEN ***********
         no_seen_list = (TextView) view.findViewById(R.id.no_seen_list);
         if(!SingletonRestClient.getInstance().seen_list.isEmpty()) {
@@ -70,6 +73,7 @@ public class UserListsFragment extends Fragment {
         seen_list_recycler.setLayoutManager(seenListLayoutManager);
         SingletonRestClient.getInstance().seenListAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().seen_list);
         seen_list_recycler.setAdapter(SingletonRestClient.getInstance().seenListAdapter);
+        seen_list_recycler.addItemDecoration(paddingItemDecoration);
 
 
 
@@ -91,6 +95,7 @@ public class UserListsFragment extends Fragment {
         watchlist_recycler.setLayoutManager(watchlistLayoutManager);
         SingletonRestClient.getInstance().watchlistAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().watchlist);
         watchlist_recycler.setAdapter(SingletonRestClient.getInstance().watchlistAdapter);
+        watchlist_recycler.addItemDecoration(paddingItemDecoration);
 
 
 
@@ -112,6 +117,7 @@ public class UserListsFragment extends Fragment {
         favourite_list_recycler.setLayoutManager(favouriteListLayoutManager);
         SingletonRestClient.getInstance().favouriteListAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().favourite_list);
         favourite_list_recycler.setAdapter(SingletonRestClient.getInstance().favouriteListAdapter);
+        favourite_list_recycler.addItemDecoration(paddingItemDecoration);
 
 
 
@@ -134,6 +140,7 @@ public class UserListsFragment extends Fragment {
         blacklist_recycler.setLayoutManager(blacklistLayoutManager);
         SingletonRestClient.getInstance().blacklistAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().blacklist);
         blacklist_recycler.setAdapter(SingletonRestClient.getInstance().blacklistAdapter);
+        blacklist_recycler.addItemDecoration(paddingItemDecoration);
 
         return view;
 
