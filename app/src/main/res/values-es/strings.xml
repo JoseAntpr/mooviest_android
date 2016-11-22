@@ -42,6 +42,7 @@
 
     <!-- Strings related to login and register -->
     <string name="register_check_errors">Registro fallido. Por favor, revise los errores</string>
+    <string name="update_profile_check_errors">Actualización del perfil fallida. Por favor, revise los errores</string>
     <string name="email_username">Email o nombre de usuario</string>
     <string name="password">Contraseña</string>
     <string name="confirm_password">Confirme su contraseña</string>
@@ -54,6 +55,8 @@
     <string name="invalid_email">Introduzca una dirección de email válida</string>
     <string name="password_least">La contraseña debe tener al menos 6 caracteres alfanuméricos</string>
     <string name="password_match">Las contraseñas no coinciden</string>
+    <string name="username_exists">Este nombre de usuario ya existe en el sistema. Por favor inténtelo de nuevo con otro</string>
+    <string name="email_exists">Este email ya existe en el sistema. Por favor inténtelo de nuevo con otro</string>
     <string name="title_activity_signup">Sign up</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
 

@@ -248,13 +248,13 @@ public class EditProfileActivity extends AppCompatActivity{
                     }else{
                         Errors errors = result.getErrors();
                         if(errors.getUsername().size() != 0){
-                            tilEditUsername.setError(errors.getUsername().get(0));
+                            tilEditUsername.setError(getString(R.string.username_exists));
                         }
                         if(errors.getEmail().size() != 0){
-                            tilEditEmail.setError(errors.getEmail().get(0));
+                            tilEditEmail.setError(getString(R.string.email_exists));
                         }
 
-                        Toast.makeText(getBaseContext(), "Update profile failed, check fields errors", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseContext(), getString(R.string.update_profile_check_errors), Toast.LENGTH_LONG).show();
                     }
                 }
             }

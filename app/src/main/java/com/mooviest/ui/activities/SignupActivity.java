@@ -167,9 +167,7 @@ public class SignupActivity extends AppCompatActivity implements RegisterRespons
 
 
     public void onSignupSuccess(SignupResponse result) {
-        //signupButton.setEnabled(true)
         setResult(RESULT_OK, null);
-        //finish();
 
         SharedPreferences app_prefs = getSharedPreferences("APP_PREFS", Context.MODE_PRIVATE);
         SharedPreferences.Editor editorAppPrefs = app_prefs.edit();
@@ -206,18 +204,17 @@ public class SignupActivity extends AppCompatActivity implements RegisterRespons
     }
 
     public void onSignupFailed(Errors errors) {
-        String message = "";
         if(errors.getEmail().size() != 0){
-            message += errors.getEmail().get(0);
+            tilEmail.setError(getString(R.string.email_exists));
         }
         if(errors.getUsername().size() != 0){
-            message += errors.getUsername().get(0);
+            tilUsername.setError(getString(R.string.username_exists));
         }
         if(errors.getPassword().size() != 0){
-            message += errors.getPassword().get(0);
+            tilSignupPassword.setError(errors.getPassword().get(0));
         }
 
-        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), getString(R.string.register_check_errors), Toast.LENGTH_LONG).show();
         signupButton.setEnabled(true);
     }
 
@@ -285,13 +282,13 @@ public class SignupActivity extends AppCompatActivity implements RegisterRespons
                 GetInitialValues getInitialValues = new GetInitialValues(this, this);
                 getInitialValues.getValues();
 
-            }else if (statusCode == 404){
+            }else if (statusCode == 400){
                 onSignupFailed(result.getErrors());
             }
 
         }else{
+            signupButton.setEnabled(true);
             Toast.makeText(getBaseContext(), getString(R.string.register_no_internet), Toast.LENGTH_LONG).show();
-
         }
     }
 

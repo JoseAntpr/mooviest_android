@@ -86,8 +86,6 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
 
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
                 this.finish();
             }
         }
@@ -100,8 +98,6 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
     }
 
     public void onLoginSuccess(LoginResponse result) {
-        //loginButton.setEnabled(true);
-        //finish();
         SharedPreferences app_prefs = getSharedPreferences("APP_PREFS", Context.MODE_PRIVATE);
         SharedPreferences.Editor editorAppPrefs = app_prefs.edit();
         editorAppPrefs.putBoolean("logged", true);
@@ -187,6 +183,7 @@ public class LoginActivity extends AppCompatActivity implements LoginResponseInt
             }
 
         }else{
+            loginButton.setEnabled(true);
             onLoginFailed(getString(R.string.login_no_internet));
         }
     }

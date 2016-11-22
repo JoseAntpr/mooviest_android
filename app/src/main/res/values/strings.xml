@@ -42,6 +42,7 @@
 
     <!-- Strings related to login and register -->
     <string name="register_check_errors">Register failed. Please, check fields errors</string>
+    <string name="update_profile_check_errors">Update profile failed. Please, check fields errors</string>
     <string name="email_username">Email or username</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
@@ -54,6 +55,8 @@
     <string name="invalid_email">Enter a valid email address</string>
     <string name="password_least">Password must be at least 6 alphanumeric characters</string>
     <string name="password_match">Passwords do not match</string>
+    <string name="username_exists">Username already exists. Please try another one</string>
+    <string name="email_exists">Email already exists. Please try another one</string>
     <string name="title_activity_signup">Sign up</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
 
