@@ -63,17 +63,6 @@ public class MoviesUserListAdapter extends RecyclerView.Adapter<MoviesUserListAd
 
     @Override
     public void onBindViewHolder(MoviesUserListAdapter.ViewHolder viewHolder, int position) {
-        /*if(position == 0){
-            Resources resources = viewHolder.view.getContext().getResources();
-            int width = resources.getDimensionPixelSize(R.dimen.width_movie_user_list);
-            int height = resources.getDimensionPixelSize(R.dimen.height_movie_user_list);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    width,
-                    height
-            );
-            params.setMargins(50, 0, 0, 0);
-            viewHolder.movie_linear.setLayoutParams(params);
-        }*/
 
         final Movie movie = movies.get(position);
 

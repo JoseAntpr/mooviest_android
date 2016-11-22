@@ -124,24 +124,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         internetOn = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
-        // Check for network connections
-        /*if ( connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTED ||
-                connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTING ||
-                connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTING ||
-                connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTED ) {
-
-            // if connected with internet
-
-            //Toast.makeText(this, " Connected ", Toast.LENGTH_LONG).show();
-            internetOn = true;
-
-        } else if (
-                connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.DISCONNECTED ||
-                        connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.DISCONNECTED  ) {
-
-            Toast.makeText(this, " Not Connected ", Toast.LENGTH_LONG).show();
-        }*/
-
         if(!internetOn){
             Snackbar.make(findViewById(R.id.splash_screen),
                     getString(R.string.no_internet_connection), Snackbar.LENGTH_INDEFINITE)

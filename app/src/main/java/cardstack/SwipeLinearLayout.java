@@ -35,31 +35,4 @@ public class SwipeLinearLayout extends LinearLayout {
         setClipChildren(false);
     }
 
-//    @Override
-//    protected void onFinishInflate() {
-//        super.onFinishInflate();
-//        int childCount = getChildCount();
-//        ViewGroup.LayoutParams params = getLayoutParams();
-//
-//        ArrayList<View> children = new ArrayList<>();
-//        View swipeDeck = null;
-//        for(int i=0; i< childCount; ++i){
-//            View child = getChildAt(i);
-//            if(child instanceof SwipeDeck){
-//                swipeDeck = getChildAt(i);
-//            }else{
-//                children.add(child);
-//            }
-//        }
-//        removeAllViews();
-//        removeAllViewsInLayout();
-//        for(View v : children){
-//            addViewInLayout(v, -1, v.getLayoutParams(), true);
-//        }
-//        if(swipeDeck != null){
-//            addViewInLayout(swipeDeck, -1, swipeDeck.getLayoutParams(), true);
-//        }
-//        invalidate();
-//        requestLayout();
-//    }
 }

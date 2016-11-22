@@ -51,7 +51,7 @@ public class RatingsAdapter extends RecyclerView.Adapter<RatingsAdapter.ViewHold
         Picasso p = Picasso.with(viewHolder.itemView.getContext());
 
         String name = rating.getName();
-        int logo = 0; //R.drawable.logo_undefined
+        int logo = 0;
         switch (name){
             case "IMDb":
                 logo = R.drawable.imdb_logo;

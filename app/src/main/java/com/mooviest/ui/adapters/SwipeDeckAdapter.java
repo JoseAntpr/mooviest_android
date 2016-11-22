@@ -75,7 +75,7 @@ public class SwipeDeckAdapter extends BaseAdapter {
         average.setText(movie.getAverage());
 
         ImageView imageView = (ImageView) v.findViewById(R.id.offer_image);
-        Log.i("OneFragment", "load new Image");
+
         //GET IMAGE
         String image = movie.getImage();
         String cover = "";

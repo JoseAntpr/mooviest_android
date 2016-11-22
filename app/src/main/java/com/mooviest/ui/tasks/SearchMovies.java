@@ -26,7 +26,6 @@ public class SearchMovies extends AsyncTask<Integer, String, MooviestApiResult> 
     private String lang_code;
     private SearchMoviesInterface searchMoviesInterface = null;
     private int page;
-    //private ProgressDialog progressDialog = null;
     private ProgressBar progressBar =null;
 
     public SearchMovies(SearchableActivity searchableActivity, String query, String lang_code, int page){

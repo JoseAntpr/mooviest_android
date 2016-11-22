@@ -19,8 +19,6 @@ import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.SingletonRestClient;
 
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 

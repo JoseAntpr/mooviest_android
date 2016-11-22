@@ -61,12 +61,12 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-            Log.i("OneFragment", "restoreInstanceState");
+
             // Restore value of members from saved state
             movies_buffer = savedInstanceState.getParcelableArrayList("MOVIES_BUFFER");
             movies_swipe = savedInstanceState.getParcelableArrayList("MOVIES_SWIPE");
         }else {
-            Log.i("OneFragment", "onCreate");
+
             //INIT movies_swipe
             movies_swipe = new ArrayList<>();
 
@@ -80,8 +80,7 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //this.savedInstanceState=savedInstanceState;
-        Log.i("OneFragment", "onCreateView");
+
 
         this.resources=getContext().getResources();
         // Inflate the layout for this fragment
@@ -91,14 +90,11 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
         cardStack = (SwipeDeck) v.findViewById(R.id.swipe_deck);
         cardStack.setHardwareAccelerationEnabled(true);
 
-        Log.i("OneFragment", "Movies_size: "+ movies_swipe.size());
-
 
         adapter = new SwipeDeckAdapter(movies_swipe, getContext(), this);
         cardStack.setAdapter(adapter);
 
         if(movies_swipe.isEmpty() && movies_buffer.size()>=2){
-            Log.i("OneFragment", "movies_swipe empty, add two movies");
             addMoviesToSwipe(2);
         }
 
@@ -108,7 +104,6 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
                 movieCollectionTask("watchlist", adapter.getItem(0));
                 checkMoviesSwipe();
                 removeAndAddMovieToAdapter(0, 1);
-                Log.i("HomeActivity", "card was swiped left, position in adapter: " + position);
             }
 
             @Override
@@ -116,7 +111,6 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
                 movieCollectionTask("seen", adapter.getItem(0));
                 checkMoviesSwipe();
                 removeAndAddMovieToAdapter(0, 1);
-                Log.i("HomeActivity", "card was swiped right, position in adapter: " + position);
             }
 
             @Override
@@ -124,7 +118,6 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
                 movieCollectionTask("favourite", adapter.getItem(0));
                 checkMoviesSwipe();
                 removeAndAddMovieToAdapter(0, 1);
-                Log.i("HomeActivity", "card was swiped Up, position in adapter: " + position);
             }
 
             @Override
@@ -132,7 +125,6 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
                 movieCollectionTask("blacklist", adapter.getItem(0));
                 checkMoviesSwipe();
                 removeAndAddMovieToAdapter(0, 1);
-                Log.i("HomeActivity", "card was swiped down, position in adapter: " + position);
             }
 
             @Override
@@ -143,17 +135,17 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
 
             @Override
             public void cardsDepleted() {
-                Log.i("HomeActivity", "no more cards");
+
             }
 
             @Override
             public void cardActionDown() {
-                Log.i("HomeActivity", "cardActionDown");
+
             }
 
             @Override
             public void cardActionUp() {
-                Log.i("HomeActivity", "cardActionUp");
+
             }
 
         });
@@ -279,9 +271,8 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        Log.i("OneFragment", "onSaveInstanceState");
         // Save the user's current game state
-        Log.i("OneFragment", "Movies_size: "+ movies_swipe.size());
+
         savedInstanceState.putParcelableArrayList("MOVIES_BUFFER", movies_buffer);
         savedInstanceState.putParcelableArrayList("MOVIES_SWIPE", movies_swipe);
 

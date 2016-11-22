@@ -56,9 +56,6 @@ public class ProfileActivity extends AppCompatActivity {
         User u = SingletonRestClient.getInstance().user;
         Profile p = u.getProfile();
         if(u.getFirstName() == null || u.getLastName() == null){
-            /*if(u.getFirstName().isEmpty() && u.getLastName().isEmpty()) {
-
-            }*/
             first_last_name_profile.setVisibility(View.GONE);
         }else{
             first_last_name_profile.setText(u.getFirstName() + " " + u.getLastName());
@@ -67,9 +64,6 @@ public class ProfileActivity extends AppCompatActivity {
         username_profile.setText("@" + u.getUsername());
 
         if(p.getCity() == null){
-            /*if(p.getCity().isEmpty()) {
-
-            }*/
             city_profile.setVisibility(View.GONE);
         }else{
             city_profile.setText(p.getCity());
@@ -79,7 +73,6 @@ public class ProfileActivity extends AppCompatActivity {
         ImageView imageView = (ImageView)findViewById(R.id.profile_avatar_image);
         String avatar =u.getProfile().getAvatar();
         if(avatar.contains("no-image")){
-            //avatar = SingletonRestClient.getInstance().baseMediaUrl + avatar;
             Picasso.with(this).load(R.drawable.no_image).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(imageView);
         }else{
             Picasso.with(this).load(SingletonRestClient.baseUrl + avatar).transform(new RoundedTransformation(1000, 0)).fit().centerCrop().into(imageView);
