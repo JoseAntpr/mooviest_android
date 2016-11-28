@@ -56,26 +56,46 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
     MovieActions movieActions;
 
     private String from;
+    private Movie movie;
+    private boolean savedInstance;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         initActivityTransitions();
         setContentView(R.layout.activity_movie_detail);
-
-        Intent i =getIntent();
-        if(i.hasExtra("FROM")){
-            from = i.getStringExtra("FROM");
-        }else{
-            from = "";
-        }
 
         // Acciones para clasificar las películas en una clase externa
         movieActions = new MovieActions();
 
+        if (savedInstanceState != null) {
+            savedInstance = true;
 
-        Movie movie = SingletonRestClient.getInstance().movie_selected;
+            SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+            movieActions.restoreMainInstanceState(savedInstanceState, user_prefs);
+            movie = savedInstanceState.getParcelable("MOVIE");
+            SingletonRestClient.getInstance().movie_selected = movie;
+
+
+            from = savedInstanceState.getString("FROM");
+            if(from != "" && SingletonRestClient.getInstance().moviesListAdapter != null){
+                SingletonRestClient.getInstance().moviesListAdapter.setListName(from);
+            }
+
+        }else{
+            savedInstance = false;
+            movie = SingletonRestClient.getInstance().movie_selected;
+
+            Intent i =getIntent();
+            if(i.hasExtra("FROM")){
+                from = i.getStringExtra("FROM");
+            }else{
+                from = "";
+            }
+        }
+
 
         String image = movie.getImage();
         String backdrop = movie.getBackdrop();
@@ -172,7 +192,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
     }
 
     private void setupFloatingButtons(){
-        Collection collection = SingletonRestClient.getInstance().movie_selected.getCollection();
+        Collection collection = movie.getCollection();
         floating_action_menu = (FloatingActionMenu) findViewById(R.id.floating_action_menu);
         floating_action_menu.setIconAnimated(false);
         floating_action_menu.setClosedOnTouchOutside(true);
@@ -270,7 +290,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        setTitle(SingletonRestClient.getInstance().movie_selected.getTitle());
+        setTitle(movie.getTitle());
 
         return true;
     }
@@ -294,8 +314,11 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         }else {
             if (from.equals("swipe")) {
                 Intent intent = new Intent();
-                if (SingletonRestClient.getInstance().movie_selected.getCollection() != null) {
-                    intent.putExtra("typeMovie", SingletonRestClient.getInstance().movie_selected.getCollection().getTypeMovie());
+                if (movie.getCollection() != null) {
+                    intent.putExtra("typeMovie", movie.getCollection().getTypeMovie());
+                    if(savedInstance) {
+                        intent.putExtra("savedInstance", true);
+                    }
                 } else {
                     intent.putExtra("typeMovie", "");
                 }
@@ -309,26 +332,27 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
     @Override
     public void updateMovieCollectionResponse(Collection result) {
         if(result != null){
-            Collection collection = SingletonRestClient.getInstance().movie_selected.getCollection();
+            Collection collection = movie.getCollection();
 
             // Volver a habilitar el botón de su typeMovie anterior
             disableEnableButton(collection.getTypeMovie(), true);
 
             // Eliminamos la película seleccionada de la lista en la que se encontraba o recargamos toda la lista si había 10 películas
             // Ésto lo hacemos por si en esa lista tiene más de 10 en la BD, seguirá habiendo 10 en la lista de previsualizaciones
-            movieActions.deleteMovieFromList(collection.getTypeMovie(), SingletonRestClient.getInstance().movie_selected);
+            movieActions.deleteMovieFromList(collection.getTypeMovie(), movie);
 
             // Set new Collection to movie_selected
             SingletonRestClient.getInstance().movie_selected.setCollection(result);
+            movie.setCollection(result);
 
             // Añadir o eliminar del adapter
             if(SingletonRestClient.getInstance().moviesListAdapter != null){
-                movieActions.addDeleteFromAdapter(from, result.getTypeMovie(), SingletonRestClient.getInstance().movie_selected);
+                movieActions.addDeleteFromAdapter(from, result.getTypeMovie(), movie);
             }
 
 
             // Después la añadimos a la lista seleccionada
-            movieActions.addMovieToList(result.getTypeMovie(), SingletonRestClient.getInstance().movie_selected);
+            movieActions.addMovieToList(result.getTypeMovie(), movie);
             // Cambiamos icono del action menu y su color al seleccionado
             setFabActionMenuDesign(result.getTypeMovie());
 
@@ -346,9 +370,10 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         if(result != null) {
             // Set new Collection to movie_selected
             SingletonRestClient.getInstance().movie_selected.setCollection(result);
+            movie.setCollection(result);
 
             // Después la añadimos a la lista seleccionada
-            movieActions.addMovieToList(result.getTypeMovie(), SingletonRestClient.getInstance().movie_selected);
+            movieActions.addMovieToList(result.getTypeMovie(), movie);
 
             // Cambiamos icono del action menu y su color al seleccionado
             setFabActionMenuDesign(result.getTypeMovie());
@@ -361,8 +386,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
     }
 
     private void movieCollectionTask(String typeMovie){
-        Movie m = SingletonRestClient.getInstance().movie_selected;
-        Collection collection = SingletonRestClient.getInstance().movie_selected.getCollection();
+        Collection collection = movie.getCollection();
 
         if(collection != null) {
             //La película ya se encontraba en una lista y se actualiza a la nueva
@@ -374,7 +398,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
 
             SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
 
-            createMovieCollection.execute(user_prefs.getInt("id", 0), m.getId(), getTypeMovieId(typeMovie));
+            createMovieCollection.execute(user_prefs.getInt("id", 0), movie.getId(), getTypeMovieId(typeMovie));
         }
     }
 
@@ -443,6 +467,19 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieColle
         floating_action_menu.getMenuIconView().setImageResource(imageResource);
         floating_action_menu.setMenuButtonColorNormalResId(colorResource);
         floating_action_menu.setMenuButtonColorPressedResId(colorResource);
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState = movieActions.saveMainInstanceState(savedInstanceState);
+        savedInstanceState.putParcelable("MOVIE", movie);
+        savedInstanceState.putString("FROM",from);
+
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 
 

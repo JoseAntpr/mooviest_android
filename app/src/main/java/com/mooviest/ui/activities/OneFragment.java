@@ -51,6 +51,7 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
     Movie movieSelectedUpdate;
     private Resources resources;
     private int id_image;
+    MovieActions movieActions;
 
     public OneFragment() {
         // Required empty public constructor
@@ -60,16 +61,26 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        movieActions = new MovieActions();
+
+
         if (savedInstanceState != null) {
 
             // Restore value of members from saved state
-            movies_buffer = savedInstanceState.getParcelableArrayList("MOVIES_BUFFER");
-            movies_swipe = savedInstanceState.getParcelableArrayList("MOVIES_SWIPE");
+
+            SharedPreferences user_prefs = this.getActivity().getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+            movieActions.restoreMainInstanceState(savedInstanceState, user_prefs);
+
+            movies_swipe = SingletonRestClient.getInstance().movies_swipe;
+            movies_buffer = SingletonRestClient.getInstance().movies_buffer;
         }else {
 
             //INIT movies_swipe
-            movies_swipe = new ArrayList<>();
-
+            if(SingletonRestClient.getInstance().movies_swipe == null) {
+                movies_swipe = new ArrayList<>();
+            }else {
+                movies_swipe = SingletonRestClient.getInstance().movies_swipe;
+            }
             //INIT movies_buffer
             movies_buffer = SingletonRestClient.getInstance().movies_buffer;
 
@@ -272,9 +283,10 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the user's current game state
+        SingletonRestClient.getInstance().movies_buffer = movies_buffer;
+        SingletonRestClient.getInstance().movies_swipe = movies_swipe;
 
-        savedInstanceState.putParcelableArrayList("MOVIES_BUFFER", movies_buffer);
-        savedInstanceState.putParcelableArrayList("MOVIES_SWIPE", movies_swipe);
+        savedInstanceState = movieActions.saveMainInstanceState(savedInstanceState);
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
@@ -321,7 +333,7 @@ public class OneFragment extends Fragment implements MovieCollectionInterface, S
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(!data.getStringExtra("typeMovie").equals("")){
-            cardStack.swipeRemove(0);
+            cardStack.swipeRemove(0, data.getBooleanExtra("savedInstance", false));
         }
     }
 }

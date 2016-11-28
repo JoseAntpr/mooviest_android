@@ -23,7 +23,7 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     // Sets the starting page index
     private int startingPageIndex = 1;
     // PAGINATE API
-    private int itemsPaginate = 10;
+    private int itemsPaginate = 18;
 
     RecyclerView.LayoutManager mLayoutManager;
 

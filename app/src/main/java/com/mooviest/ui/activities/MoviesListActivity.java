@@ -1,6 +1,8 @@
 package com.mooviest.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +32,7 @@ public class MoviesListActivity extends AppCompatActivity {
     private Boolean next;
     private int count;
     private ArrayList<Movie> moviesList;
+    private MovieActions movieActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +40,23 @@ public class MoviesListActivity extends AppCompatActivity {
         initActivityTransitions();
         setContentView(R.layout.activity_movies_list);
 
+        // Acciones para clasificar las películas en una clase externa
+        movieActions = new MovieActions();
+
 
         if(savedInstanceState != null){
+            SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+            movieActions.restoreMainInstanceState(savedInstanceState, user_prefs);
+
             title = savedInstanceState.getString("TITLE");
             list_name = savedInstanceState.getString("LIST_NAME");
             next = savedInstanceState.getBoolean("NEXT");
             count = savedInstanceState.getInt("COUNT");
-            moviesList = savedInstanceState.getParcelableArrayList("MOVIES_ADAPTER");
+            if(SingletonRestClient.getInstance().moviesListAdapter == null) {
+                moviesList = savedInstanceState.getParcelableArrayList("MOVIES_ADAPTER");
+            }else {
+                moviesList = SingletonRestClient.getInstance().moviesListAdapter.getItems();
+            }
         }else{
             // GET TAGS INTENT
             Intent i =getIntent();
@@ -127,6 +140,7 @@ public class MoviesListActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState = movieActions.saveMainInstanceState(savedInstanceState);
         savedInstanceState.putString("TITLE", title);
         savedInstanceState.putString("LIST_NAME", list_name);
         savedInstanceState.putBoolean("NEXT", next);

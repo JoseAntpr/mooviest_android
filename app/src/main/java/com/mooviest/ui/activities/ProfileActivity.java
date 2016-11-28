@@ -30,19 +30,28 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView first_last_name_profile;
     private TextView username_profile;
     private TextView city_profile;
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    ViewPager profile_pager;
-    TabLayout profile_tabs;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private ViewPager profile_pager;
+    private TabLayout profile_tabs;
+    private MovieActions movieActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            // Restore value of user from saved state
-            SingletonRestClient.getInstance().user = savedInstanceState.getParcelable("USER");
-        }
+
         initActivityTransitions();
         setContentView(R.layout.activity_profile);
+
+
+        // Acciones para clasificar, guardar y restaurar películas
+        movieActions = new MovieActions();
+
+        if (savedInstanceState != null) {
+            // Restore value of user from saved state
+            SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+            movieActions.restoreMainInstanceState(savedInstanceState, user_prefs);
+        }
+
 
         // **** TEXT VIEW *****
         first_last_name_profile = (TextView) findViewById(R.id.first_last_name_profile);
@@ -133,7 +142,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putParcelable("USER", SingletonRestClient.getInstance().user);
+        savedInstanceState = movieActions.saveMainInstanceState(savedInstanceState);
         super.onSaveInstanceState(savedInstanceState);
     }
 

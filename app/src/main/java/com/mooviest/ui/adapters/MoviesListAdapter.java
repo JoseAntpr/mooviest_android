@@ -144,5 +144,9 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
         return movies;
     }
 
+    public void setListName(String list_name){
+        this.list_name = list_name;
+    }
+
 
 }

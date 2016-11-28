@@ -72,7 +72,6 @@ public class SignupActivity extends AppCompatActivity implements RegisterRespons
     }
 
     public void signup() {
-        Log.d(TAG, "Signup");
         if(!textWatcher){
             tilUsername.getEditText().addTextChangedListener(new TextWatcher() {
                 @Override

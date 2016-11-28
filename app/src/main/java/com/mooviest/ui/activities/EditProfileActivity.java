@@ -1,7 +1,9 @@
 package com.mooviest.ui.activities;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -55,16 +57,23 @@ public class EditProfileActivity extends AppCompatActivity{
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private ImageView avatarImage;
     private MultipartBody.Part imageProfileUploaded;
+    private MovieActions movieActions;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_edit_profile);
+
+        // Acciones para clasificar, guardar y restaurar películas
+        movieActions = new MovieActions();
+
         if (savedInstanceState != null) {
             // Restore value of user from saved state
-            SingletonRestClient.getInstance().user = savedInstanceState.getParcelable("USER");
+            SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+            movieActions.restoreMainInstanceState(savedInstanceState, user_prefs);
         }
-        setContentView(R.layout.activity_edit_profile);
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar_edit_profile);
@@ -207,7 +216,7 @@ public class EditProfileActivity extends AppCompatActivity{
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putParcelable("USER", SingletonRestClient.getInstance().user);
+        savedInstanceState = movieActions.saveMainInstanceState(savedInstanceState);
         super.onSaveInstanceState(savedInstanceState);
     }
 

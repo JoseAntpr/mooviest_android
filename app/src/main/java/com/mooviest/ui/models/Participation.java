@@ -1,12 +1,47 @@
 
 package com.mooviest.ui.models;
 
-public class Participation {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Participation implements Parcelable{
 
     private Celebrity celebrity;
     private String role;
     private String character;
     private String award;
+
+    protected Participation(Parcel in) {
+        celebrity = in.readParcelable(getClass().getClassLoader());
+        role = in.readString();
+        character = in.readString();
+        award = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(celebrity,flags);
+        dest.writeString(role);
+        dest.writeString(character);
+        dest.writeString(award);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Participation> CREATOR = new Creator<Participation>() {
+        @Override
+        public Participation createFromParcel(Parcel in) {
+            return new Participation(in);
+        }
+
+        @Override
+        public Participation[] newArray(int size) {
+            return new Participation[size];
+        }
+    };
 
     /**
      * 

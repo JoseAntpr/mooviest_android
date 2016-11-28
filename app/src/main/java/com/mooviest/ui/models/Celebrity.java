@@ -2,7 +2,10 @@
 package com.mooviest.ui.models;
 
 
-public class Celebrity {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Celebrity implements Parcelable{
 
     private int id;
     private String name;
@@ -10,6 +13,27 @@ public class Celebrity {
     private String image;
     private String twitterAccount;
     private String address;
+
+    protected Celebrity(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        born = in.readString();
+        image = in.readString();
+        twitterAccount = in.readString();
+        address = in.readString();
+    }
+
+    public static final Creator<Celebrity> CREATOR = new Creator<Celebrity>() {
+        @Override
+        public Celebrity createFromParcel(Parcel in) {
+            return new Celebrity(in);
+        }
+
+        @Override
+        public Celebrity[] newArray(int size) {
+            return new Celebrity[size];
+        }
+    };
 
     /**
      * 
@@ -120,4 +144,18 @@ public class Celebrity {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeString(born);
+        parcel.writeString(image);
+        parcel.writeString(twitterAccount);
+        parcel.writeString(address);
+    }
 }

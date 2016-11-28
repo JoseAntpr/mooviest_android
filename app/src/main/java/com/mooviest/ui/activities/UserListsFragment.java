@@ -45,6 +45,10 @@ public class UserListsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null){
+
+        }
     }
 
     @Override
@@ -71,7 +75,9 @@ public class UserListsFragment extends Fragment {
         seen_list_recycler = (RecyclerView) view.findViewById(R.id.seen_list_recycler);
         LinearLayoutManager seenListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         seen_list_recycler.setLayoutManager(seenListLayoutManager);
-        SingletonRestClient.getInstance().seenListAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().seen_list);
+        if(SingletonRestClient.getInstance().seenListAdapter == null) {
+            SingletonRestClient.getInstance().seenListAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().seen_list);
+        }
         seen_list_recycler.setAdapter(SingletonRestClient.getInstance().seenListAdapter);
         seen_list_recycler.addItemDecoration(paddingItemDecoration);
 
@@ -93,7 +99,9 @@ public class UserListsFragment extends Fragment {
         watchlist_recycler = (RecyclerView) view.findViewById(R.id.watchlist_recycler);
         LinearLayoutManager watchlistLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         watchlist_recycler.setLayoutManager(watchlistLayoutManager);
-        SingletonRestClient.getInstance().watchlistAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().watchlist);
+        if(SingletonRestClient.getInstance().watchlistAdapter == null) {
+            SingletonRestClient.getInstance().watchlistAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().watchlist);
+        }
         watchlist_recycler.setAdapter(SingletonRestClient.getInstance().watchlistAdapter);
         watchlist_recycler.addItemDecoration(paddingItemDecoration);
 
@@ -115,7 +123,9 @@ public class UserListsFragment extends Fragment {
         favourite_list_recycler = (RecyclerView) view.findViewById(R.id.favourite_list_recycler);
         LinearLayoutManager favouriteListLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         favourite_list_recycler.setLayoutManager(favouriteListLayoutManager);
-        SingletonRestClient.getInstance().favouriteListAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().favourite_list);
+        if(SingletonRestClient.getInstance().favouriteListAdapter == null) {
+            SingletonRestClient.getInstance().favouriteListAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().favourite_list);
+        }
         favourite_list_recycler.setAdapter(SingletonRestClient.getInstance().favouriteListAdapter);
         favourite_list_recycler.addItemDecoration(paddingItemDecoration);
 
@@ -138,7 +148,9 @@ public class UserListsFragment extends Fragment {
         blacklist_recycler = (RecyclerView) view.findViewById(R.id.blacklist_recycler);
         LinearLayoutManager blacklistLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         blacklist_recycler.setLayoutManager(blacklistLayoutManager);
-        SingletonRestClient.getInstance().blacklistAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().blacklist);
+        if(SingletonRestClient.getInstance().blacklistAdapter == null) {
+            SingletonRestClient.getInstance().blacklistAdapter = new MoviesUserListAdapter(SingletonRestClient.getInstance().blacklist);
+        }
         blacklist_recycler.setAdapter(SingletonRestClient.getInstance().blacklistAdapter);
         blacklist_recycler.addItemDecoration(paddingItemDecoration);
 

@@ -1,18 +1,15 @@
 package com.mooviest.ui.activities;
 
-import android.app.SearchManager;
-import android.content.ComponentName;
+
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -20,13 +17,10 @@ import android.widget.Toast;
 import com.mooviest.R;
 import com.mooviest.ui.adapters.MoviesListAdapter;
 import com.mooviest.ui.listeners.EndlessRecyclerViewScrollListener;
-import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.MooviestApiResult;
 import com.mooviest.ui.rest.SingletonRestClient;
 import com.mooviest.ui.tasks.SearchMovies;
 import com.mooviest.ui.tasks.SearchMoviesInterface;
-
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class SearchableActivity extends AppCompatActivity implements SearchMoviesInterface, SearchView.OnQueryTextListener{
@@ -37,11 +31,15 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
     private Boolean next;
     private int count;
     private String lang_code;
+    private MovieActions movieActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchable);
+
+        // Acciones para clasificar, guardar y restaurar películas
+        movieActions = new MovieActions();
 
         // LOAD RECYCLERVIEW
         recyclerView = (RecyclerView) findViewById(R.id.movies_search_list_recycler);
@@ -49,11 +47,13 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
         recyclerView.setLayoutManager(layoutManager);
 
         if(savedInstanceState != null){
+            SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+            movieActions.restoreMainInstanceState(savedInstanceState, user_prefs);
+
             query = savedInstanceState.getString("QUERY");
             next = savedInstanceState.getBoolean("NEXT");
             count = savedInstanceState.getInt("COUNT");
-            ArrayList<Movie> movies = savedInstanceState.getParcelableArrayList("MOVIES_ADAPTER");
-            SingletonRestClient.getInstance().moviesListAdapter = new MoviesListAdapter(movies);
+
         }else {
             SingletonRestClient.getInstance().moviesListAdapter = new MoviesListAdapter();
             next = false;
@@ -134,11 +134,12 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState = movieActions.saveMainInstanceState(savedInstanceState);
+
         savedInstanceState.putString("QUERY", query);
         savedInstanceState.putBoolean("NEXT", next);
         savedInstanceState.putInt("COUNT", count);
 
-        savedInstanceState.putParcelableArrayList("MOVIES_ADAPTER", SingletonRestClient.getInstance().moviesListAdapter.getItems());
         super.onSaveInstanceState(savedInstanceState);
     }
 

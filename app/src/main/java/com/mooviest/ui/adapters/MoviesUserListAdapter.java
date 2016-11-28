@@ -125,9 +125,10 @@ public class MoviesUserListAdapter extends RecyclerView.Adapter<MoviesUserListAd
     }
 
     public void addItem(Movie movie){
-        if(this.movies.size() < 10) {
-            this.movies.add(movie);
+        if(this.movies.size() == 18) {
+            this.movies.remove(movies.size()-1);
         }
+        this.movies.add(0, movie);
     }
 
     public void removeItem(Movie movie){
