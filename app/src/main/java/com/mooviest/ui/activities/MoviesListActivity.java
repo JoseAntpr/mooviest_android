@@ -16,9 +16,9 @@ import com.mooviest.R;
 import com.mooviest.ui.adapters.MoviesListAdapter;
 import com.mooviest.ui.listeners.EndlessRecyclerViewScrollListener;
 import com.mooviest.ui.models.Movie;
-import com.mooviest.ui.rest.MooviestApiResult;
+import com.mooviest.ui.rest.responses.MooviestApiResult;
 import com.mooviest.ui.rest.SingletonRestClient;
-import com.mooviest.ui.tasks.GetUserList;
+import com.mooviest.ui.tasks.movie_collection.GetUserList;
 
 import java.util.ArrayList;
 
@@ -123,10 +123,12 @@ public class MoviesListActivity extends AppCompatActivity {
                         if(result.getNext() == null){
                             next = false;
                         }
-                        int curSize = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
-                        SingletonRestClient.getInstance().moviesListAdapter.addItems(result.getMovies());
-                        int totalMovies = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
-                        SingletonRestClient.getInstance().moviesListAdapter.notifyItemRangeInserted(curSize, totalMovies-1);
+                        if(SingletonRestClient.getInstance().moviesListAdapter != null) {
+                            int curSize = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
+                            SingletonRestClient.getInstance().moviesListAdapter.addItems(result.getMovies());
+                            int totalMovies = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
+                            SingletonRestClient.getInstance().moviesListAdapter.notifyItemRangeInserted(curSize, totalMovies - 1);
+                        }
                     }else{
                         Toast.makeText(getApplication(), "No movies list", Toast.LENGTH_LONG).show();
                     }

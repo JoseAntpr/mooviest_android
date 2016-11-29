@@ -6,9 +6,9 @@ import android.os.Bundle;
 import com.mooviest.ui.adapters.MoviesListAdapter;
 import com.mooviest.ui.adapters.MoviesUserListAdapter;
 import com.mooviest.ui.models.Movie;
-import com.mooviest.ui.rest.MooviestApiResult;
+import com.mooviest.ui.rest.responses.MooviestApiResult;
 import com.mooviest.ui.rest.SingletonRestClient;
-import com.mooviest.ui.tasks.GetUserList;
+import com.mooviest.ui.tasks.movie_collection.GetUserList;
 
 /**
  * Created by jesus on 25/10/16.

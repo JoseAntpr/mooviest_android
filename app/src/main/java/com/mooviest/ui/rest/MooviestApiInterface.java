@@ -2,6 +2,11 @@ package com.mooviest.ui.rest;
 
 import com.mooviest.ui.models.Collection;
 import com.mooviest.ui.models.Movie;
+import com.mooviest.ui.rest.responses.LoginResponse;
+import com.mooviest.ui.rest.responses.MooviestApiResult;
+import com.mooviest.ui.rest.responses.SignupResponse;
+import com.mooviest.ui.rest.responses.UpdateProfileResponse;
+import com.mooviest.ui.rest.responses.UserProfileResponse;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;

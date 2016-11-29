@@ -3,7 +3,6 @@ package com.mooviest.ui.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +14,10 @@ import android.widget.Toast;
 
 import com.mooviest.R;
 import com.mooviest.ui.RoundedTransformation;
-import com.mooviest.ui.activities.MovieDetailActivity;
+import com.mooviest.ui.activities.movie_detail.MovieDetailActivity;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.SingletonRestClient;
-import com.mooviest.ui.tasks.GetMovieDetail;
+import com.mooviest.ui.tasks.movie_detail.GetMovieDetail;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

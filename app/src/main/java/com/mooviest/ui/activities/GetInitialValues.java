@@ -5,11 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.mooviest.ui.activities.home.HomeActivity;
 import com.mooviest.ui.models.Movie;
-import com.mooviest.ui.rest.MooviestApiResult;
+import com.mooviest.ui.rest.responses.MooviestApiResult;
 import com.mooviest.ui.rest.SingletonRestClient;
-import com.mooviest.ui.tasks.GetSwipeList;
-import com.mooviest.ui.tasks.GetUserList;
+import com.mooviest.ui.tasks.swipe.GetSwipeList;
+import com.mooviest.ui.tasks.movie_collection.GetUserList;
 import com.mooviest.ui.tasks.InitialValuesInterface;
 
 import java.util.ArrayList;
