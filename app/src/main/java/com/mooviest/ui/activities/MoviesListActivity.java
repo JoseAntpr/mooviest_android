@@ -1,6 +1,8 @@
 package com.mooviest.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,9 +16,9 @@ import com.mooviest.R;
 import com.mooviest.ui.adapters.MoviesListAdapter;
 import com.mooviest.ui.listeners.EndlessRecyclerViewScrollListener;
 import com.mooviest.ui.models.Movie;
-import com.mooviest.ui.rest.MooviestApiResult;
+import com.mooviest.ui.rest.responses.MooviestApiResult;
 import com.mooviest.ui.rest.SingletonRestClient;
-import com.mooviest.ui.tasks.GetUserList;
+import com.mooviest.ui.tasks.movie_collection.GetUserList;
 
 import java.util.ArrayList;
 
@@ -30,6 +32,7 @@ public class MoviesListActivity extends AppCompatActivity {
     private Boolean next;
     private int count;
     private ArrayList<Movie> moviesList;
+    private MovieActions movieActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +40,23 @@ public class MoviesListActivity extends AppCompatActivity {
         initActivityTransitions();
         setContentView(R.layout.activity_movies_list);
 
+        // Acciones para clasificar las películas en una clase externa
+        movieActions = new MovieActions();
+
 
         if(savedInstanceState != null){
+            SharedPreferences user_prefs = getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE);
+            movieActions.restoreMainInstanceState(savedInstanceState, user_prefs);
+
             title = savedInstanceState.getString("TITLE");
             list_name = savedInstanceState.getString("LIST_NAME");
             next = savedInstanceState.getBoolean("NEXT");
             count = savedInstanceState.getInt("COUNT");
-            moviesList = savedInstanceState.getParcelableArrayList("MOVIES_ADAPTER");
+            if(SingletonRestClient.getInstance().moviesListAdapter == null) {
+                moviesList = savedInstanceState.getParcelableArrayList("MOVIES_ADAPTER");
+            }else {
+                moviesList = SingletonRestClient.getInstance().moviesListAdapter.getItems();
+            }
         }else{
             // GET TAGS INTENT
             Intent i =getIntent();
@@ -110,10 +123,12 @@ public class MoviesListActivity extends AppCompatActivity {
                         if(result.getNext() == null){
                             next = false;
                         }
-                        int curSize = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
-                        SingletonRestClient.getInstance().moviesListAdapter.addItems(result.getMovies());
-                        int totalMovies = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
-                        SingletonRestClient.getInstance().moviesListAdapter.notifyItemRangeInserted(curSize, totalMovies-1);
+                        if(SingletonRestClient.getInstance().moviesListAdapter != null) {
+                            int curSize = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
+                            SingletonRestClient.getInstance().moviesListAdapter.addItems(result.getMovies());
+                            int totalMovies = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
+                            SingletonRestClient.getInstance().moviesListAdapter.notifyItemRangeInserted(curSize, totalMovies - 1);
+                        }
                     }else{
                         Toast.makeText(getApplication(), "No movies list", Toast.LENGTH_LONG).show();
                     }
@@ -127,6 +142,7 @@ public class MoviesListActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState = movieActions.saveMainInstanceState(savedInstanceState);
         savedInstanceState.putString("TITLE", title);
         savedInstanceState.putString("LIST_NAME", list_name);
         savedInstanceState.putBoolean("NEXT", next);

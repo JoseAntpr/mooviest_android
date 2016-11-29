@@ -7,7 +7,7 @@
     android:id="@+id/movie_detail_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mooviest.ui.activities.MovieDetailActivity"
+    tools:context="com.mooviest.ui.activities.movie_detail.MovieDetailActivity"
     android:fitsSystemWindows="true">
 
 

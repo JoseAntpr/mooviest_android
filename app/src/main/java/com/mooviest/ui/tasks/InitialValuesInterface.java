@@ -1,6 +1,6 @@
 package com.mooviest.ui.tasks;
 
-import com.mooviest.ui.rest.MooviestApiResult;
+import com.mooviest.ui.rest.responses.MooviestApiResult;
 
 /**
  * Created by jesus on 25/10/16.

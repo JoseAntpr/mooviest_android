@@ -1,7 +1,6 @@
 package com.mooviest.ui.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,11 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mooviest.R;
-import com.mooviest.ui.activities.MovieDetailActivity;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.SingletonRestClient;
-import com.mooviest.ui.tasks.GetMovieDetail;
-import com.mooviest.ui.tasks.SwipeMovieInterface;
+import com.mooviest.ui.tasks.movie_detail.GetMovieDetail;
+import com.mooviest.ui.tasks.swipe.SwipeMovieInterface;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

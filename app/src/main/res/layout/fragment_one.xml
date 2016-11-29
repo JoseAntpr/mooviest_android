@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/swipeLayout"
     android:orientation="vertical"
-    tools:context=".ui.activities.OneFragment">
+    tools:context=".ui.activities.home.OneFragment">
 
 
     <RelativeLayout

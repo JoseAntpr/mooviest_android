@@ -2,6 +2,11 @@ package com.mooviest.ui.rest;
 
 import com.mooviest.ui.models.Collection;
 import com.mooviest.ui.models.Movie;
+import com.mooviest.ui.rest.responses.LoginResponse;
+import com.mooviest.ui.rest.responses.MooviestApiResult;
+import com.mooviest.ui.rest.responses.SignupResponse;
+import com.mooviest.ui.rest.responses.UpdateProfileResponse;
+import com.mooviest.ui.rest.responses.UserProfileResponse;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -71,14 +76,8 @@ public interface MooviestApiInterface {
 
     // ********** MOVIE ************
 
-    @GET("movie/")
-    Call<MooviestApiResult> movie(@Query("search") String name);
-
     @GET("movie/{id}/")
     Call<Movie> getMovieDetail(@Path("id") int id, @Query("movie_lang_id") int movie_lang_id, @Query("user_id") int user_id);
-
-    @GET("movie_app_bylang")
-    Call<MooviestApiResult> movie_app_bylang(@Query("lang_id") int lang_id, @Query("limit") int limit);
 
     @GET("movie_lang/")
     Call<MooviestApiResult> searchMovies(@Query("title") String search, @Query("code") String lang_code, @Query("page") int page);

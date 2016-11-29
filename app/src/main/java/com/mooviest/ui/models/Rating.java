@@ -1,12 +1,34 @@
 
 package com.mooviest.ui.models;
 
-public class Rating {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Rating implements Parcelable{
 
     private String name;
     private int rating;
     private int count;
     private String dateUpdate;
+
+    protected Rating(Parcel in) {
+        name = in.readString();
+        rating = in.readInt();
+        count = in.readInt();
+        dateUpdate = in.readString();
+    }
+
+    public static final Creator<Rating> CREATOR = new Creator<Rating>() {
+        @Override
+        public Rating createFromParcel(Parcel in) {
+            return new Rating(in);
+        }
+
+        @Override
+        public Rating[] newArray(int size) {
+            return new Rating[size];
+        }
+    };
 
     /**
      * 
@@ -81,4 +103,16 @@ public class Rating {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
+        parcel.writeInt(rating);
+        parcel.writeInt(count);
+        parcel.writeString(dateUpdate);
+    }
 }

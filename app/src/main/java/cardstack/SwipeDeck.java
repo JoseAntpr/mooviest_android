@@ -212,7 +212,14 @@ public class SwipeDeck extends FrameLayout {
     }
 
     private void addNextCard() {
+        //Add child
+        addChild();
 
+        //Set listener top card
+        setupTopCard();
+    }
+
+    private void addChild(){
         if (nextAdapterCard < mAdapter.getCount()) {
 
             // TODO: Make view recycling work
@@ -230,8 +237,6 @@ public class SwipeDeck extends FrameLayout {
             nextAdapterCard++;
 
         }
-
-        setupTopCard();
     }
 
 
@@ -346,12 +351,17 @@ public class SwipeDeck extends FrameLayout {
 
 
     private void setupTopCard() {
-        //TODO: maybe find a better solution this is kind of hacky
         //if there's an extra card on screen that means the top card is still being animated
         //in that case setup the next card along
         int childOffset = getChildCount() - NUMBER_OF_CARDS + 1;
         final View child = getChildAt(getChildCount() - childOffset);
 
+        //Set swipe listener to child
+        setSwipeListener(child);
+
+    }
+
+    private void setSwipeListener(View child){
         //this calculation is to get the correct position in the adapter of the current top card
         //the card position on setup top card is currently always the bottom card in the view
         //at any given time.
@@ -430,7 +440,6 @@ public class SwipeDeck extends FrameLayout {
 
             child.setOnTouchListener(swipeListener);
         }
-
     }
 
     public void setEventCallback(SwipeEventCallback eventCallback) {
@@ -500,8 +509,13 @@ public class SwipeDeck extends FrameLayout {
         }
     }
 
-    public void swipeRemove(int duration) {
+    public void swipeRemove(int duration, boolean setListener) {
+        if(setListener) {
+            addChildsetSwipeListener();
+        }
         int childCount = getChildCount();
+
+        // Swipe (remove) top card
         if(swipeListener != null) {
             if (childCount > 0 && getChildCount() < (NUMBER_OF_CARDS + 1)) {
                 swipeListener.animateOffScreenUp(duration);
@@ -513,6 +527,17 @@ public class SwipeDeck extends FrameLayout {
 
             }
         }
+    }
+
+    public void addChildsetSwipeListener(){
+        //Add child
+        addChild();
+
+        //Get first child
+        View child = getChildAt(0);
+
+        //Set swipe listener to child
+        setSwipeListener(child);
     }
 
     public void setPositionCallback(CardPositionCallback callback) {

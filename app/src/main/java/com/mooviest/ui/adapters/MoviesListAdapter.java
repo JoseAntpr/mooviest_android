@@ -13,10 +13,10 @@ import android.widget.Toast;
 
 import com.mooviest.R;
 import com.mooviest.ui.RoundedTransformation;
-import com.mooviest.ui.activities.MovieDetailActivity;
+import com.mooviest.ui.activities.movie_detail.MovieDetailActivity;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.SingletonRestClient;
-import com.mooviest.ui.tasks.GetMovieDetail;
+import com.mooviest.ui.tasks.movie_detail.GetMovieDetail;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -142,6 +142,10 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
 
     public ArrayList<Movie> getItems(){
         return movies;
+    }
+
+    public void setListName(String list_name){
+        this.list_name = list_name;
     }
 
 

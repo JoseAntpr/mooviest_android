@@ -11,35 +11,51 @@ public class Movie implements Parcelable {
 
     private int id;
     private int movie_lang_id;
-    private String title;
-    private String image;
-    private String backdrop;
-    private List<Genre> genres = new ArrayList<Genre>();
-    private List<Participation> participations = new ArrayList<Participation>();
-    private List<Object> emotions = new ArrayList<Object>();
-    private List<Rating> ratings = new ArrayList<Rating>();
-    private String original_title;
     private int runtime;
     private int released;
-    private String movieProducer;
-    private Collection collection;
-    private String synopsis;
-    private int sagaOrder;
+
     private String average;
+    private String title;
+    private String original_title;
+    private String backdrop;
+    private String image;
+    private String synopsis;
+    private String movie_producer;
+
+    private Collection collection;
+
+    private List<Genre> genres = new ArrayList<Genre>();
+    private List<Participation> participations = new ArrayList<Participation>();
+    private List<Rating> ratings = new ArrayList<Rating>();
 
 
     protected Movie(Parcel in) {
         id = in.readInt();
-        original_title = in.readString();
-        title = in.readString();
-        image = in.readString();
-        backdrop = in.readString();
+        movie_lang_id = in.readInt();
         runtime = in.readInt();
         released = in.readInt();
-        movieProducer = in.readString();
-        collection = in.readParcelable(getClass().getClassLoader());
-        sagaOrder = in.readInt();
+
+
         average = in.readString();
+        title = in.readString();
+        original_title = in.readString();
+        backdrop = in.readString();
+        image = in.readString();
+        synopsis = in.readString();
+        movie_producer = in.readString();
+
+        collection = in.readParcelable(getClass().getClassLoader());
+
+        genres = new ArrayList<Genre>();
+        in.readTypedList(genres, Genre.CREATOR);
+
+        participations = new ArrayList<Participation>();
+        in.readTypedList(participations, Participation.CREATOR);
+
+
+        ratings = new ArrayList<Rating>();
+        in.readTypedList(ratings, Rating.CREATOR);
+
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -201,24 +217,6 @@ public class Movie implements Parcelable {
     /**
      * 
      * @return
-     *     The emotions
-     */
-    public List<Object> getEmotions() {
-        return emotions;
-    }
-
-    /**
-     * 
-     * @param emotions
-     *     The emotions
-     */
-    public void setEmotions(List<Object> emotions) {
-        this.emotions = emotions;
-    }
-
-    /**
-     * 
-     * @return
      *     The ratings
      */
     public List<Rating> getRatings() {
@@ -291,19 +289,19 @@ public class Movie implements Parcelable {
     /**
      * 
      * @return
-     *     The movieProducer
+     *     The movie_producer
      */
     public String getMovieProducer() {
-        return movieProducer;
+        return movie_producer;
     }
 
     /**
      * 
-     * @param movieProducer
+     * @param movie_producer
      *     The movie_producer
      */
-    public void setMovieProducer(String movieProducer) {
-        this.movieProducer = movieProducer;
+    public void setMovieProducer(String movie_producer) {
+        this.movie_producer = movie_producer;
     }
 
     /**
@@ -324,23 +322,6 @@ public class Movie implements Parcelable {
         this.collection = collection;
     }
 
-    /**
-     * 
-     * @return
-     *     The sagaOrder
-     */
-    public int getSagaOrder() {
-        return sagaOrder;
-    }
-
-    /**
-     * 
-     * @param sagaOrder
-     *     The saga_order
-     */
-    public void setSagaOrder(int sagaOrder) {
-        this.sagaOrder = sagaOrder;
-    }
 
     /**
      * 
@@ -369,16 +350,24 @@ public class Movie implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
-        parcel.writeString(original_title);
-        parcel.writeString(title);
+        parcel.writeInt(movie_lang_id);
         parcel.writeInt(runtime);
         parcel.writeInt(released);
-        parcel.writeString(image);
-        parcel.writeString(backdrop);
-        parcel.writeString(movieProducer);
-        parcel.writeParcelable(collection, i);
-        parcel.writeInt(sagaOrder);
+
         parcel.writeString(average);
+        parcel.writeString(title);
+        parcel.writeString(original_title);
+        parcel.writeString(backdrop);
+        parcel.writeString(image);
+        parcel.writeString(synopsis);
+        parcel.writeString(movie_producer);
+
+        parcel.writeParcelable(collection, i);
+
+        parcel.writeTypedList(genres);
+        parcel.writeTypedList(participations);
+        parcel.writeTypedList(ratings);
+
     }
 
     @Override

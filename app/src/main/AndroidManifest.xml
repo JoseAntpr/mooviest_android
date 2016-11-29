@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/MovieDetailTheme">
         <activity
-            android:name=".ui.activities.SplashScreenActivity"
+            android:name=".ui.activities.splash.SplashScreenActivity"
             android:label="@string/app_name"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -33,18 +33,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.LoginActivity"
+            android:name=".ui.activities.login.LoginActivity"
             android:theme="@style/AppTheme.Sign" />
         <activity
-            android:name=".ui.activities.SignupActivity"
+            android:name=".ui.activities.signup.SignupActivity"
             android:theme="@style/AppTheme.Sign" />
         <activity
-            android:name=".ui.activities.HomeActivity"
+            android:name=".ui.activities.home.HomeActivity"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.activities.SearchableActivity"
-            android:parentActivityName=".ui.activities.HomeActivity"
+            android:name=".ui.activities.search.SearchableActivity"
+            android:parentActivityName=".ui.activities.home.HomeActivity"
             android:theme="@style/FormsTheme">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -54,29 +54,29 @@
                 android:resource="@xml/searchable"
                 />
         </activity>
-        <activity android:name=".ui.activities.MovieDetailActivity"></activity>
+        <activity android:name=".ui.activities.movie_detail.MovieDetailActivity"></activity>
         <activity
-            android:name=".ui.activities.ProfileActivity"
-            android:parentActivityName=".ui.activities.HomeActivity">
+            android:name=".ui.activities.profile.ProfileActivity"
+            android:parentActivityName=".ui.activities.home.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.HomeActivity" />
+                android:value=".ui.activities.home.HomeActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.EditProfileActivity"
-            android:parentActivityName=".ui.activities.ProfileActivity"
+            android:name=".ui.activities.profile.EditProfileActivity"
+            android:parentActivityName=".ui.activities.profile.ProfileActivity"
             android:theme="@style/FormsTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.ProfileActivity" />
+                android:value=".ui.activities.profile.ProfileActivity" />
         </activity>
         <activity
             android:name=".ui.activities.MoviesListActivity"
-            android:parentActivityName=".ui.activities.HomeActivity"
+            android:parentActivityName=".ui.activities.home.HomeActivity"
             android:theme="@style/FormsTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.HomeActivity" />
+                android:value=".ui.activities.home.HomeActivity" />
         </activity>
 
     </application>
