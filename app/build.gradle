@@ -34,5 +34,6 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.mikhaellopez:circularimageview:3.0.2'
     compile 'com.github.clans:fab:1.6.4'
+    compile 'com.github.arimorty:floatingsearchview:2.0.3'
     testCompile 'junit:junit:4.12'
 }

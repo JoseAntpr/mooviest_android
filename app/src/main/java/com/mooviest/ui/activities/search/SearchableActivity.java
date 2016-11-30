@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.mooviest.R;
 import com.mooviest.ui.activities.MovieActions;
 import com.mooviest.ui.adapters.MoviesListAdapter;
@@ -33,6 +35,7 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
     private int count;
     private String lang_code;
     private MovieActions movieActions;
+    private FloatingSearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +84,48 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
             }
         });
 
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar_movies_search_list));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //setSupportActionBar((Toolbar) findViewById(R.id.toolbar_movies_search_list));
+
+        mSearchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
+        mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+            @Override
+            public void onSearchTextChanged(String oldQuery, final String newQuery) {
+
+                //get suggestions based on newQuery
+
+                //pass them on to the search view
+                //mSearchView.swapSuggestions(newSuggestions);
+            }
+        });
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
+
+        mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+
+            @Override
+            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+
+            }
+
+            @Override
+            public void onSearchAction(String query) {
+                String queryReplaced = query.replace(" ", "");
+                if(!queryReplaced.equals("")){
+                    onQueryTextSubmit(query);
+                }else {
+                    mSearchView.clearQuery();
+                }
+            }
+        });
+
+        mSearchView.setOnHomeActionClickListener(new FloatingSearchView.OnHomeActionClickListener() {
+            @Override
+            public void onHomeClicked() {
+                onBackPressed();
+            }
+        });
 
     }
 
@@ -117,10 +160,12 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
                 if(result.getNext() == null){
                     next = false;
                 }
-                int curSize = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
-                SingletonRestClient.getInstance().moviesListAdapter.addItems(result.getMovies());
-                int totalMovies = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
-                SingletonRestClient.getInstance().moviesListAdapter.notifyItemRangeInserted(curSize, totalMovies-1);
+                if(SingletonRestClient.getInstance().moviesListAdapter != null) {
+                    int curSize = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
+                    SingletonRestClient.getInstance().moviesListAdapter.addItems(result.getMovies());
+                    int totalMovies = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
+                    SingletonRestClient.getInstance().moviesListAdapter.notifyItemRangeInserted(curSize, totalMovies);
+                }
             }else{
                 Toast.makeText(getApplication(), getString(R.string.no_movies_found)+ " " + query, Toast.LENGTH_LONG).show();
             }
