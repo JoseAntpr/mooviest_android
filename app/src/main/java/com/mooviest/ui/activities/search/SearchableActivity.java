@@ -111,16 +111,12 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
 
             @Override
             public void onSearchAction(String query) {
-                setQuery(query);
-                setNext(true);
-                setCount(0);
-
-                SingletonRestClient.getInstance().moviesListAdapter.removeAllItems();
-                SingletonRestClient.getInstance().moviesListAdapter.notifyDataSetChanged();
-
-                SearchMovies searchMovies = new SearchMovies(SearchableActivity.this, query, lang_code, 1);
-                searchMovies.execute();
-
+                String queryReplaced = query.replace(" ", "");
+                if(!queryReplaced.equals("")){
+                    onQueryTextSubmit(query);
+                }else {
+                    mSearchView.clearQuery();
+                }
             }
         });
 
@@ -131,18 +127,6 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
             }
         });
 
-    }
-
-    public void setQuery(String query){
-        this.query = query;
-    }
-
-    public void setNext(Boolean next){
-        this.next = next;
-    }
-
-    public void setCount(int count){
-        this.count = count;
     }
 
     @Override
@@ -180,7 +164,7 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
                     int curSize = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
                     SingletonRestClient.getInstance().moviesListAdapter.addItems(result.getMovies());
                     int totalMovies = SingletonRestClient.getInstance().moviesListAdapter.getItemCount();
-                    SingletonRestClient.getInstance().moviesListAdapter.notifyItemRangeInserted(curSize, totalMovies - 1);
+                    SingletonRestClient.getInstance().moviesListAdapter.notifyItemRangeInserted(curSize, totalMovies);
                 }
             }else{
                 Toast.makeText(getApplication(), getString(R.string.no_movies_found)+ " " + query, Toast.LENGTH_LONG).show();
