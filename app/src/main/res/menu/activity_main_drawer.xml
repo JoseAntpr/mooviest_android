@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_swipe"
+            android:icon="@drawable/ic_swipe"
+            android:title="@string/swipe" />
+        <item
+            android:id="@+id/nav_recommendations"
+            android:icon="@drawable/ic_recommendations"
+            android:title="@string/recommendations" />
+        <item
+            android:id="@+id/nav_my_lists"
+            android:icon="@drawable/ic_lists"
+            android:title="@string/my_lists" />
+    </group>
+
+    <item android:title="@string/nav_others">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_settings"
+                android:title="@string/settings" />
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/share" />
+            <item
+                android:id="@+id/nav_feedback"
+                android:icon="@drawable/ic_feedback"
+                android:title="@string/feedback" />
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_help"
+                android:title="@string/help" />
+        </menu>
+    </item>
+
+</menu>

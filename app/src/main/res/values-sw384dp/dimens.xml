@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Custom FilmCard -->
+    <dimen name="paddingBottom_filmCard">60dp</dimen>
+    <dimen name="height_linearButtons">40dp</dimen>
+</resources>

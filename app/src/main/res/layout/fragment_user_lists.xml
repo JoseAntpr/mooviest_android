@@ -1,0 +1,202 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activities.home.UserListsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingLeft="25dp"
+                android:paddingRight="0dp">
+                <TextView
+                    android:id="@+id/seen_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:textSize="20sp"
+                    android:text="@string/seen_list" />
+
+                <Button
+                    android:id="@+id/seen_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/more"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorPrimary"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/no_seen_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/no_movies_list"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/seen_list_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"></android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingLeft="25dp"
+                android:paddingRight="0dp">
+                <TextView
+                    android:id="@+id/watchlist_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:textSize="20sp"
+                    android:text="@string/watchlist_list" />
+
+                <Button
+                    android:id="@+id/watchlist_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/more"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorPrimary"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/no_watchlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/no_movies_list"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/watchlist_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"></android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingLeft="25dp"
+                android:paddingRight="0dp">
+                <TextView
+                    android:id="@+id/favourite_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:textSize="20sp"
+                    android:text="@string/favourite_list" />
+
+                <Button
+                    android:id="@+id/favourite_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/more"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorPrimary"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/no_favourite_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/no_movies_list"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/favourite_list_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"></android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingLeft="25dp"
+                android:paddingRight="0dp">
+                <TextView
+                    android:id="@+id/blacklist_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:textSize="20sp"
+                    android:text="@string/blacklist_list" />
+
+                <Button
+                    android:id="@+id/blacklist_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/more"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorPrimary"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/no_blacklist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/no_movies_list"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/blacklist_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"></android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
