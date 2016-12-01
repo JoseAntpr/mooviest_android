@@ -15,16 +15,16 @@ import retrofit2.Call;
  * Created by jesus on 8/10/16.
  */
 
-public class GetUserList extends AsyncTask<Integer, String, MooviestApiResult> {
+public class GetUserMoviesList extends AsyncTask<Integer, String, MooviestApiResult> {
 
     private String list_name;
     private InitialValuesInterface initialValuesInterface = null;
 
-    public GetUserList(String name){
+    public GetUserMoviesList(String name){
         this.list_name = name;
     }
 
-    public GetUserList(String name, InitialValuesInterface initialValuesInterface){
+    public GetUserMoviesList(String name, InitialValuesInterface initialValuesInterface){
         this.list_name = name;
         this.initialValuesInterface = initialValuesInterface;
     }
@@ -38,7 +38,7 @@ public class GetUserList extends AsyncTask<Integer, String, MooviestApiResult> {
     protected MooviestApiResult doInBackground(Integer... params) {
         MooviestApiInterface apiInterface= SingletonRestClient.getInstance().mooviestApiInterface;
 
-        Call<MooviestApiResult> call = apiInterface.getUserList(
+        Call<MooviestApiResult> call = apiInterface.getUserMoviesList(
                 SingletonRestClient.getInstance().user.getId(),
                 list_name,
                 params[0]

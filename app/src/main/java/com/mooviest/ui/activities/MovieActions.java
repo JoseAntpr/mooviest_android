@@ -8,7 +8,7 @@ import com.mooviest.ui.adapters.MoviesUserListAdapter;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.responses.MooviestApiResult;
 import com.mooviest.ui.rest.SingletonRestClient;
-import com.mooviest.ui.tasks.movie_collection.GetUserList;
+import com.mooviest.ui.tasks.movie_collection.GetUserMoviesList;
 
 /**
  * Created by jesus on 25/10/16.
@@ -44,7 +44,7 @@ public class MovieActions {
         switch (typeMovie){
             case "seen":
                 if(SingletonRestClient.getInstance().seenListAdapter.getItemCount() == 18){
-                    GetUserList getSeenList = new GetUserList("seen"){
+                    GetUserMoviesList getSeenList = new GetUserMoviesList("seen"){
                         @Override
                         protected void onPostExecute(MooviestApiResult result) {
                             super.onPostExecute(result);
@@ -64,7 +64,7 @@ public class MovieActions {
                 break;
             case "watchlist":
                 if(SingletonRestClient.getInstance().watchlistAdapter.getItemCount() == 18){
-                    GetUserList getSeenList = new GetUserList("watchlist"){
+                    GetUserMoviesList getSeenList = new GetUserMoviesList("watchlist"){
                         @Override
                         protected void onPostExecute(MooviestApiResult result) {
                             super.onPostExecute(result);
@@ -84,7 +84,7 @@ public class MovieActions {
                 break;
             case "favourite":
                 if(SingletonRestClient.getInstance().favouriteListAdapter.getItemCount() == 18){
-                    GetUserList getSeenList = new GetUserList("favourite"){
+                    GetUserMoviesList getSeenList = new GetUserMoviesList("favourite"){
                         @Override
                         protected void onPostExecute(MooviestApiResult result) {
                             super.onPostExecute(result);
@@ -104,7 +104,7 @@ public class MovieActions {
                 break;
             case "blacklist":
                 if(SingletonRestClient.getInstance().blacklistAdapter.getItemCount() == 18){
-                    GetUserList getSeenList = new GetUserList("blacklist"){
+                    GetUserMoviesList getSeenList = new GetUserMoviesList("blacklist"){
                         @Override
                         protected void onPostExecute(MooviestApiResult result) {
                             super.onPostExecute(result);

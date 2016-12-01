@@ -183,5 +183,20 @@ public class ProfileActivity extends AppCompatActivity {
         user_prefs.getString("token", "");
 
         editor.commit();
+
+        SingletonRestClient.getInstance().movies_buffer = null;
+        SingletonRestClient.getInstance().movies_swipe = null;
+        SingletonRestClient.getInstance().movies_list = null;
+        SingletonRestClient.getInstance().moviesListAdapter = null;
+        SingletonRestClient.getInstance().seenListAdapter = null;
+        SingletonRestClient.getInstance().watchlistAdapter = null;
+        SingletonRestClient.getInstance().favouriteListAdapter = null;
+        SingletonRestClient.getInstance().blacklistAdapter = null;
+        SingletonRestClient.getInstance().seen_list = null;
+        SingletonRestClient.getInstance().watchlist = null;
+        SingletonRestClient.getInstance().favourite_list = null;
+        SingletonRestClient.getInstance().blacklist = null;
+        SingletonRestClient.getInstance().movie_selected = null;
+        SingletonRestClient.getInstance().user = null;
     }
 }

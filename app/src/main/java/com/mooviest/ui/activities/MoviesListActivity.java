@@ -18,7 +18,7 @@ import com.mooviest.ui.listeners.EndlessRecyclerViewScrollListener;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.responses.MooviestApiResult;
 import com.mooviest.ui.rest.SingletonRestClient;
-import com.mooviest.ui.tasks.movie_collection.GetUserList;
+import com.mooviest.ui.tasks.movie_collection.GetUserMoviesList;
 
 import java.util.ArrayList;
 
@@ -114,7 +114,7 @@ public class MoviesListActivity extends AppCompatActivity {
         // Send an API request to retrieve appropriate data using the offset value as a parameter.
         //  --> Deserialize API response and then construct new objects to append to the adapter
         //  --> Notify the adapter of the changes
-        GetUserList getUserList = new GetUserList(list_name){
+        GetUserMoviesList getUserMoviesList = new GetUserMoviesList(list_name){
             @Override
             protected void onPostExecute(MooviestApiResult result) {
                 super.onPostExecute(result);
@@ -137,7 +137,7 @@ public class MoviesListActivity extends AppCompatActivity {
         };
 
         // Params: page API result
-        getUserList.execute(page);
+        getUserMoviesList.execute(page);
     }
 
     @Override

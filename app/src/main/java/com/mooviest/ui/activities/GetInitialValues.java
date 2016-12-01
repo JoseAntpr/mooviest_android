@@ -10,7 +10,7 @@ import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.responses.MooviestApiResult;
 import com.mooviest.ui.rest.SingletonRestClient;
 import com.mooviest.ui.tasks.swipe.GetSwipeList;
-import com.mooviest.ui.tasks.movie_collection.GetUserList;
+import com.mooviest.ui.tasks.movie_collection.GetUserMoviesList;
 import com.mooviest.ui.tasks.InitialValuesInterface;
 
 import java.util.ArrayList;
@@ -42,16 +42,16 @@ public class GetInitialValues implements InitialValuesInterface {
 
 
         // GET USER LISTS
-        GetUserList getSeenList = new GetUserList("seen", GetInitialValues.this);
+        GetUserMoviesList getSeenList = new GetUserMoviesList("seen", GetInitialValues.this);
         getSeenList.execute(1);
 
-        GetUserList getWatchlist = new GetUserList("watchlist", GetInitialValues.this);
+        GetUserMoviesList getWatchlist = new GetUserMoviesList("watchlist", GetInitialValues.this);
         getWatchlist.execute(1);
 
-        GetUserList getFavouriteList = new GetUserList("favourite", GetInitialValues.this);
+        GetUserMoviesList getFavouriteList = new GetUserMoviesList("favourite", GetInitialValues.this);
         getFavouriteList.execute(1);
 
-        GetUserList getBlacklist = new GetUserList("blacklist", GetInitialValues.this);
+        GetUserMoviesList getBlacklist = new GetUserMoviesList("blacklist", GetInitialValues.this);
         getBlacklist.execute(1);
     }
 

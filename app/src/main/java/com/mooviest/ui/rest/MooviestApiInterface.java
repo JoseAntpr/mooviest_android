@@ -4,6 +4,7 @@ import com.mooviest.ui.models.Collection;
 import com.mooviest.ui.models.Movie;
 import com.mooviest.ui.rest.responses.LoginResponse;
 import com.mooviest.ui.rest.responses.MooviestApiResult;
+import com.mooviest.ui.rest.responses.SearchUsersResponse;
 import com.mooviest.ui.rest.responses.SignupResponse;
 import com.mooviest.ui.rest.responses.UpdateProfileResponse;
 import com.mooviest.ui.rest.responses.UserProfileResponse;
@@ -50,8 +51,11 @@ public interface MooviestApiInterface {
     @GET("users/{id}/swipelist/")
     Call<MooviestApiResult> getSwipeList(@Path("id") int id);
 
+    @GET("users/search/")
+    Call<SearchUsersResponse> searchUsers(@Query("name") String name);
+
     @GET("users/{id}/collection/")
-    Call<MooviestApiResult> getUserList(@Path("id") int id, @Query("name") String list_name, @Query("page") int page);
+    Call<MooviestApiResult> getUserMoviesList(@Path("id") int id, @Query("name") String list_name, @Query("page") int page);
 
     @FormUrlEncoded
     @POST("users/")

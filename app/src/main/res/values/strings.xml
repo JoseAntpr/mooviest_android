@@ -62,7 +62,7 @@
 
     <!-- Search Menu -->
     <string name="search">Search</string>
-    <string name="search_query_hint">Search film in Mooviest</string>
+    <string name="search_query_hint">Search in Mooviest</string>
     <string name="no_movies_found">No movies found with title</string>
     <string name="relevance">RELEVANCE</string>
 

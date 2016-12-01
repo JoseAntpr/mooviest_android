@@ -126,6 +126,9 @@ public class SearchableActivity extends AppCompatActivity implements SearchMovie
                 onBackPressed();
             }
         });
+        if(savedInstanceState == null) {
+            mSearchView.setSearchFocused(true);
+        }
 
     }
 

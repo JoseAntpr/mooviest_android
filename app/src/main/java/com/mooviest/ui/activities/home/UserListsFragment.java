@@ -18,7 +18,7 @@ import com.mooviest.ui.activities.MoviesListActivity;
 import com.mooviest.ui.adapters.MoviesUserListAdapter;
 import com.mooviest.ui.rest.responses.MooviestApiResult;
 import com.mooviest.ui.rest.SingletonRestClient;
-import com.mooviest.ui.tasks.movie_collection.GetUserList;
+import com.mooviest.ui.tasks.movie_collection.GetUserMoviesList;
 
 
 public class UserListsFragment extends Fragment {
@@ -68,7 +68,7 @@ public class UserListsFragment extends Fragment {
         seen_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getUserListAPI("seen", 1, R.string.seen_list);
+                getUserMoviesListAPI("seen", 1, R.string.seen_list);
             }
         });
 
@@ -92,7 +92,7 @@ public class UserListsFragment extends Fragment {
         watchlist_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getUserListAPI("watchlist", 1, R.string.watchlist_list);
+                getUserMoviesListAPI("watchlist", 1, R.string.watchlist_list);
             }
         });
 
@@ -116,7 +116,7 @@ public class UserListsFragment extends Fragment {
         favourite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getUserListAPI("favourite", 1, R.string.favourite_list);
+                getUserMoviesListAPI("favourite", 1, R.string.favourite_list);
             }
         });
 
@@ -141,7 +141,7 @@ public class UserListsFragment extends Fragment {
         blacklist_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getUserListAPI("blacklist", 1, R.string.blacklist_list);
+                getUserMoviesListAPI("blacklist", 1, R.string.blacklist_list);
             }
         });
 
@@ -158,8 +158,8 @@ public class UserListsFragment extends Fragment {
 
     }
 
-    private void getUserListAPI(final String list_name, int page, final int titleResource){
-        GetUserList getUserList = new GetUserList(list_name){
+    private void getUserMoviesListAPI(final String list_name, int page, final int titleResource){
+        GetUserMoviesList getUserMoviesList = new GetUserMoviesList(list_name){
             @Override
             protected void onPostExecute(MooviestApiResult result) {
                 super.onPostExecute(result);
@@ -186,7 +186,7 @@ public class UserListsFragment extends Fragment {
         };
 
         // Params: page API result
-        getUserList.execute(page);
+        getUserMoviesList.execute(page);
     }
 
 
